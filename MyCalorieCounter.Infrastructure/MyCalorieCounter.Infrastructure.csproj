@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MyCalorieCounter.Application\MyCalorieCounter.Application.csproj" />
     <ProjectReference Include="..\MyCalorieCounter.Core\MyCalorieCounter.Core.csproj" />
   </ItemGroup>
 
