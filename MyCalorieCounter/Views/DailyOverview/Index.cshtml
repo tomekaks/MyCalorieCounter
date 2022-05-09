@@ -1,0 +1,90 @@
+﻿@model MyCalorieCounter.Models.DailyOverviewVM
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Your Daily Overview For: @Model.Date</h1>
+
+<br />
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Calories)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Proteins)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Carbs)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Fats)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th>
+                Daily Totals
+            </th>
+            <th>
+                @Model.Calories
+            </th>
+            <th>
+                @Model.Proteins
+            </th>
+            <th>
+                @Model.Carbs
+            </th>
+            <th>
+                @Model.Fats
+            </th>
+            <th></th>
+        </tr>
+        <tr>
+            <th>
+                Your Daily Goals
+            </th>
+            <th>
+                @Model.DailyCaloriesGoal
+            </th>
+            <th>
+                @Model.DailyProteinsGoal
+            </th>
+            <th>
+                @Model.DailyCarbsGoal
+            </th>
+            <th>
+                @Model.DailyFatsGoal
+            </th>
+            <th></th>
+        </tr>
+        <tr>
+            <th>
+                Remaining
+            </th>
+            <th>
+                @Model.RemainingDailyCalories
+            </th>
+            <th>
+                @Model.RemainingDailyProteins
+            </th>
+            <th>
+                @Model.RemainingDailyCarbs
+            </th>
+            <th>
+                @Model.RemainingDailyFats
+            </th>
+            <th></th>
+        </tr>
+    </tbody>
+</table>
+<div>
+    <a asp-action="UpdateGoals" class="btn btn-primary">Update Goals</a>
+</div>

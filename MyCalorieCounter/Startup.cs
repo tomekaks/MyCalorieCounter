@@ -7,7 +7,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MyCalorieCounter.Application.Factories;
+using MyCalorieCounter.Application.Interfaces.Factories;
+using MyCalorieCounter.Application.Interfaces.Repositories;
+using MyCalorieCounter.Application.Interfaces.Services;
+using MyCalorieCounter.Application.Services;
 using MyCalorieCounter.Infrastructure.DataBase;
+using MyCalorieCounter.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +41,12 @@ namespace MyCalorieCounter
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
+            services.AddScoped<IDailySumService, DailySumService>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IDailySumFactory, DailySumFactory>();
+            services.AddScoped<ISettingService, SettingService>();
+            services.AddScoped<IProductFactory, ProductFactory>();
+            services.AddScoped<IProductService, ProductService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -32,8 +32,10 @@ namespace MyCalorieCounter.Application.Services
                 await UpdateTodaysMacros(todaysMacros);
         }
 
-        public async Task<DailySumDto> GetTodaysMacros(string todaysDate)
+        public async Task<DailySumDto> GetTodaysMacros()
         {
+            var todaysDate = GetTodaysDate();
+
             var todaysSum = await _unitOfWork.DailySums.Get(q => q.Date == todaysDate);
             if (todaysSum == null)
             {
@@ -54,6 +56,10 @@ namespace MyCalorieCounter.Application.Services
             var today = _dailySumFactory.CreateDailySum(todaysMacros);
             await _unitOfWork.DailySums.Add(today);
             await _unitOfWork.Save();
+        }
+        private string GetTodaysDate()
+        {
+            return DateTime.Today.ToString("d");
         }
     }
 }

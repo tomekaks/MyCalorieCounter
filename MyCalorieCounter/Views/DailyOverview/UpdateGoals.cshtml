@@ -1,0 +1,47 @@
+﻿@model MyCalorieCounter.Models.DailyGoalsVM
+@{
+    ViewData["Title"] = "Update Goals";
+}
+
+<h1>Update Your Daily Goals</h1>
+
+<br />
+<br />
+
+<div class="col-md-4">
+    <form asp-action="UpdateGoals">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="DailyCaloriesGoal" class="control-label">Calories</label>
+            <input asp-for="DailyCaloriesGoal" class="form-control" />
+            <span asp-validation-for="DailyCaloriesGoal" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DailyProteinsGoal" class="control-label">Proteins</label>
+            <input asp-for="DailyProteinsGoal" class="form-control" />
+            <span asp-validation-for="DailyProteinsGoal" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DailyCarbsGoal" class="control-label">Carbs</label>
+            <input asp-for="DailyCarbsGoal" class="form-control" />
+            <span asp-validation-for="DailyCarbsGoal" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DailyFatsGoal" class="control-label">Fats</label>
+            <input asp-for="DailyFatsGoal" class="form-control" />
+            <span asp-validation-for="DailyFatsGoal" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Update Goals" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+
+<div>
+    <a asp-action="Index" class="btn btn-primary">Back</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
