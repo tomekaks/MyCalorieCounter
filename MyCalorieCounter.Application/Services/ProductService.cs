@@ -42,6 +42,12 @@ namespace MyCalorieCounter.Application.Services
             _unitOfWork.Products.Delete(product);
         }
 
+        public async Task<ProductDto> GetProduct(int id)
+        {
+            var product = await _unitOfWork.Products.Get(q => q.Id == id);
+            return _productFactory.CreateProductDto(product);
+        }
+
         public async Task<List<ProductDto>> GetProductList()
         {
             var productList = await _unitOfWork.Products.GetAll();

@@ -26,6 +26,7 @@ namespace MyCalorieCounter.Application.Factories
         {
             return new ProductDto()
             {
+                Id = product.Id,
                 Name = product.Name,
                 Calories = product.Calories,
                 Proteins = product.Proteins,

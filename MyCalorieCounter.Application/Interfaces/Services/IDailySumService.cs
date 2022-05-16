@@ -11,5 +11,6 @@ namespace MyCalorieCounter.Application.Interfaces.Services
     {
         Task<DailySumDto> GetTodaysMacros();
         Task BeginNewOrUpdateTodaysMacros(DailySumDto todaysMacros);
+        
     }
 }

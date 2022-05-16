@@ -13,5 +13,6 @@ namespace MyCalorieCounter.Application.Interfaces.Services
         ProductDto CreateNewProduct(string name, double cal, double pro, double carb, double fat);
         void AddAProduct(string name, double cal, double pro, double carb, double fat);
         void DeleteAProduct(ProductDto productDto);
+        public Task<ProductDto> GetProduct(int id);
     }
 }

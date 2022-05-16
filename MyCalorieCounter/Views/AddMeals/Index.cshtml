@@ -37,6 +37,9 @@
                <td>@Html.DisplayFor(modelItem => item.Proteins)</td>
                <td>@Html.DisplayFor(modelItem => item.Carbs)</td>
                <td>@Html.DisplayFor(modelItem => item.Fats)</td>
+               <td>
+                   <a asp-action="AddFood" asp-route-id="@item.Id" class="btn btn-success">Add</a>
+               </td>
            </tr>
        }
     </tbody>

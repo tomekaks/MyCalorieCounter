@@ -14,7 +14,6 @@ namespace MyCalorieCounter.Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IDailySumFactory _dailySumFactory;
-        private bool newDay = true;
 
         public DailySumService(IUnitOfWork unitOfWork, IDailySumFactory dailySumFactory)
         {
@@ -24,12 +23,15 @@ namespace MyCalorieCounter.Application.Services
 
         public async Task BeginNewOrUpdateTodaysMacros(DailySumDto todaysMacros)
         {
-            if (newDay == true)
+            var isExists = await _unitOfWork.DailySums.IsExists(d => d.Date == todaysMacros.Date);
+            if (isExists)
             {
-                await BeginNewDay(todaysMacros);
+                await UpdateTodaysMacros(todaysMacros);
             }
             else
-                await UpdateTodaysMacros(todaysMacros);
+            {
+                await BeginNewDay(todaysMacros);
+            }   
         }
 
         public async Task<DailySumDto> GetTodaysMacros()
@@ -38,11 +40,9 @@ namespace MyCalorieCounter.Application.Services
 
             var todaysSum = await _unitOfWork.DailySums.Get(q => q.Date == todaysDate);
             if (todaysSum == null)
-            {
-                newDay = true;
+            {  
                 return _dailySumFactory.CreateDailySumDto(todaysDate);
             }
-            newDay = false;
             return _dailySumFactory.CreateDailySumDto(todaysSum);
         }
         private async Task UpdateTodaysMacros(DailySumDto todaysMacros)

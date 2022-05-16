@@ -41,6 +41,7 @@ namespace MyCalorieCounter
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
+            services.AddRazorPages();
             services.AddScoped<IDailySumService, DailySumService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IDailySumFactory, DailySumFactory>();

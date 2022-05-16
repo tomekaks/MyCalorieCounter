@@ -43,7 +43,7 @@ namespace MyCalorieCounter.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> UpdateGoals(DailyGoalsVM model)
+        public async Task<IActionResult> UpdateGoals(DailyGoalsVM model)
         {
             try
             {
