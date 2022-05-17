@@ -23,12 +23,13 @@ namespace MyCalorieCounter.Application.Services
             _unitOfWork = unitOfWork;
         }
 
-        public void AddAProduct(string name, double cal, double pro, double carb, double fat)
+        public async Task AddAProduct(string name, double cal, double pro, double carb, double fat)
         {
             ProductDto productDto = _productFactory.CreateProductDto(name, cal, pro, carb, fat);
             Product product = _productFactory.CreateProduct(productDto);
 
-            _unitOfWork.Products.Add(product);
+            await _unitOfWork.Products.Add(product);
+            await _unitOfWork.Save();
         }
 
         public ProductDto CreateNewProduct(string name, double cal, double pro, double carb, double fat)
@@ -36,10 +37,11 @@ namespace MyCalorieCounter.Application.Services
             return _productFactory.CreateProductDto(name, cal, pro, carb, fat);
         }
 
-        public void DeleteAProduct(ProductDto productDto)
+        public async Task DeleteAProduct(int id)
         {
-            Product product = _productFactory.CreateProduct(productDto);
+            var product = await _unitOfWork.Products.Get(q => q.Id == id);
             _unitOfWork.Products.Delete(product);
+            await _unitOfWork.Save();
         }
 
         public async Task<ProductDto> GetProduct(int id)

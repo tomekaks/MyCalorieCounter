@@ -68,5 +68,45 @@ namespace MyCalorieCounter.Controllers
                 return View(model);
             }
         }
+
+        public async Task<IActionResult> RemoveFood(int id)
+        {
+            var product = await _productService.GetProduct(id);
+            var model = new AddFoodVM()
+            {
+                Name = product.Name,
+                Calories = product.Calories,
+                Proteins = product.Proteins,
+                Carbs = product.Carbs,
+                Fats = product.Fats
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveFood(AddFoodVM model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                var dailySum = await _dailySumService.GetTodaysMacros();
+                dailySum.Calories -= model.Calories * (model.Weight / 100);
+                dailySum.Proteins -= model.Proteins * (model.Weight / 100);
+                dailySum.Carbs -= model.Carbs * (model.Weight / 100);
+                dailySum.Fats -= model.Fats * (model.Weight / 100);
+                await _dailySumService.BeginNewOrUpdateTodaysMacros(dailySum);
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View(model);
+            }
+        }
     }
 }

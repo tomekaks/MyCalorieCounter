@@ -4,8 +4,8 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Add Your Today's Meals</h1>
-
+<h1>Add or remove food from your today's meals</h1>
+<br />
 <table class="table">
     <thead>
         <tr>
@@ -25,6 +25,7 @@
                 Fats (/100g)
             </th>
             <th></th>
+            <th></th>
         </tr>
     </thead>
 
@@ -39,6 +40,9 @@
                <td>@Html.DisplayFor(modelItem => item.Fats)</td>
                <td>
                    <a asp-action="AddFood" asp-route-id="@item.Id" class="btn btn-success">Add</a>
+               </td>
+               <td>
+                   <a asp-action="RemoveFood" asp-route-id="@item.Id" class="btn btn-danger">Remove</a>
                </td>
            </tr>
        }

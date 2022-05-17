@@ -1,0 +1,63 @@
+﻿@model MyCalorieCounter.Models.AddMealsVM
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Manage your products</h1>
+<br />
+
+<a asp-action="AddProduct" class="btn btn-success">Add new product</a>
+
+<br />
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Product
+            </th>
+            <th>
+                Calories (kcal)
+            </th>
+            <th>
+                Proteins (/100g)
+            </th>
+            <th>
+                Carbs (/100g)
+            </th>
+            <th>
+                Fats (/100g)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model.Products)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.Calories)</td>
+                <td>@Html.DisplayFor(modelItem => item.Proteins)</td>
+                <td>@Html.DisplayFor(modelItem => item.Carbs)</td>
+                <td>@Html.DisplayFor(modelItem => item.Fats)</td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+
+@section Scripts{
+    <script>
+    $(document).ready(function () {
+        $('.table').DataTable();
+    });
+    </script>
+
+}
+

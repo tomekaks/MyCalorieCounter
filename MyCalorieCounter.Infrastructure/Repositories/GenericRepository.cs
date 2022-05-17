@@ -34,7 +34,7 @@ namespace MyCalorieCounter.Infrastructure.Repositories
         public async Task<T> Get(Expression<Func<T, bool>> expression)
         {
             IQueryable<T> query = _db;
-            return await query.FirstOrDefaultAsync(expression);
+            return await query.AsNoTracking().FirstOrDefaultAsync(expression);
         }
 
         public async Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>> expression = null)
