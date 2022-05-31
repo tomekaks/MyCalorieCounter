@@ -20,6 +20,7 @@ namespace MyCalorieCounter.Infrastructure.DataBase
         public DbSet<Product> Products { get; set; }
         public DbSet<DailySum> DailySums { get; set; }
         public DbSet<Setting> Settings { get; set; }
+        public DbSet<Meal> Meals { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -28,16 +29,26 @@ namespace MyCalorieCounter.Infrastructure.DataBase
                 .IsRequired();
 
             builder.Entity<DailySum>()
-                .Property(p => p.Date)
+                .Property(d => d.Date)
                 .IsRequired();
+            builder.Entity<DailySum>()
+                .HasMany(d => d.Meals)
+                .WithOne(m => m.DailySum);
 
             builder.Entity<Setting>()
-                .Property(p => p.Key)
+                .Property(s => s.Key)
                 .IsRequired();
             builder.Entity<Setting>()
-               .Property(p => p.Value)
+               .Property(s => s.Value)
                .IsRequired();
 
+            builder.Entity<Meal>()
+                .HasOne(m => m.Product)
+                .WithMany()
+                .HasForeignKey(m => m.ProductId)
+                .OnDelete(DeleteBehavior.NoAction);
+                
+                       
 
             base.OnModelCreating(builder);
         }
