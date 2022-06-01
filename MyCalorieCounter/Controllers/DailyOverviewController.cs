@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MyCalorieCounter.Application.Dto;
 using MyCalorieCounter.Application.Interfaces.Services;
 using MyCalorieCounter.Models;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace MyCalorieCounter.Controllers
 {
+    [Authorize]
     public class DailyOverviewController : Controller
     {
         private readonly IDailySumService _dailySumService;

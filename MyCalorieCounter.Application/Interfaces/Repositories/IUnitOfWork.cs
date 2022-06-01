@@ -11,6 +11,7 @@ namespace MyCalorieCounter.Application.Interfaces.Repositories
         IProductRepository Products { get; }
         IDailySumRepository DailySums { get; }
         ISettingRepository Settings { get; }
+        IMealRepository Meals { get; }
         Task Save();
     }
 }

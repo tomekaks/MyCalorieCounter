@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,5 +16,6 @@ namespace MyCalorieCounter.Core.Data
         public double Carbs { get; set; }
         public double Fats { get; set; }
         public List<Meal> Meals { get; set; }
+
     }
 }
