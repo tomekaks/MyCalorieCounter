@@ -12,6 +12,7 @@ using MyCalorieCounter.Application.Interfaces.Factories;
 using MyCalorieCounter.Application.Interfaces.Repositories;
 using MyCalorieCounter.Application.Interfaces.Services;
 using MyCalorieCounter.Application.Services;
+using MyCalorieCounter.Core.Data;
 using MyCalorieCounter.Infrastructure.DataBase;
 using MyCalorieCounter.Infrastructure.Repositories;
 using System;
@@ -38,7 +39,7 @@ namespace MyCalorieCounter
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();

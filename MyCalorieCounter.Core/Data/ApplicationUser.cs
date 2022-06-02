@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,7 @@ namespace MyCalorieCounter.Core.Data
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime DateJoined { get; set; }
+        public List<DailySum> DailySums { get; set; }
+        public DailyGoal DailyGoal { get; set; }
     }
 }

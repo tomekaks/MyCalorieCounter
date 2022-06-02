@@ -21,6 +21,7 @@ namespace MyCalorieCounter.Infrastructure.DataBase
         public DbSet<DailySum> DailySums { get; set; }
         public DbSet<Setting> Settings { get; set; }
         public DbSet<Meal> Meals { get; set; }
+        public DbSet<DailyGoal> DailyGoals { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -34,6 +35,10 @@ namespace MyCalorieCounter.Infrastructure.DataBase
             builder.Entity<DailySum>()
                 .HasMany(d => d.Meals)
                 .WithOne(m => m.DailySum);
+            builder.Entity<DailySum>()
+                .HasOne(d => d.User)
+                .WithMany(u => u.DailySums)
+                .HasForeignKey(d => d.UserId);
 
             builder.Entity<Setting>()
                 .Property(s => s.Key)
@@ -47,6 +52,11 @@ namespace MyCalorieCounter.Infrastructure.DataBase
                 .WithMany()
                 .HasForeignKey(m => m.ProductId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<ApplicationUser>()
+                .HasOne(a => a.DailyGoal)
+                .WithOne(d => d.User);
+                
                 
                        
 

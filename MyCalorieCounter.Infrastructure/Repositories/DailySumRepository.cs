@@ -24,10 +24,11 @@ namespace MyCalorieCounter.Infrastructure.Repositories
             var obj = await _context.DailySums.FirstOrDefaultAsync(d => d.Date == dailySum.Date);
             if (obj != null)
             {
-                obj.Calories = dailySum.Calories;
-                obj.Proteins = dailySum.Proteins;
-                obj.Carbs = dailySum.Carbs;
-                obj.Fats = dailySum.Fats;
+                _context.DailySums.Update(obj);
+                //obj.Calories = dailySum.Calories;
+                //obj.Proteins = dailySum.Proteins;
+                //obj.Carbs = dailySum.Carbs;
+                //obj.Fats = dailySum.Fats;
             }
         }
     }
