@@ -30,7 +30,11 @@ namespace MyCalorieCounter.Infrastructure.Repositories
             var obj = await _context.DailyGoals.FirstOrDefaultAsync(q => q.UserId == dailyGoal.UserId);
             if (obj != null)
             {
-                _context.DailyGoals.Update(obj);
+                obj.Calories = dailyGoal.Calories;
+                obj.Proteins = dailyGoal.Proteins;
+                obj.Carbs = dailyGoal.Carbs;
+                obj.Fats = dailyGoal.Fats;
+                //_context.DailyGoals.Update(obj);
             }
         }
         public async Task Add(DailyGoal dailyGoal)

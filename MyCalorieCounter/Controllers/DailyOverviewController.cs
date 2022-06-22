@@ -19,7 +19,6 @@ namespace MyCalorieCounter.Controllers
         private readonly IDailySumService _dailySumService;
         private readonly ISettingService _settingService;
         private readonly IDailyGoalService _dailyGoalService;
-        private string _currentUsersId;
         private readonly UserManager<ApplicationUser> _userManager;
 
         public DailyOverviewController(IDailySumService dailySumService, ISettingService settingService, IDailyGoalService dailyGoalService, UserManager<ApplicationUser> userManager)
@@ -32,17 +31,18 @@ namespace MyCalorieCounter.Controllers
 
         public async Task<IActionResult> Index()
         {
-            await GetUsersId();
+            var currentUsersId = await GetUsersId();
             var todaysMacros = await _dailySumService.GetTodaysMacros();
             //var dailyGoals = await _settingService.GetDailyGoals();
-            var dailyGoals = await _dailyGoalService.GetDailyGoal(_currentUsersId);
+            var dailyGoals = await _dailyGoalService.GetDailyGoal(currentUsersId);
             var model = new DailyOverviewVM(todaysMacros, dailyGoals);
             return View(model);
         }
 
         public async Task<IActionResult> UpdateGoals()
         {
-            var dailyGoals = await _dailyGoalService.GetDailyGoal(_currentUsersId);
+            var currentUsersId = await GetUsersId();
+            var dailyGoals = await _dailyGoalService.GetDailyGoal(currentUsersId);
             var model = new DailyGoalsVM()
             {
                 DailyCaloriesGoal = dailyGoals.Calories,
@@ -71,7 +71,8 @@ namespace MyCalorieCounter.Controllers
                 //    Fats = model.DailyFatsGoal
                 //};
                 //await _settingService.UpdateDailyGoals(dailyGoals);
-                await _dailyGoalService.UpdateDailyGoal(_currentUsersId, 
+                var currentUsersId = await GetUsersId();
+                await _dailyGoalService.UpdateDailyGoal(currentUsersId, 
                                                         model.DailyCaloriesGoal, model.DailyProteinsGoal, 
                                                         model.DailyCarbsGoal, model.DailyFatsGoal);
 
@@ -82,14 +83,14 @@ namespace MyCalorieCounter.Controllers
                 return View(model);
             }
         }
-        private async Task GetUsersId()
+        private async Task<string> GetUsersId()
         {
             var user = await _userManager.GetUserAsync(User);
-            _currentUsersId = user.Id;
+
             //var claimsIdentity = (ClaimsIdentity)User.Identity;
             //var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             //return claim.Value;
-            //return user.Id;
+            return user.Id;
         }
     }
 }
