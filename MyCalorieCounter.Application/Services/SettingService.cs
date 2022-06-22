@@ -23,13 +23,13 @@ namespace MyCalorieCounter.Application.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<DailyGoals> GetDailyGoals()
+        public async Task<DailyGoalDto> GetDailyGoals()
         {
             var calories = await _unitOfWork.Settings.Get(q => q.Key == _calKey);
             var proteins = await _unitOfWork.Settings.Get(q => q.Key == _protsKey);
             var carbs = await _unitOfWork.Settings.Get(q => q.Key == _carbsKey);
             var fats = await _unitOfWork.Settings.Get(q => q.Key == _fatsKey);
-            return new DailyGoals()
+            return new DailyGoalDto()
             {
                 Calories = double.Parse(calories.Value),
                 Proteins = double.Parse(proteins.Value),
@@ -38,7 +38,7 @@ namespace MyCalorieCounter.Application.Services
             };
         }
 
-        public async Task UpdateDailyGoals(DailyGoals dailyGoals)
+        public async Task UpdateDailyGoals(DailyGoalDto dailyGoals)
         {
             var calories = CreateSetting(_calKey, dailyGoals.Calories.ToString());
             var proteins = CreateSetting(_protsKey, dailyGoals.Proteins.ToString());

@@ -49,6 +49,8 @@ namespace MyCalorieCounter
             services.AddScoped<ISettingService, SettingService>();
             services.AddScoped<IProductFactory, ProductFactory>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IDailyGoalService, DailyGoalService>();
+            services.AddScoped<IDailyGoalFactory, DailyGoalFactory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

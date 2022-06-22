@@ -9,7 +9,7 @@ namespace MyCalorieCounter.Application.Interfaces.Services
 {
     public interface ISettingService
     {
-        Task<DailyGoals> GetDailyGoals();
-        Task UpdateDailyGoals(DailyGoals dailyGoals);
+        Task<DailyGoalDto> GetDailyGoals();
+        Task UpdateDailyGoals(DailyGoalDto dailyGoals);
     }
 }

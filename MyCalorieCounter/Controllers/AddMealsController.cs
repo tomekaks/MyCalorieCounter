@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyCalorieCounter.Application.Dto;
 using MyCalorieCounter.Application.Interfaces.Services;
@@ -6,6 +7,7 @@ using MyCalorieCounter.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace MyCalorieCounter.Controllers
@@ -47,8 +49,11 @@ namespace MyCalorieCounter.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddFood(AddFoodVM model)
+        public async Task<IActionResult> AddFood(AddFoodVM model, MealDto meal)
         {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            meal.UserId = claim.Value;
             try
             {
                 if (!ModelState.IsValid)

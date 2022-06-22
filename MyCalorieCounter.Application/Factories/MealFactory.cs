@@ -15,6 +15,7 @@ namespace MyCalorieCounter.Application.Factories
         {
             return new Meal()
             {
+                UserId = mealDto.UserId,
                 ProductId = mealDto.ProductId,
                 DailySumId = mealDto.DailySumId,
                 Weight = mealDto.Weight
@@ -26,6 +27,7 @@ namespace MyCalorieCounter.Application.Factories
             return new MealDto()
             {
                 Id = meal.Id,
+                UserId = meal.UserId,
                 ProductId = meal.ProductId,
                 DailySumId = meal.DailySumId,
                 Weight = meal.Weight

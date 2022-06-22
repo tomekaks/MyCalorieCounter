@@ -15,6 +15,7 @@ namespace MyCalorieCounter.Application.Factories
         {
             return new DailySum()
             {
+                UserId = today.UserId,
                 Date = today.Date,
                 Calories = today.Calories,
                 Proteins = today.Proteins,
@@ -26,6 +27,8 @@ namespace MyCalorieCounter.Application.Factories
         {
             return new DailySumDto()
             {
+                Id = today.Id,
+                UserId = today.UserId,
                 Date = today.Date,
                 Calories = today.Calories,
                 Proteins = today.Proteins,
@@ -43,6 +46,15 @@ namespace MyCalorieCounter.Application.Factories
                 Carbs = 0,
                 Fats = 0
             };
+        }
+        public List<DailySumDto> CreateDailySumDtoList(List<DailySum> dailySums)
+        {
+            var listDto = new List<DailySumDto>();
+            foreach (var item in dailySums)
+            {
+                listDto.Add(CreateDailySumDto(item));
+            }
+            return listDto;
         }
     }
 }

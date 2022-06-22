@@ -8,7 +8,7 @@ namespace MyCalorieCounter.Models
 {
     public class DailyOverviewVM
     {
-        public DailyOverviewVM(DailySumDto dailySumDto, DailyGoals dailyGoals)
+        public DailyOverviewVM(DailySumDto dailySumDto, DailyGoalDto dailyGoals)
         {
             Date = dailySumDto.Date;
             Calories = dailySumDto.Calories;
