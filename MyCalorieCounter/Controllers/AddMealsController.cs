@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyCalorieCounter.Application.Dto;
 using MyCalorieCounter.Application.Interfaces.Services;
+using MyCalorieCounter.Core.Data;
 using MyCalorieCounter.Models;
 using System;
 using System.Collections.Generic;
@@ -17,12 +18,14 @@ namespace MyCalorieCounter.Controllers
     {
         private readonly IProductService _productService;
         private readonly IDailySumService _dailySumService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
 
-        public AddMealsController(IProductService productService, IDailySumService dailySumService)
+        public AddMealsController(IProductService productService, IDailySumService dailySumService, UserManager<ApplicationUser> userManager)
         {
             _productService = productService;
             _dailySumService = dailySumService;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
@@ -51,17 +54,18 @@ namespace MyCalorieCounter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddFood(AddFoodVM model, MealDto meal)
         {
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            meal.UserId = claim.Value;
+            //var claimsIdentity = (ClaimsIdentity)User.Identity;
+            //var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            //meal.UserId = claim.Value;
             try
             {
                 if (!ModelState.IsValid)
                 {
                     return View(model);
                 }
-
-                var dailySum = await _dailySumService.GetTodaysMacros();
+                var userId = await GetUsersId();
+                var dailySum = await _dailySumService.GetTodaysMacros(userId);
+                dailySum.UserId = userId;
                 dailySum.Calories += model.Calories * (model.Weight / 100);
                 dailySum.Proteins += model.Proteins * (model.Weight / 100);
                 dailySum.Carbs += model.Carbs * (model.Weight / 100);
@@ -100,8 +104,9 @@ namespace MyCalorieCounter.Controllers
                 {
                     return View(model);
                 }
-
-                var dailySum = await _dailySumService.GetTodaysMacros();
+                var userId = await GetUsersId();
+                var dailySum = await _dailySumService.GetTodaysMacros(userId);
+                dailySum.UserId = userId;
                 dailySum.Calories -= model.Calories * (model.Weight / 100);
                 dailySum.Proteins -= model.Proteins * (model.Weight / 100);
                 dailySum.Carbs -= model.Carbs * (model.Weight / 100);
@@ -114,6 +119,15 @@ namespace MyCalorieCounter.Controllers
             {
                 return View(model);
             }
+        }
+        private async Task<string> GetUsersId()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            //var claimsIdentity = (ClaimsIdentity)User.Identity;
+            //var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            //return claim.Value;
+            return user.Id;
         }
     }
 }

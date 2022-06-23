@@ -23,7 +23,7 @@ namespace MyCalorieCounter.Application.Services
 
         public async Task BeginNewOrUpdateTodaysMacros(DailySumDto todaysMacros)
         {
-            var isExists = await _unitOfWork.DailySums.IsExists(d => d.Date == todaysMacros.Date);
+            var isExists = await _unitOfWork.DailySums.IsExists(d => d.Date == todaysMacros.Date && d.UserId == todaysMacros.UserId);
             if (isExists)
             {
                 await UpdateTodaysMacros(todaysMacros);
@@ -34,11 +34,11 @@ namespace MyCalorieCounter.Application.Services
             }   
         }
 
-        public async Task<DailySumDto> GetTodaysMacros()
+        public async Task<DailySumDto> GetTodaysMacros(string userId)
         {
             var todaysDate = GetTodaysDate();
 
-            var todaysSum = await _unitOfWork.DailySums.Get(q => q.Date == todaysDate);
+            var todaysSum = await _unitOfWork.DailySums.Get(q => q.Date == todaysDate && q.UserId == userId);
             if (todaysSum == null)
             {  
                 return _dailySumFactory.CreateDailySumDto(todaysDate);

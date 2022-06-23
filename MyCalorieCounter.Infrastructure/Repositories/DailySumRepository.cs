@@ -21,14 +21,14 @@ namespace MyCalorieCounter.Infrastructure.Repositories
 
         public async Task Update(DailySum dailySum)
         {
-            var obj = await _context.DailySums.FirstOrDefaultAsync(d => d.Date == dailySum.Date);
+            var obj = await _context.DailySums.FirstOrDefaultAsync(d => d.Date == dailySum.Date && d.UserId == dailySum.UserId);
             if (obj != null)
             {
-                _context.DailySums.Update(obj);
-                //obj.Calories = dailySum.Calories;
-                //obj.Proteins = dailySum.Proteins;
-                //obj.Carbs = dailySum.Carbs;
-                //obj.Fats = dailySum.Fats;
+                //_context.DailySums.Update(obj);
+                obj.Calories = dailySum.Calories;
+                obj.Proteins = dailySum.Proteins;
+                obj.Carbs = dailySum.Carbs;
+                obj.Fats = dailySum.Fats;
             }
         }
     }

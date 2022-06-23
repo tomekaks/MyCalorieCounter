@@ -32,8 +32,7 @@ namespace MyCalorieCounter.Controllers
         public async Task<IActionResult> Index()
         {
             var currentUsersId = await GetUsersId();
-            var todaysMacros = await _dailySumService.GetTodaysMacros();
-            //var dailyGoals = await _settingService.GetDailyGoals();
+            var todaysMacros = await _dailySumService.GetTodaysMacros(currentUsersId);
             var dailyGoals = await _dailyGoalService.GetDailyGoal(currentUsersId);
             var model = new DailyOverviewVM(todaysMacros, dailyGoals);
             return View(model);
@@ -63,14 +62,7 @@ namespace MyCalorieCounter.Controllers
                 {
                     return View(model);
                 }
-                //var dailyGoals = new DailyGoalDto()
-                //{
-                //    Calories = model.DailyCaloriesGoal,
-                //    Proteins = model.DailyProteinsGoal,
-                //    Carbs = model.DailyCarbsGoal,
-                //    Fats = model.DailyFatsGoal
-                //};
-                //await _settingService.UpdateDailyGoals(dailyGoals);
+               
                 var currentUsersId = await GetUsersId();
                 await _dailyGoalService.UpdateDailyGoal(currentUsersId, 
                                                         model.DailyCaloriesGoal, model.DailyProteinsGoal, 
