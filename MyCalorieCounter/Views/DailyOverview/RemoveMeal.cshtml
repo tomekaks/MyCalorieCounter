@@ -1,0 +1,55 @@
+﻿@model MyCalorieCounter.Models.AddFoodVM
+
+@{
+    ViewData["Title"] = "RemoveMeal";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>Are you sure you want to remove this from your daily meals?</h2>
+<div> 
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Calories)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Calories)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Proteins)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Proteins)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Carbs)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Carbs)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Fats)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Fats)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Weight)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Weight)
+        </dd>
+    </dl>
+    
+    <form asp-action="RemoveMeal">
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

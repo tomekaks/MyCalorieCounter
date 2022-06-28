@@ -10,7 +10,7 @@ namespace MyCalorieCounter.Application.Interfaces.Repositories
     public interface IGenericRepository<T> where T : class 
     {
         Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>> expression = null, string includeProperties = null);
-        Task<T> Get(Expression<Func<T, bool>> expression);
+        Task<T> Get(Expression<Func<T, bool>> expression, string includeProperties = null);
         Task<bool> IsExists(Expression<Func<T, bool>> expression);
         Task Add(T entity);
         void Delete(T entity);

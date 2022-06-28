@@ -31,9 +31,13 @@ namespace MyCalorieCounter.Infrastructure.Repositories
             _db.Remove(entity);
         }
 
-        public async Task<T> Get(Expression<Func<T, bool>> expression)
+        public async Task<T> Get(Expression<Func<T, bool>> expression, string includeProperties = null)
         {
             IQueryable<T> query = _db;
+            if (includeProperties != null)
+            {
+                query = query.Include(includeProperties);
+            }
             return await query.FirstOrDefaultAsync(expression);
         }
 

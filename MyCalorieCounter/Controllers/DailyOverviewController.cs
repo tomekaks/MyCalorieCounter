@@ -79,6 +79,40 @@ namespace MyCalorieCounter.Controllers
                 return View(model);
             }
         }
+        public async Task<IActionResult> RemoveMeal(int id)
+        {
+            var meal = await _mealService.GetMeal(id);
+            var model = new AddFoodVM()
+            {
+                Name = meal.Product.Name,
+                Calories = meal.Product.Calories,
+                Proteins = meal.Product.Proteins,
+                Carbs = meal.Product.Carbs,
+                Fats = meal.Product.Fats
+            };
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveMeal(AddFoodVM model, int id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                await _mealService.DeleteMeal(id);
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View(model);
+            }
+        }
+
         private async Task<string> GetUsersId()
         {
             var user = await _userManager.GetUserAsync(User);

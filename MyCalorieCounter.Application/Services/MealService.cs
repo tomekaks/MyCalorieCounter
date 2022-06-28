@@ -33,12 +33,23 @@ namespace MyCalorieCounter.Application.Services
             _unitOfWork.Meals.Delete(meal);
             await _unitOfWork.Save();
         }
+        public async Task DeleteMeal(int id)
+        {
+            var meal = await _unitOfWork.Meals.Get(m => m.Id == id);
+            _unitOfWork.Meals.Delete(meal);
+            await _unitOfWork.Save();
+        }
         public async Task<List<MealDto>> GetTodaysMeals(string userId, string date)
         {
             var list = await _unitOfWork.Meals.GetAll(m => m.UserId == userId && m.Date == date,
                                                       includeProperties:"Product");
             var mealList = _mealFactory.CreateMealDtoList(list.ToList());
             return mealList;
+        }
+        public async Task<MealDto> GetMeal(int id)
+        {
+            var meal = await _unitOfWork.Meals.Get(m => m.Id == id, includeProperties:"Product");
+            return _mealFactory.CreateMealDto(meal);
         }
     }
 }

@@ -12,5 +12,7 @@ namespace MyCalorieCounter.Application.Interfaces.Services
         Task AddMeal(MealDto mealDto);
         Task DeleteMeal(MealDto mealDto);
         Task<List<MealDto>> GetTodaysMeals(string userId, string date);
+        Task<MealDto> GetMeal(int id);
+        Task DeleteMeal(int id);
     }
 }
