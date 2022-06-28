@@ -52,6 +52,12 @@ namespace MyCalorieCounter.Infrastructure.DataBase
                 .WithMany()
                 .HasForeignKey(m => m.ProductId)
                 .OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<Meal>()
+                .Property(m => m.Date)
+                .IsRequired();
+            builder.Entity<Meal>()
+                .Property(m => m.UserId)
+                .IsRequired();
 
             builder.Entity<ApplicationUser>()
                 .HasOne(a => a.DailyGoal)

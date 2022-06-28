@@ -12,6 +12,54 @@
 <table class="table">
     <thead>
         <tr>
+            <th>
+                Product
+            </th>
+            <th>
+                Calories (kcal)
+            </th>
+            <th>
+                Proteins (/100g)
+            </th>
+            <th>
+                Carbs (/100g)
+            </th>
+            <th>
+                Fats (/100g)
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model.Meals != null)
+        {
+            foreach (var item in Model.Meals)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Product.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Product.Calories)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Product.Proteins)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Product.Carbs)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Product.Fats)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Weight)</td>
+                    <td>
+                        <a asp-action="RemoveFood" asp-route-id="@item.Id" class="btn btn-danger">Remove</a>
+                    </td>
+                </tr>
+            }
+        }
+
+    </tbody>
+
+</table>
+<br />
+<br />
+
+<table class="table-striped">
+    <thead>
+        <tr>
             <th></th>
             <th>
                 @Html.DisplayNameFor(model => model.Calories)
@@ -88,3 +136,11 @@
 <div>
     <a asp-action="UpdateGoals" class="btn btn-primary">Update Goals</a>
 </div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable();
+        });
+    </script>
+}

@@ -18,14 +18,16 @@ namespace MyCalorieCounter.Controllers
     {
         private readonly IProductService _productService;
         private readonly IDailySumService _dailySumService;
+        private readonly IMealService _mealService;
         private readonly UserManager<ApplicationUser> _userManager;
 
 
-        public AddMealsController(IProductService productService, IDailySumService dailySumService, UserManager<ApplicationUser> userManager)
+        public AddMealsController(IProductService productService, IDailySumService dailySumService, UserManager<ApplicationUser> userManager, IMealService mealService)
         {
             _productService = productService;
             _dailySumService = dailySumService;
             _userManager = userManager;
+            _mealService = mealService;
         }
 
         public async Task<IActionResult> Index()
@@ -52,7 +54,7 @@ namespace MyCalorieCounter.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddFood(AddFoodVM model, MealDto meal)
+        public async Task<IActionResult> AddFood(AddFoodVM model, int id)
         {
             //var claimsIdentity = (ClaimsIdentity)User.Identity;
             //var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -71,7 +73,18 @@ namespace MyCalorieCounter.Controllers
                 dailySum.Carbs += model.Carbs * (model.Weight / 100);
                 dailySum.Fats += model.Fats * (model.Weight / 100);
                 await _dailySumService.BeginNewOrUpdateTodaysMacros(dailySum);
-               
+                dailySum = await _dailySumService.GetTodaysMacros(userId);
+                
+                var meal = new MealDto()
+                {
+                    DailySumId = dailySum.Id,
+                    UserId = userId,
+                    Date = dailySum.Date,
+                    ProductId = id,
+                    Weight = model.Weight
+                };
+                await _mealService.AddMeal(meal);
+
                 return RedirectToAction(nameof(Index));
             }
             catch

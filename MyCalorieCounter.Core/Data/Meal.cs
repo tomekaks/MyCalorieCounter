@@ -15,6 +15,7 @@ namespace MyCalorieCounter.Core.Data
         public Product Product { get; set; }
         public int DailySumId { get; set; }
         public DailySum DailySum { get; set; }
+        public string Date { get; set; }
         public int Weight { get; set; }
     }
 }

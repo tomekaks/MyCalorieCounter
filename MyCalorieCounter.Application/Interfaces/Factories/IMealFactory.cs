@@ -12,5 +12,6 @@ namespace MyCalorieCounter.Application.Interfaces.Factories
     {
         Meal CreateMeal(MealDto mealDto);
         MealDto CreateMealDto(Meal meal);
+        public List<MealDto> CreateMealDtoList(List<Meal> mealList);
     }
 }

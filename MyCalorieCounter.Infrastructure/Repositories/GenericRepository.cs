@@ -37,7 +37,7 @@ namespace MyCalorieCounter.Infrastructure.Repositories
             return await query.FirstOrDefaultAsync(expression);
         }
 
-        public async Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>> expression = null)
+        public async Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>> expression = null, string includeProperties = null)
         {
             IQueryable<T> query = _db;
 
@@ -45,10 +45,17 @@ namespace MyCalorieCounter.Infrastructure.Repositories
             {
                 query = query.Where(expression);
             }
+
+            if (includeProperties != null)
+            {
+                query = query.Include(includeProperties);
+            }
+
             return await query.ToListAsync();
         }
 
-        public async Task<bool> IsExists(Expression<Func<T, bool>> expression = null)
+
+        public async Task<bool> IsExists(Expression<Func<T, bool>> expression)
         {
             IQueryable<T> query = _db;
             return await query.AnyAsync(expression);

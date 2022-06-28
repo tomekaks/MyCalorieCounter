@@ -8,7 +8,7 @@ namespace MyCalorieCounter.Models
 {
     public class DailyOverviewVM
     {
-        public DailyOverviewVM(DailySumDto dailySumDto, DailyGoalDto dailyGoals)
+        public DailyOverviewVM(DailySumDto dailySumDto, DailyGoalDto dailyGoals, List<MealDto> meals)
         {
             Date = dailySumDto.Date;
             Calories = dailySumDto.Calories;
@@ -19,6 +19,7 @@ namespace MyCalorieCounter.Models
             DailyProteinsGoal = dailyGoals.Proteins;
             DailyCarbsGoal = dailyGoals.Carbs;
             DailyFatsGoal = dailyGoals.Fats;
+            Meals = meals;
         }
         public string Date { get; set; }
         public double Calories { get; set; }
@@ -49,5 +50,6 @@ namespace MyCalorieCounter.Models
         public double DailyProteinsGoal { get; set; }
         public double DailyCarbsGoal { get; set; }
         public double DailyFatsGoal { get; set; }
+        public List<MealDto> Meals { get; set; }
     }
 }

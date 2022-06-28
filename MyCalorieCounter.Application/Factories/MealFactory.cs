@@ -11,6 +11,13 @@ namespace MyCalorieCounter.Application.Factories
 {
     public class MealFactory : IMealFactory
     {
+        private readonly IProductFactory _productFactory;
+
+        public MealFactory(IProductFactory productFactory)
+        {
+            _productFactory = productFactory;
+        }
+
         public Meal CreateMeal(MealDto mealDto)
         {
             return new Meal()
@@ -18,6 +25,7 @@ namespace MyCalorieCounter.Application.Factories
                 UserId = mealDto.UserId,
                 ProductId = mealDto.ProductId,
                 DailySumId = mealDto.DailySumId,
+                Date = mealDto.Date,
                 Weight = mealDto.Weight
             };
         }
@@ -29,7 +37,9 @@ namespace MyCalorieCounter.Application.Factories
                 Id = meal.Id,
                 UserId = meal.UserId,
                 ProductId = meal.ProductId,
+                Product = _productFactory.CreateProductDto(meal.Product),
                 DailySumId = meal.DailySumId,
+                Date = meal.Date,
                 Weight = meal.Weight
             };
         }
