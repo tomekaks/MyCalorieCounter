@@ -24,8 +24,10 @@ namespace MyCalorieCounter.Controllers
         public async Task<IActionResult> Index()
         {
             var productList = await _productService.GetProductList();
-            var model = new AddMealsVM();
-            model.Products = productList;
+            var model = new AddMealsVM
+            {
+                Products = productList
+            };
             return View(model);
         }
 

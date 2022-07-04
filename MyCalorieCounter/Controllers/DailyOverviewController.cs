@@ -102,7 +102,15 @@ namespace MyCalorieCounter.Controllers
                 {
                     return View(model);
                 }
-
+                var userId = await GetUsersId();
+                var dailySum = await _dailySumService.GetTodaysMacros(userId);
+                var meal = await _mealService.GetMeal(id);
+                dailySum.UserId = userId;
+                dailySum.Calories -= meal.Product.Calories * (meal.Weight / 100);
+                dailySum.Proteins -= meal.Product.Proteins * (meal.Weight / 100);
+                dailySum.Carbs -= meal.Product.Carbs * (meal.Weight / 100);
+                dailySum.Fats -= meal.Product.Fats * (meal.Weight / 100);
+                await _dailySumService.BeginNewOrUpdateTodaysMacros(dailySum);
                 await _mealService.DeleteMeal(id);
 
                 return RedirectToAction(nameof(Index));

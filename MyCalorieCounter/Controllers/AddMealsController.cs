@@ -43,6 +43,7 @@ namespace MyCalorieCounter.Controllers
             var product = await _productService.GetProduct(id);
             var model = new AddFoodVM()
             {
+                ProductId = id,
                 Name = product.Name,
                 Calories = product.Calories,
                 Proteins = product.Proteins,
@@ -54,7 +55,7 @@ namespace MyCalorieCounter.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddFood(AddFoodVM model, int id)
+        public async Task<IActionResult> AddFood(AddFoodVM model, int productId)
         {
             //var claimsIdentity = (ClaimsIdentity)User.Identity;
             //var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -66,12 +67,13 @@ namespace MyCalorieCounter.Controllers
                     return View(model);
                 }
                 var userId = await GetUsersId();
+                var product = await _productService.GetProduct(productId);
                 var dailySum = await _dailySumService.GetTodaysMacros(userId);
                 dailySum.UserId = userId;
-                dailySum.Calories += model.Calories * (model.Weight / 100);
-                dailySum.Proteins += model.Proteins * (model.Weight / 100);
-                dailySum.Carbs += model.Carbs * (model.Weight / 100);
-                dailySum.Fats += model.Fats * (model.Weight / 100);
+                dailySum.Calories += (product.Calories * model.Weight) / 100;
+                dailySum.Proteins += (product.Proteins * model.Weight) / 100;
+                dailySum.Carbs += (product.Carbs * model.Weight) / 100;
+                dailySum.Fats += (product.Fats * model.Weight) / 100;
                 await _dailySumService.BeginNewOrUpdateTodaysMacros(dailySum);
                 dailySum = await _dailySumService.GetTodaysMacros(userId);
                 
@@ -80,7 +82,7 @@ namespace MyCalorieCounter.Controllers
                     DailySumId = dailySum.Id,
                     UserId = userId,
                     Date = dailySum.Date,
-                    ProductId = id,
+                    ProductId = productId,
                     Weight = model.Weight
                 };
                 await _mealService.AddMeal(meal);
@@ -93,46 +95,7 @@ namespace MyCalorieCounter.Controllers
             }
         }
 
-        public async Task<IActionResult> RemoveFood(int id)
-        {
-            var product = await _productService.GetProduct(id);
-            var model = new AddFoodVM()
-            {
-                Name = product.Name,
-                Calories = product.Calories,
-                Proteins = product.Proteins,
-                Carbs = product.Carbs,
-                Fats = product.Fats
-            };
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RemoveFood(AddFoodVM model)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return View(model);
-                }
-                var userId = await GetUsersId();
-                var dailySum = await _dailySumService.GetTodaysMacros(userId);
-                dailySum.UserId = userId;
-                dailySum.Calories -= model.Calories * (model.Weight / 100);
-                dailySum.Proteins -= model.Proteins * (model.Weight / 100);
-                dailySum.Carbs -= model.Carbs * (model.Weight / 100);
-                dailySum.Fats -= model.Fats * (model.Weight / 100);
-                await _dailySumService.BeginNewOrUpdateTodaysMacros(dailySum);
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View(model);
-            }
-        }
+        
         private async Task<string> GetUsersId()
         {
             var user = await _userManager.GetUserAsync(User);

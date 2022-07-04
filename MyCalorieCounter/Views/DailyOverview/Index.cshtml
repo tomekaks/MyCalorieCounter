@@ -19,13 +19,16 @@
                 Calories (kcal)
             </th>
             <th>
-                Proteins (/100g)
+                Proteins (g)
             </th>
             <th>
-                Carbs (/100g)
+                Carbs (g)
             </th>
             <th>
-                Fats (/100g)
+                Fats (g)
+            </th>
+            <th>
+                Weight (g)
             </th>
             <th></th>
             <th></th>
@@ -39,13 +42,16 @@
             {
                 <tr>
                     <td>@Html.DisplayFor(modelItem => item.Product.Name)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Product.Calories)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Product.Proteins)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Product.Carbs)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Product.Fats)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Calories)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Proteins)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Carbs)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Fats)</td>
                     <td>@Html.DisplayFor(modelItem => item.Weight)</td>
                     <td>
                         <a asp-action="RemoveMeal" asp-route-id="@item.Id" class="btn btn-danger">Remove</a>
+                    </td>
+                    <td>
+                        <a asp-action="EditMeal" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
                     </td>
                 </tr>
             }
@@ -57,7 +63,7 @@
 <br />
 <br />
 
-<table class="table-striped">
+<table class="col-5">
     <thead>
         <tr>
             <th></th>
@@ -133,9 +139,11 @@
         </tr>
     </tbody>
 </table>
+<br />
 <div>
-    <a asp-action="UpdateGoals" class="btn btn-primary">Update Goals</a>
+    <a asp-action="UpdateGoals" class="btn btn-success">Update Goals</a>
 </div>
+
 
 @section Scripts{
     <script>
