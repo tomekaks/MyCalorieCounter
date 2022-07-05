@@ -55,5 +55,12 @@ namespace MyCalorieCounter.Application.Services
             var productList = await _unitOfWork.Products.GetAll();
             return _productFactory.CreateProductDtoList(productList.ToList());
         }
+
+        public async Task UpdateProduct(ProductDto productDto)
+        {
+            var product = _productFactory.CreateProduct(productDto);
+            await _unitOfWork.Products.Update(product);
+            await _unitOfWork.Save();
+        }
     }
 }

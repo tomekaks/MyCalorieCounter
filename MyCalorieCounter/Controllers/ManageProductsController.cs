@@ -88,5 +88,45 @@ namespace MyCalorieCounter.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var product = await _productService.GetProduct(id);
+            var model = new ProductVM()
+            {
+                Id = id,
+                Name = product.Name,
+                Calories = product.Calories,
+                Proteins = product.Proteins,
+                Carbs = product.Carbs,
+                Fats = product.Fats
+            };
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(ProductVM model, int id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                var product = await _productService.GetProduct(id);
+                product.Name = model.Name;
+                product.Calories = model.Calories;
+                product.Proteins = model.Proteins;
+                product.Carbs = model.Carbs;
+                product.Fats = model.Fats;
+                await _productService.UpdateProduct(product);
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View(model);
+            }
+        }
     }
 }
