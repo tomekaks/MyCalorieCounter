@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyCalorieCounter.Infrastructure.DataBase;
 
 namespace MyCalorieCounter.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220705123730_AddedExerciseAndActivityModels")]
+    partial class AddedExerciseAndActivityModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -152,6 +154,35 @@ namespace MyCalorieCounter.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("MyCalorieCounter.Core.Data.Activity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Calories")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DailySumId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ExerciseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Minutes")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExerciseId");
+
+                    b.ToTable("Activities");
                 });
 
             modelBuilder.Entity("MyCalorieCounter.Core.Data.ApplicationUser", b =>
@@ -345,35 +376,6 @@ namespace MyCalorieCounter.Infrastructure.Migrations
                     b.ToTable("Meals");
                 });
 
-            modelBuilder.Entity("MyCalorieCounter.Core.Data.MyActivity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Calories")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DailySumId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ExerciseId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Minutes")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExerciseId");
-
-                    b.ToTable("MyActivities");
-                });
-
             modelBuilder.Entity("MyCalorieCounter.Core.Data.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -473,6 +475,17 @@ namespace MyCalorieCounter.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("MyCalorieCounter.Core.Data.Activity", b =>
+                {
+                    b.HasOne("MyCalorieCounter.Core.Data.Exercise", "Exercise")
+                        .WithMany()
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Exercise");
+                });
+
             modelBuilder.Entity("MyCalorieCounter.Core.Data.DailyGoal", b =>
                 {
                     b.HasOne("MyCalorieCounter.Core.Data.ApplicationUser", "User")
@@ -516,17 +529,6 @@ namespace MyCalorieCounter.Infrastructure.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("MyCalorieCounter.Core.Data.MyActivity", b =>
-                {
-                    b.HasOne("MyCalorieCounter.Core.Data.Exercise", "Exercise")
-                        .WithMany()
-                        .HasForeignKey("ExerciseId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Exercise");
                 });
 
             modelBuilder.Entity("MyCalorieCounter.Core.Data.ApplicationUser", b =>

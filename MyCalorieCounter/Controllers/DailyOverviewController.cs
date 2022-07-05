@@ -17,16 +17,14 @@ namespace MyCalorieCounter.Controllers
     public class DailyOverviewController : Controller
     {
         private readonly IDailySumService _dailySumService;
-        private readonly ISettingService _settingService;
         private readonly IDailyGoalService _dailyGoalService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMealService _mealService;
 
-        public DailyOverviewController(IDailySumService dailySumService, ISettingService settingService, IDailyGoalService dailyGoalService, 
+        public DailyOverviewController(IDailySumService dailySumService, IDailyGoalService dailyGoalService, 
                                        UserManager<ApplicationUser> userManager, IMealService mealService)
         {
             _dailySumService = dailySumService;
-            _settingService = settingService;
             _dailyGoalService = dailyGoalService;
             _userManager = userManager;
             _mealService = mealService;

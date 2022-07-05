@@ -20,6 +20,8 @@ namespace MyCalorieCounter.Infrastructure.Repositories
             Settings = new SettingRepository(context);
             Meals = new MealRepository(context);
             DailyGoals = new DailyGoalRepository(context);
+            Exercises = new ExerciseRepository(context);
+            MyActivities = new MyActivityRepository(context);
         }
 
         public IProductRepository Products { get; private set; }
@@ -27,6 +29,8 @@ namespace MyCalorieCounter.Infrastructure.Repositories
         public ISettingRepository Settings { get; private set; }
         public IMealRepository Meals { get; private set; }
         public IDailyGoalRepository DailyGoals { get; private set; }
+        public IExerciseRepository Exercises { get; private set; }
+        public IMyActivityRepository MyActivities { get; private set; }
 
         public void Dispose()
         {

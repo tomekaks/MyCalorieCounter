@@ -13,6 +13,8 @@ namespace MyCalorieCounter.Application.Interfaces.Repositories
         ISettingRepository Settings { get; }
         IMealRepository Meals { get; }
         IDailyGoalRepository DailyGoals { get; }
+        IExerciseRepository Exercises { get; }
+        IMyActivityRepository MyActivities { get; }
         Task Save();
     }
 }
