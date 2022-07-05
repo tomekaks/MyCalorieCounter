@@ -29,6 +29,18 @@ namespace MyCalorieCounter.Application.Factories
                 Weight = mealDto.Weight
             };
         }
+        public Meal CreateMeal(MealDto mealDto, int id)
+        {
+            return new Meal()
+            {
+                Id = id,
+                UserId = mealDto.UserId,
+                ProductId = mealDto.ProductId,
+                DailySumId = mealDto.DailySumId,
+                Date = mealDto.Date,
+                Weight = mealDto.Weight
+            };
+        }
 
         public MealDto CreateMealDto(Meal meal)
         {

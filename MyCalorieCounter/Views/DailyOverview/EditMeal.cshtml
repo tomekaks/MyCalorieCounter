@@ -1,0 +1,62 @@
+﻿@model MyCalorieCounter.Models.EditMealVM
+
+@{
+    ViewData["Title"] = "EditMeal";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit Meal</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Calories)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Calories)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Proteins)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Proteins)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Carbs)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Carbs)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Fats)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Fats)
+        </dd>
+    </dl>
+    <div class="col-sm-2">
+        <form asp-action="EditMeal">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input hidden asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Weight" class="control-label">Weight in grams</label>
+                <input asp-for="Weight" class="form-control" />
+                <span asp-validation-for="Weight" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Edit" class="btn btn-info" />
+            </div>
+        </form>
+    </div>
+    
+</div>
+<div>
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
+</div>

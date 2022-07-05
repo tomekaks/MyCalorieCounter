@@ -1,4 +1,5 @@
-﻿using MyCalorieCounter.Application.Interfaces.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using MyCalorieCounter.Application.Interfaces.Repositories;
 using MyCalorieCounter.Core.Data;
 using MyCalorieCounter.Infrastructure.DataBase;
 using System;
@@ -15,6 +16,11 @@ namespace MyCalorieCounter.Infrastructure.Repositories
         public MealRepository(ApplicationDbContext context) : base(context)
         {
             _context = context;
+        }
+        public async Task Update(Meal meal)
+        {
+            var obj = await _context.Meals.FirstOrDefaultAsync(m => m.Id == meal.Id && m.UserId == meal.UserId);
+            obj.Weight = meal.Weight;
         }
     }
 }

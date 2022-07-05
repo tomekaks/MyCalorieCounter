@@ -51,5 +51,11 @@ namespace MyCalorieCounter.Application.Services
             var meal = await _unitOfWork.Meals.Get(m => m.Id == id, includeProperties:"Product");
             return _mealFactory.CreateMealDto(meal);
         }
+        public async Task UpdateMeal(MealDto mealDto, int id)
+        {
+            var meal = _mealFactory.CreateMeal(mealDto, id);
+            await _unitOfWork.Meals.Update(meal);
+            await _unitOfWork.Save();
+        }
     }
 }

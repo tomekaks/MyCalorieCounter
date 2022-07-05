@@ -82,19 +82,21 @@ namespace MyCalorieCounter.Controllers
         public async Task<IActionResult> RemoveMeal(int id)
         {
             var meal = await _mealService.GetMeal(id);
-            var model = new AddFoodVM()
+            var model = new RemoveMealVM()
             {
+                Id = id,
                 Name = meal.Product.Name,
-                Calories = meal.Product.Calories,
-                Proteins = meal.Product.Proteins,
-                Carbs = meal.Product.Carbs,
-                Fats = meal.Product.Fats
+                Calories = meal.Calories,
+                Proteins = meal.Proteins,
+                Carbs = meal.Carbs,
+                Fats = meal.Fats,
+                Weight = meal.Weight
             };
             return View(model);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RemoveMeal(AddFoodVM model, int id)
+        public async Task<IActionResult> RemoveMeal(RemoveMealVM model, int id)
         {
             try
             {
@@ -106,12 +108,62 @@ namespace MyCalorieCounter.Controllers
                 var dailySum = await _dailySumService.GetTodaysMacros(userId);
                 var meal = await _mealService.GetMeal(id);
                 dailySum.UserId = userId;
-                dailySum.Calories -= meal.Product.Calories * (meal.Weight / 100);
-                dailySum.Proteins -= meal.Product.Proteins * (meal.Weight / 100);
-                dailySum.Carbs -= meal.Product.Carbs * (meal.Weight / 100);
-                dailySum.Fats -= meal.Product.Fats * (meal.Weight / 100);
+                dailySum.Calories -= meal.Calories;
+                dailySum.Proteins -= meal.Proteins;
+                dailySum.Carbs -= meal.Carbs;
+                dailySum.Fats -= meal.Fats;
                 await _dailySumService.BeginNewOrUpdateTodaysMacros(dailySum);
                 await _mealService.DeleteMeal(id);
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View(model);
+            }
+        }
+
+        public async Task<IActionResult> EditMeal(int id)
+        {
+            var meal = await _mealService.GetMeal(id);
+            var model = new EditMealVM()
+            {
+                Id = id,
+                Name = meal.Product.Name,
+                Calories = meal.Calories,
+                Proteins = meal.Proteins,
+                Carbs = meal.Carbs,
+                Fats = meal.Fats,
+                Weight = meal.Weight
+            };
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditMeal(EditMealVM model, int id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                var userId = await GetUsersId();
+                var dailySum = await _dailySumService.GetTodaysMacros(userId);
+                var meal = await _mealService.GetMeal(id);
+                dailySum.Calories -= meal.Calories;
+                dailySum.Proteins -= meal.Proteins;
+                dailySum.Carbs -= meal.Carbs;
+                dailySum.Fats -= meal.Fats;
+
+                meal.Weight = model.Weight;
+                dailySum.Calories += meal.Calories;
+                dailySum.Proteins += meal.Proteins;
+                dailySum.Carbs += meal.Carbs;
+                dailySum.Fats += meal.Fats;
+
+                await _mealService.UpdateMeal(meal, id);
+                await _dailySumService.BeginNewOrUpdateTodaysMacros(dailySum);
 
                 return RedirectToAction(nameof(Index));
             }
