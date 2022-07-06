@@ -1,0 +1,43 @@
+﻿@model MyCalorieCounter.Models.ActivitiesVM
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Manage Exercises</h1>
+<br />
+<a asp-action="AddExercise" class="btn btn-success">Add New Exercise</a>
+<br />
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th>Exercise</th>
+            <th>Calories Per Hour</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Exercises)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.CaloriesPerHour)</td>
+                <td>
+                    <a asp-action="DeleteExercise" asp-route-id="@item.Id" class="btn btn-danger">Delete</a> | 
+                    <a asp-action="EditExercise" asp-route-id="@item.Id" class="btn btn-info">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable();
+        });
+    </script>
+
+}

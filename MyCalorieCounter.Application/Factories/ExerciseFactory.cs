@@ -19,6 +19,7 @@ namespace MyCalorieCounter.Application.Factories
                 CaloriesPerHour = exerciseDto.CaloriesPerHour
             };
         }
+
         public ExerciseDto CreateExerciseDto(Exercise exercise)
         {
             return new ExerciseDto()
@@ -27,6 +28,25 @@ namespace MyCalorieCounter.Application.Factories
                 Name = exercise.Name,
                 CaloriesPerHour = exercise.CaloriesPerHour
             };
+        }
+
+        public ExerciseDto CreateExerciseDto(string name, int calories)
+        {
+            return new ExerciseDto()
+            {
+                Name = name,
+                CaloriesPerHour = calories
+            };
+        }
+
+        public List<ExerciseDto> CreateExerciseDtoList(List<Exercise> exercises)
+        {
+            var exerciseList = new List<ExerciseDto>();
+            foreach (var item in exercises)
+            {
+                exerciseList.Add(CreateExerciseDto(item));
+            }
+            return exerciseList;
         }
     }
 }

@@ -1,0 +1,35 @@
+﻿@model MyCalorieCounter.Models.ExerciseVM
+
+@{
+    ViewData["Title"] = "AddExercise";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Add New Exercise</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddExercise">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CaloriesPerHour" class="control-label"></label>
+                <input asp-for="CaloriesPerHour" class="form-control" />
+                <span asp-validation-for="CaloriesPerHour" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
+</div>
+
