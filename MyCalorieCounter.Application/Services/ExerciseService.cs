@@ -36,9 +36,9 @@ namespace MyCalorieCounter.Application.Services
             await _unitOfWork.Save();
         }
 
-        public async Task DeleteExercise(ExerciseDto exerciseDto)
+        public async Task DeleteExercise(int id)
         {
-            var exercise = _exerciseFactory.CreateExercise(exerciseDto);
+            var exercise = await _unitOfWork.Exercises.Get(e => e.Id == id);
             _unitOfWork.Exercises.Delete(exercise);
             await _unitOfWork.Save();
         }
@@ -57,6 +57,13 @@ namespace MyCalorieCounter.Application.Services
         {
             var exercise = await _unitOfWork.Exercises.Get(e => e.Id == id);
             return _exerciseFactory.CreateExerciseDto(exercise);
+        }
+
+        public async Task UpdateExercise(ExerciseDto exerciseDto, int id)
+        {
+            var exercise = _exerciseFactory.CreateExercise(exerciseDto, id);
+            await _unitOfWork.Exercises.Update(exercise);
+            await _unitOfWork.Save();
         }
     }
 }

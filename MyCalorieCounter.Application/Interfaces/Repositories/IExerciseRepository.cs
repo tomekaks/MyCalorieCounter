@@ -9,6 +9,6 @@ namespace MyCalorieCounter.Application.Interfaces.Repositories
 {
     public interface IExerciseRepository : IGenericRepository<Exercise>
     {
-
+        Task Update(Exercise exercise);
     }
 }

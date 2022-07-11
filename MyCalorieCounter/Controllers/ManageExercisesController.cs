@@ -55,26 +55,24 @@ namespace MyCalorieCounter.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            //var product = await _exerciseService.GetProduct(id);
-            var model = new ProductVM();
-            //{
-            //    Id = product.Id,
-            //    Name = product.Name,
-            //    Calories = product.Calories,
-            //    Proteins = product.Proteins,
-            //    Carbs = product.Carbs,
-            //    Fats = product.Fats
-            //};
+            var exercise = await _exerciseService.GetExercise(id);
+            var model = new ExerciseVM()
+            {
+                Id = id,
+                Name = exercise.Name,
+                CaloriesPerHour = exercise.CaloriesPerHour
+            };
+            
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteProduct(int id)
+        public async Task<IActionResult> DeleteExercise(int id)
         {
             try
             {
-                //await _exerciseService.DeleteAProduct(id);
+                await _exerciseService.DeleteExercise(id);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -86,21 +84,18 @@ namespace MyCalorieCounter.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            //var product = await _exerciseService.GetProduct(id);
-            var model = new ProductVM();
-            //{
-            //    Id = id,
-            //    Name = product.Name,
-            //    Calories = product.Calories,
-            //    Proteins = product.Proteins,
-            //    Carbs = product.Carbs,
-            //    Fats = product.Fats
-            //};
+            var exercise = await _exerciseService.GetExercise(id);
+            var model = new ExerciseVM()
+            {
+                Id = exercise.Id,
+                Name = exercise.Name,
+                CaloriesPerHour = exercise.CaloriesPerHour
+            };
             return View(model);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(ProductVM model, int id)
+        public async Task<IActionResult> EditExercise(ExerciseVM model, int id)
         {
             try
             {
@@ -108,13 +103,11 @@ namespace MyCalorieCounter.Controllers
                 {
                     return View(model);
                 }
-                //var product = await _exerciseService.GetProduct(id);
-                //product.Name = model.Name;
-                //product.Calories = model.Calories;
-                //product.Proteins = model.Proteins;
-                //product.Carbs = model.Carbs;
-                //product.Fats = model.Fats;
-                //await _exerciseService.UpdateProduct(product);
+
+                var exercise = await _exerciseService.GetExercise(id);
+                exercise.Name = model.Name;
+                exercise.CaloriesPerHour = model.CaloriesPerHour;
+                await _exerciseService.UpdateExercise(exercise, id);
 
                 return RedirectToAction(nameof(Index));
             }

@@ -14,5 +14,6 @@ namespace MyCalorieCounter.Application.Interfaces.Factories
         ExerciseDto CreateExerciseDto(Exercise exercise);
         ExerciseDto CreateExerciseDto(string name, int calories);
         List<ExerciseDto> CreateExerciseDtoList(List<Exercise> exercises);
+        Exercise CreateExercise(ExerciseDto exerciseDto, int id);
     }
 }
