@@ -23,7 +23,7 @@
             <td>@Html.DisplayFor(modelItem => item.Name)</td>
             <td>@Html.DisplayFor(modelItem => item.CaloriesPerHour)</td>
             <td>
-                <a asp-action="AddActivity" asp-route-id="@item.Id" class="btn btn-success">Add</a>
+                <a asp-action="Add" asp-route-id="@item.Id" class="btn btn-success">Add</a>
             </td>
         </tr>
         }

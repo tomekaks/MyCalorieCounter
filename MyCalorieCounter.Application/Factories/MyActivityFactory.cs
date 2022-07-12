@@ -43,5 +43,16 @@ namespace MyCalorieCounter.Application.Factories
                 Minutes = myActivity.Minutes
             };
         }
+        public MyActivityDto CreateMyActivityDto(string userId, int exerciseId, int minutes, int calories, int dailySumId)
+        {
+            return new MyActivityDto()
+            {
+                UserId = userId,
+                Calories = calories,
+                DailySumId = dailySumId,
+                ExerciseId = exerciseId,
+                Minutes = minutes
+            };
+        }
     }
 }
