@@ -8,7 +8,8 @@
 
 <br />
 <br />
-
+<h3>Meals</h3>
+<br />
 <table class="table">
     <thead>
         <tr>
@@ -60,6 +61,55 @@
     </tbody>
 
 </table>
+<br />
+<br />
+
+<h3>Activities</h3>
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Activity
+            </th>
+            <th>
+                Time (minutes)
+            </th>
+            <th>
+                Calories per hour
+            </th>
+            <th>
+                Calories burned
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model.MyActivities != null)
+        {
+            foreach (var item in Model.MyActivities)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Exercise.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Minutes)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Exercise.CaloriesPerHour)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Calories)</td>
+                    <td>
+                        <a asp-action="RemoveActivity" asp-route-id="@item.Id" class="btn btn-danger">Remove</a>
+                    </td>
+                    <td>
+                        <a asp-action="EditActivity" asp-route-id="@item.Id" class="btn btn-info">Edit</a>
+                    </td>
+                </tr>
+            }
+        }
+
+    </tbody>
+
+</table>
+
 <br />
 <br />
 

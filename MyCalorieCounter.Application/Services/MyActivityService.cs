@@ -1,4 +1,5 @@
-﻿using MyCalorieCounter.Application.Interfaces.Factories;
+﻿using MyCalorieCounter.Application.Dto;
+using MyCalorieCounter.Application.Interfaces.Factories;
 using MyCalorieCounter.Application.Interfaces.Repositories;
 using MyCalorieCounter.Application.Interfaces.Services;
 using System;
@@ -26,6 +27,11 @@ namespace MyCalorieCounter.Application.Services
             var activity = _myActivityFactory.CreateMyActivity(myActivityDto);
             await _unitOfWork.MyActivities.Add(activity);
             await _unitOfWork.Save();
+        }
+        public async Task<List<MyActivityDto>> GetTodaysActivities(int dailySumId)
+        {
+            var activityList = await _unitOfWork.MyActivities.GetAll(a => a.DailySumId == dailySumId, includeProperties:"Exercise");
+            return _myActivityFactory.CreateMyActivityDtoList(activityList.ToList());
         }
     }
 }

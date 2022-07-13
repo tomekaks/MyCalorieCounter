@@ -54,5 +54,15 @@ namespace MyCalorieCounter.Application.Factories
                 Minutes = minutes
             };
         }
+
+        public List<MyActivityDto> CreateMyActivityDtoList(List<MyActivity> myActivities)
+        {
+            var activityList = new List<MyActivityDto>();
+            foreach (var item in myActivities)
+            {
+                activityList.Add(CreateMyActivityDto(item));
+            }
+            return activityList;
+        }
     }
 }

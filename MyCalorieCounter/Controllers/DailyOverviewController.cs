@@ -20,14 +20,17 @@ namespace MyCalorieCounter.Controllers
         private readonly IDailyGoalService _dailyGoalService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMealService _mealService;
+        private readonly IMyActivityService _myActivityService;
 
-        public DailyOverviewController(IDailySumService dailySumService, IDailyGoalService dailyGoalService, 
-                                       UserManager<ApplicationUser> userManager, IMealService mealService)
+
+        public DailyOverviewController(IDailySumService dailySumService, IDailyGoalService dailyGoalService,
+                                       UserManager<ApplicationUser> userManager, IMealService mealService, IMyActivityService myActivityService)
         {
             _dailySumService = dailySumService;
             _dailyGoalService = dailyGoalService;
             _userManager = userManager;
             _mealService = mealService;
+            _myActivityService = myActivityService;
         }
 
         public async Task<IActionResult> Index()
@@ -36,7 +39,8 @@ namespace MyCalorieCounter.Controllers
             var todaysMacros = await _dailySumService.GetTodaysMacros(currentUsersId);
             var dailyGoals = await _dailyGoalService.GetDailyGoal(currentUsersId);
             var todaysMeals = await _mealService.GetTodaysMeals(currentUsersId, todaysMacros.Date);
-            var model = new DailyOverviewVM(todaysMacros, dailyGoals, todaysMeals);
+            var activities = await _myActivityService.GetTodaysActivities(todaysMacros.Id);
+            var model = new DailyOverviewVM(todaysMacros, dailyGoals, todaysMeals, activities);
             return View(model);
         }
 
