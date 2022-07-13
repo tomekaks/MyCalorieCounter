@@ -33,5 +33,16 @@ namespace MyCalorieCounter.Application.Services
             var activityList = await _unitOfWork.MyActivities.GetAll(a => a.DailySumId == dailySumId, includeProperties:"Exercise");
             return _myActivityFactory.CreateMyActivityDtoList(activityList.ToList());
         }
+        public async Task<MyActivityDto> GetMyActivity(int id)
+        {
+            var activity = await _unitOfWork.MyActivities.Get(a => a.Id == id, includeProperties: "Exercise");
+            return _myActivityFactory.CreateMyActivityDto(activity);
+        }
+        public async Task DeleteActivity(int id)
+        {
+            var activity = await _unitOfWork.MyActivities.Get(a => a.Id == id);
+            _unitOfWork.MyActivities.Delete(activity);
+            await _unitOfWork.Save();
+        }
     }
 }

@@ -11,5 +11,7 @@ namespace MyCalorieCounter.Application.Interfaces.Services
     {
         Task AddActivity(string userId, int exerciseId, int minutes, int calories, int dailySumId);
         Task<List<MyActivityDto>> GetTodaysActivities(int dailySumId);
+        Task<MyActivityDto> GetMyActivity(int id);
+        Task DeleteActivity(int id);
     }
 }

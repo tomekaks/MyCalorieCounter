@@ -175,6 +175,41 @@ namespace MyCalorieCounter.Controllers
             }
         }
 
+        public async Task<IActionResult> RemoveActivity(int id)
+        {
+            var activity = await _myActivityService.GetMyActivity(id);
+            var model = new RemoveActivityVM()
+            {
+                Id = id,
+                Name = activity.Exercise.Name,
+                CaloriesBurned = activity.Calories,
+                Minutes = activity.Minutes
+            };
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveActivity(RemoveActivityVM model, int id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                var userId = await GetUsersId();
+                var dailySum = await _dailySumService.GetTodaysMacros(userId);
+                var activity = await _myActivityService.GetMyActivity(id);
+                await _myActivityService.DeleteActivity(id);
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View(model);
+            }
+        }
+
         private async Task<string> GetUsersId()
         {
             var user = await _userManager.GetUserAsync(User);
