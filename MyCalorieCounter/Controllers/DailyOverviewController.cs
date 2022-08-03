@@ -210,6 +210,45 @@ namespace MyCalorieCounter.Controllers
             }
         }
 
+        public async Task<IActionResult> EditActivity(int id)
+        {
+            var activity = await _myActivityService.GetMyActivity(id);
+            var model = new EditActivityVM()
+            {
+                Id = id,
+                Name = activity.Exercise.Name,
+                CaloriesBurned = activity.Calories,
+                Minutes = activity.Minutes
+            };
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditActivity(EditActivityVM model, int id)
+        {
+            //TODO doesn't update
+
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                var userId = await GetUsersId();
+                var dailySum = await _dailySumService.GetTodaysMacros(userId);
+                var activity = await _myActivityService.GetMyActivity(id);
+                activity.Minutes = model.Minutes;
+                activity.Calories = activity.Exercise.CaloriesPerHour * activity.Minutes / 60;
+                await _myActivityService.UpdateActivity(activity, id);
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View(model);
+            }
+        }
+
         private async Task<string> GetUsersId()
         {
             var user = await _userManager.GetUserAsync(User);

@@ -1,4 +1,5 @@
-﻿using MyCalorieCounter.Application.Interfaces.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using MyCalorieCounter.Application.Interfaces.Repositories;
 using MyCalorieCounter.Core.Data;
 using MyCalorieCounter.Infrastructure.DataBase;
 using System;
@@ -15,6 +16,16 @@ namespace MyCalorieCounter.Infrastructure.Repositories
         public MyActivityRepository(ApplicationDbContext context) : base(context)
         {
             _context = context;
+        }
+
+        public async Task Update(MyActivity myActivity)
+        {
+            var obj = await _context.MyActivities.FirstOrDefaultAsync(q => q.Id == myActivity.Id);
+            if (obj != null)
+            {
+                obj.Minutes = myActivity.Minutes;
+                obj.Calories = myActivity.Calories;
+            }
         }
     }
 }

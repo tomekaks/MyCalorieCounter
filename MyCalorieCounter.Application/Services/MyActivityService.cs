@@ -44,5 +44,11 @@ namespace MyCalorieCounter.Application.Services
             _unitOfWork.MyActivities.Delete(activity);
             await _unitOfWork.Save();
         }
+        public async Task UpdateActivity(MyActivityDto myActivityDto, int id)
+        {
+            var activity = _myActivityFactory.CreateMyActivity(myActivityDto, id);
+            await _unitOfWork.MyActivities.Update(activity);
+            await _unitOfWork.Save();
+        }
     }
 }
