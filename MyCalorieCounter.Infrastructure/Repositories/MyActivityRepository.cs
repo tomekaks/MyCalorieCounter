@@ -24,7 +24,7 @@ namespace MyCalorieCounter.Infrastructure.Repositories
             if (obj != null)
             {
                 obj.Minutes = myActivity.Minutes;
-                obj.Calories = myActivity.Calories;
+                obj.CaloriesBurned = myActivity.CaloriesBurned;
             }
         }
     }

@@ -69,11 +69,12 @@ namespace MyCalorieCounter.Controllers
                 var userId = await GetUsersId();
                 var product = await _productService.GetProduct(productId);
                 var dailySum = await _dailySumService.GetDailySum(userId);
-                dailySum.UserId = userId;
+
                 dailySum.Calories += (product.Calories * model.Weight) / 100;
                 dailySum.Proteins += (product.Proteins * model.Weight) / 100;
                 dailySum.Carbs += (product.Carbs * model.Weight) / 100;
                 dailySum.Fats += (product.Fats * model.Weight) / 100;
+
                 await _dailySumService.BeginNewOrUpdateDailySum(dailySum);
                 dailySum = await _dailySumService.GetDailySum(userId);
                 

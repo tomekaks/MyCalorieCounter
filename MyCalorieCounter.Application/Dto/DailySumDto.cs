@@ -16,6 +16,7 @@ namespace MyCalorieCounter.Application.Dto
         public double Proteins { get; set; }
         public double Carbs { get; set; }
         public double Fats { get; set; }
+        public double CaloriesBurned { get; set; }
         public List<MealDto> Meals { get; set; }
     }
 }

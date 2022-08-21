@@ -20,7 +20,8 @@ namespace MyCalorieCounter.Application.Factories
                 Calories = dailySumDto.Calories,
                 Proteins = dailySumDto.Proteins,
                 Carbs = dailySumDto.Carbs,
-                Fats = dailySumDto.Fats
+                Fats = dailySumDto.Fats,
+                CaloriesBurned = dailySumDto.CaloriesBurned
             };
         }
         public DailySumDto CreateDailySumDto(DailySum dailySum)
@@ -33,7 +34,8 @@ namespace MyCalorieCounter.Application.Factories
                 Calories = dailySum.Calories,
                 Proteins = dailySum.Proteins,
                 Carbs = dailySum.Carbs,
-                Fats = dailySum.Fats
+                Fats = dailySum.Fats,
+                CaloriesBurned = dailySum.CaloriesBurned
             };
         }
         public DailySumDto CreateDailySumDto(string todaysDate, string userId)
@@ -45,7 +47,8 @@ namespace MyCalorieCounter.Application.Factories
                 Calories = 0,
                 Proteins = 0,
                 Carbs = 0,
-                Fats = 0
+                Fats = 0,
+                CaloriesBurned = 0
             };
         }
         public List<DailySumDto> CreateDailySumDtoList(List<DailySum> dailySums)

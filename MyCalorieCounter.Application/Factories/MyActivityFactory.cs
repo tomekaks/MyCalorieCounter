@@ -23,7 +23,7 @@ namespace MyCalorieCounter.Application.Factories
             return new MyActivity()
             {
                 UserId = myActivityDto.UserId,
-                Calories = myActivityDto.Calories,
+                CaloriesBurned = myActivityDto.CaloriesBurned,
                 DailySumId = myActivityDto.DailySumId,
                 ExerciseId = myActivityDto.ExerciseId,
                 Minutes = myActivityDto.Minutes
@@ -35,7 +35,7 @@ namespace MyCalorieCounter.Application.Factories
             {
                 Id = id,
                 UserId = myActivityDto.UserId,
-                Calories = myActivityDto.Calories,
+                CaloriesBurned = myActivityDto.CaloriesBurned,
                 DailySumId = myActivityDto.DailySumId,
                 ExerciseId = myActivityDto.ExerciseId,
                 Minutes = myActivityDto.Minutes
@@ -48,7 +48,7 @@ namespace MyCalorieCounter.Application.Factories
             {
                 Id = myActivity.Id,
                 UserId = myActivity.UserId,
-                Calories = myActivity.Calories,
+                CaloriesBurned = myActivity.CaloriesBurned,
                 DailySumId = myActivity.DailySumId,
                 ExerciseId = myActivity.ExerciseId,
                 Exercise = _exerciseFactory.CreateExerciseDto(myActivity.Exercise),
@@ -60,7 +60,7 @@ namespace MyCalorieCounter.Application.Factories
             return new MyActivityDto()
             {
                 UserId = userId,
-                Calories = calories,
+                CaloriesBurned = calories,
                 DailySumId = dailySumId,
                 ExerciseId = exerciseId,
                 Minutes = minutes

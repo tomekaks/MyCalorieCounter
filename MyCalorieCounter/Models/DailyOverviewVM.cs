@@ -51,6 +51,7 @@ namespace MyCalorieCounter.Models
         public double DailyProteinsGoal { get; set; }
         public double DailyCarbsGoal { get; set; }
         public double DailyFatsGoal { get; set; }
+        public double CaloriesBurned { get; set; }
         public List<MealDto> Meals { get; set; }
         public List<MyActivityDto> MyActivities { get; set; }
     }

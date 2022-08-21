@@ -95,7 +95,7 @@
                     <td>@Html.DisplayFor(modelItem => item.Exercise.Name)</td>
                     <td>@Html.DisplayFor(modelItem => item.Minutes)</td>
                     <td>@Html.DisplayFor(modelItem => item.Exercise.CaloriesPerHour)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Calories)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CaloriesBurned)</td>
                     <td>
                         <a asp-action="RemoveActivity" asp-route-id="@item.Id" class="btn btn-danger">Remove</a>
                     </td>
@@ -168,6 +168,14 @@
                 @Model.DailyFatsGoal
             </th>
             <th></th>
+        </tr>
+        <tr>
+            <th>
+                Bruned
+            </th>
+            <th>
+
+            </th>
         </tr>
         <tr>
             <th>

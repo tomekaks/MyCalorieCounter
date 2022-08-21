@@ -182,7 +182,7 @@ namespace MyCalorieCounter.Controllers
             {
                 Id = id,
                 Name = activity.Exercise.Name,
-                CaloriesBurned = activity.Calories,
+                CaloriesBurned = activity.CaloriesBurned,
                 Minutes = activity.Minutes
             };
             return View(model);
@@ -217,7 +217,7 @@ namespace MyCalorieCounter.Controllers
             {
                 Id = id,
                 Name = activity.Exercise.Name,
-                CaloriesBurned = activity.Calories,
+                CaloriesBurned = activity.CaloriesBurned,
                 Minutes = activity.Minutes
             };
             return View(model);
@@ -237,7 +237,7 @@ namespace MyCalorieCounter.Controllers
                 var dailySum = await _dailySumService.GetDailySum(userId);
                 var activity = await _myActivityService.GetMyActivity(id);
                 activity.Minutes = model.Minutes;
-                activity.Calories = activity.Exercise.CaloriesPerHour * activity.Minutes / 60;
+                activity.CaloriesBurned = activity.Exercise.CaloriesPerHour * activity.Minutes / 60;
                 await _myActivityService.UpdateActivity(activity, id);
 
                 return RedirectToAction(nameof(Index));

@@ -17,6 +17,7 @@ namespace MyCalorieCounter.Core.Data
         public double Proteins { get; set; }
         public double Carbs { get; set; }
         public double Fats { get; set; }
+        public double CaloriesBurned { get; set; }
         public List<Meal> Meals { get; set; }
 
     }
