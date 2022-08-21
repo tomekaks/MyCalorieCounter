@@ -32,11 +32,6 @@ namespace MyCalorieCounter.Application.Services
             await _unitOfWork.Save();
         }
 
-        public ProductDto CreateNewProduct(string name, double cal, double pro, double carb, double fat)
-        {
-            return _productFactory.CreateProductDto(name, cal, pro, carb, fat);
-        }
-
         public async Task DeleteAProduct(int id)
         {
             var product = await _unitOfWork.Products.Get(q => q.Id == id);

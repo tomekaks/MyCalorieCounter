@@ -10,8 +10,8 @@ namespace MyCalorieCounter.Application.Interfaces.Factories
 {
     public interface IDailySumFactory
     {
-        DailySum CreateDailySum(DailySumDto today);
-        DailySumDto CreateDailySumDto(DailySum today);
-        DailySumDto CreateDailySumDto(string todaysDate);
+        DailySum CreateDailySum(DailySumDto dailySumDto);
+        DailySumDto CreateDailySumDto(DailySum dailySum);
+        DailySumDto CreateDailySumDto(string todaysDate, string userId);
     }
 }

@@ -36,7 +36,7 @@ namespace MyCalorieCounter.Controllers
         public async Task<IActionResult> Index()
         {
             var currentUsersId = await GetUsersId();
-            var todaysMacros = await _dailySumService.GetTodaysMacros(currentUsersId);
+            var todaysMacros = await _dailySumService.GetDailySum(currentUsersId);
             var dailyGoals = await _dailyGoalService.GetDailyGoal(currentUsersId);
             var todaysMeals = await _mealService.GetTodaysMeals(currentUsersId, todaysMacros.Date);
             var activities = await _myActivityService.GetTodaysActivities(todaysMacros.Id);
@@ -107,14 +107,14 @@ namespace MyCalorieCounter.Controllers
                     return View(model);
                 }
                 var userId = await GetUsersId();
-                var dailySum = await _dailySumService.GetTodaysMacros(userId);
+                var dailySum = await _dailySumService.GetDailySum(userId);
                 var meal = await _mealService.GetMeal(id);
                 dailySum.UserId = userId;
                 dailySum.Calories -= meal.Calories;
                 dailySum.Proteins -= meal.Proteins;
                 dailySum.Carbs -= meal.Carbs;
                 dailySum.Fats -= meal.Fats;
-                await _dailySumService.BeginNewOrUpdateTodaysMacros(dailySum);
+                await _dailySumService.BeginNewOrUpdateDailySum(dailySum);
                 await _mealService.DeleteMeal(id);
 
                 return RedirectToAction(nameof(Index));
@@ -151,7 +151,7 @@ namespace MyCalorieCounter.Controllers
                     return View(model);
                 }
                 var userId = await GetUsersId();
-                var dailySum = await _dailySumService.GetTodaysMacros(userId);
+                var dailySum = await _dailySumService.GetDailySum(userId);
                 var meal = await _mealService.GetMeal(id);
                 dailySum.Calories -= meal.Calories;
                 dailySum.Proteins -= meal.Proteins;
@@ -165,7 +165,7 @@ namespace MyCalorieCounter.Controllers
                 dailySum.Fats += meal.Fats;
 
                 await _mealService.UpdateMeal(meal, id);
-                await _dailySumService.BeginNewOrUpdateTodaysMacros(dailySum);
+                await _dailySumService.BeginNewOrUpdateDailySum(dailySum);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -198,7 +198,7 @@ namespace MyCalorieCounter.Controllers
                     return View(model);
                 }
                 var userId = await GetUsersId();
-                var dailySum = await _dailySumService.GetTodaysMacros(userId);
+                var dailySum = await _dailySumService.GetDailySum(userId);
                 var activity = await _myActivityService.GetMyActivity(id);
                 await _myActivityService.DeleteActivity(id);
 
@@ -226,7 +226,6 @@ namespace MyCalorieCounter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditActivity(EditActivityVM model, int id)
         {
-            //TODO doesn't update
 
             try
             {
@@ -235,7 +234,7 @@ namespace MyCalorieCounter.Controllers
                     return View(model);
                 }
                 var userId = await GetUsersId();
-                var dailySum = await _dailySumService.GetTodaysMacros(userId);
+                var dailySum = await _dailySumService.GetDailySum(userId);
                 var activity = await _myActivityService.GetMyActivity(id);
                 activity.Minutes = model.Minutes;
                 activity.Calories = activity.Exercise.CaloriesPerHour * activity.Minutes / 60;

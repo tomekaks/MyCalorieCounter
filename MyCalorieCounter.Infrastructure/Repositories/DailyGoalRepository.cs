@@ -34,7 +34,6 @@ namespace MyCalorieCounter.Infrastructure.Repositories
                 obj.Proteins = dailyGoal.Proteins;
                 obj.Carbs = dailyGoal.Carbs;
                 obj.Fats = dailyGoal.Fats;
-                //_context.DailyGoals.Update(obj);
             }
         }
         public async Task Add(DailyGoal dailyGoal)

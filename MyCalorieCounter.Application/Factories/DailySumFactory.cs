@@ -11,35 +11,36 @@ namespace MyCalorieCounter.Application.Factories
 {
     public class DailySumFactory : IDailySumFactory
     {
-        public DailySum CreateDailySum(DailySumDto today)
+        public DailySum CreateDailySum(DailySumDto dailySumDto)
         {
             return new DailySum()
             {
-                UserId = today.UserId,
-                Date = today.Date,
-                Calories = today.Calories,
-                Proteins = today.Proteins,
-                Carbs = today.Carbs,
-                Fats = today.Fats
+                UserId = dailySumDto.UserId,
+                Date = dailySumDto.Date,
+                Calories = dailySumDto.Calories,
+                Proteins = dailySumDto.Proteins,
+                Carbs = dailySumDto.Carbs,
+                Fats = dailySumDto.Fats
             };
         }
-        public DailySumDto CreateDailySumDto(DailySum today)
+        public DailySumDto CreateDailySumDto(DailySum dailySum)
         {
             return new DailySumDto()
             {
-                Id = today.Id,
-                UserId = today.UserId,
-                Date = today.Date,
-                Calories = today.Calories,
-                Proteins = today.Proteins,
-                Carbs = today.Carbs,
-                Fats = today.Fats
+                Id = dailySum.Id,
+                UserId = dailySum.UserId,
+                Date = dailySum.Date,
+                Calories = dailySum.Calories,
+                Proteins = dailySum.Proteins,
+                Carbs = dailySum.Carbs,
+                Fats = dailySum.Fats
             };
         }
-        public DailySumDto CreateDailySumDto(string todaysDate)
+        public DailySumDto CreateDailySumDto(string todaysDate, string userId)
         {
             return new DailySumDto()
             {
+                UserId = userId,
                 Date = todaysDate,
                 Calories = 0,
                 Proteins = 0,

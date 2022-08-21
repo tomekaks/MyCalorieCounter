@@ -60,7 +60,10 @@ namespace MyCalorieCounter.Controllers
                 }
                 var userId = await GetUsersId();
                 var exercise = await _exerciseService.GetExercise(exerciseId);
-                var dailySum = await _dailySumService.GetTodaysMacros(userId);
+                var dailySum = await _dailySumService.GetDailySum(userId);
+                await _dailySumService.BeginNewOrUpdateDailySum(dailySum);
+                dailySum = await _dailySumService.GetDailySum(userId);
+
                 var calories = (exercise.CaloriesPerHour * model.Minutes) / 60;
                 await _myActivityService.AddActivity(userId, exerciseId, model.Minutes, calories, dailySum.Id);
 

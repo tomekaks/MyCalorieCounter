@@ -21,40 +21,40 @@ namespace MyCalorieCounter.Application.Services
             _dailySumFactory = dailySumFactory;
         }
 
-        public async Task BeginNewOrUpdateTodaysMacros(DailySumDto todaysMacros)
+        public async Task BeginNewOrUpdateDailySum(DailySumDto dailySumDto)
         {
-            var isExists = await _unitOfWork.DailySums.IsExists(d => d.Date == todaysMacros.Date && d.UserId == todaysMacros.UserId);
+            var isExists = await _unitOfWork.DailySums.IsExists(d => d.Date == dailySumDto.Date && d.UserId == dailySumDto.UserId);
             if (isExists)
             {
-                await UpdateTodaysMacros(todaysMacros);
+                await UpdateDailySum(dailySumDto);
             }
             else
             {
-                await BeginNewDay(todaysMacros);
+                await BeginNewDay(dailySumDto);
             }   
         }
 
-        public async Task<DailySumDto> GetTodaysMacros(string userId)
+        public async Task<DailySumDto> GetDailySum(string userId)
         {
             var todaysDate = GetTodaysDate();
 
-            var todaysSum = await _unitOfWork.DailySums.Get(q => q.Date == todaysDate && q.UserId == userId);
-            if (todaysSum == null)
+            var dailySum = await _unitOfWork.DailySums.Get(q => q.Date == todaysDate && q.UserId == userId);
+            if (dailySum == null)
             {  
-                return _dailySumFactory.CreateDailySumDto(todaysDate);
+                return _dailySumFactory.CreateDailySumDto(todaysDate, userId);
             }
-            return _dailySumFactory.CreateDailySumDto(todaysSum);
+            return _dailySumFactory.CreateDailySumDto(dailySum);
         }
-        private async Task UpdateTodaysMacros(DailySumDto todaysMacros)
+        private async Task UpdateDailySum(DailySumDto dailySumDto)
         {
-            var today = _dailySumFactory.CreateDailySum(todaysMacros);
-            await _unitOfWork.DailySums.Update(today);
+            var dailySum = _dailySumFactory.CreateDailySum(dailySumDto);
+            await _unitOfWork.DailySums.Update(dailySum);
             await _unitOfWork.Save();
         }
-        private async Task BeginNewDay(DailySumDto todaysMacros)
+        private async Task BeginNewDay(DailySumDto dailySumDto)
         {
-            var today = _dailySumFactory.CreateDailySum(todaysMacros);
-            await _unitOfWork.DailySums.Add(today);
+            var dailySum = _dailySumFactory.CreateDailySum(dailySumDto);
+            await _unitOfWork.DailySums.Add(dailySum);
             await _unitOfWork.Save();
         }
         private string GetTodaysDate()

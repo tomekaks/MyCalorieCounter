@@ -24,7 +24,6 @@ namespace MyCalorieCounter.Infrastructure.Repositories
             var obj = await _context.DailySums.FirstOrDefaultAsync(d => d.Date == dailySum.Date && d.UserId == dailySum.UserId);
             if (obj != null)
             {
-                //_context.DailySums.Update(obj);
                 obj.Calories = dailySum.Calories;
                 obj.Proteins = dailySum.Proteins;
                 obj.Carbs = dailySum.Carbs;
