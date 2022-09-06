@@ -36,11 +36,11 @@ namespace MyCalorieCounter.Controllers
         public async Task<IActionResult> Index()
         {
             var currentUsersId = await GetUsersId();
-            var todaysMacros = await _dailySumService.GetDailySum(currentUsersId);
+            var dailySum = await _dailySumService.GetDailySum(currentUsersId);
             var dailyGoals = await _dailyGoalService.GetDailyGoal(currentUsersId);
-            var todaysMeals = await _mealService.GetTodaysMeals(currentUsersId, todaysMacros.Date);
-            var activities = await _myActivityService.GetTodaysActivities(todaysMacros.Id);
-            var model = new DailyOverviewVM(todaysMacros, dailyGoals, todaysMeals, activities);
+            var todaysMeals = await _mealService.GetTodaysMeals(currentUsersId, dailySum.Date);
+            var activities = await _myActivityService.GetTodaysActivities(dailySum.Id);
+            var model = new DailyOverviewVM(dailySum, dailyGoals, todaysMeals, activities);
             return View(model);
         }
 
@@ -200,6 +200,10 @@ namespace MyCalorieCounter.Controllers
                 var userId = await GetUsersId();
                 var dailySum = await _dailySumService.GetDailySum(userId);
                 var activity = await _myActivityService.GetMyActivity(id);
+
+                dailySum.CaloriesBurned -= activity.CaloriesBurned;
+                await _dailySumService.BeginNewOrUpdateDailySum(dailySum);
+
                 await _myActivityService.DeleteActivity(id);
 
                 return RedirectToAction(nameof(Index));
@@ -236,8 +240,15 @@ namespace MyCalorieCounter.Controllers
                 var userId = await GetUsersId();
                 var dailySum = await _dailySumService.GetDailySum(userId);
                 var activity = await _myActivityService.GetMyActivity(id);
+
+                dailySum.CaloriesBurned -= activity.CaloriesBurned;
+
                 activity.Minutes = model.Minutes;
                 activity.CaloriesBurned = activity.Exercise.CaloriesPerHour * activity.Minutes / 60;
+
+                dailySum.CaloriesBurned += activity.CaloriesBurned;
+                await _dailySumService.BeginNewOrUpdateDailySum(dailySum);
+
                 await _myActivityService.UpdateActivity(activity, id);
 
                 return RedirectToAction(nameof(Index));

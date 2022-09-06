@@ -28,6 +28,7 @@ namespace MyCalorieCounter.Infrastructure.Repositories
                 obj.Proteins = dailySum.Proteins;
                 obj.Carbs = dailySum.Carbs;
                 obj.Fats = dailySum.Fats;
+                obj.CaloriesBurned = dailySum.CaloriesBurned;
             }
         }
     }

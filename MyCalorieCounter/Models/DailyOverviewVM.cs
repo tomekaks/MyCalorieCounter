@@ -15,6 +15,7 @@ namespace MyCalorieCounter.Models
             Proteins = dailySumDto.Proteins;
             Carbs = dailySumDto.Carbs;
             Fats = dailySumDto.Fats;
+            CaloriesBurned = dailySumDto.CaloriesBurned;
             DailyCaloriesGoal = dailyGoals.Calories;
             DailyProteinsGoal = dailyGoals.Proteins;
             DailyCarbsGoal = dailyGoals.Carbs;
@@ -29,7 +30,7 @@ namespace MyCalorieCounter.Models
         public double Fats { get; set; }
         public double RemainingDailyCalories
         {
-            get { return DailyCaloriesGoal - Calories; }
+            get { return DailyCaloriesGoal - Calories + CaloriesBurned; }
             set { }
         }
         public double RemainingDailyProteins

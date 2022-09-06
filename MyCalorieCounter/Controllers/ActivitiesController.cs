@@ -61,11 +61,14 @@ namespace MyCalorieCounter.Controllers
                 var userId = await GetUsersId();
                 var exercise = await _exerciseService.GetExercise(exerciseId);
                 var dailySum = await _dailySumService.GetDailySum(userId);
+
+                var caloriesBurned = (exercise.CaloriesPerHour * model.Minutes) / 60;
+                dailySum.CaloriesBurned += caloriesBurned;
+
                 await _dailySumService.BeginNewOrUpdateDailySum(dailySum);
                 dailySum = await _dailySumService.GetDailySum(userId);
 
-                var calories = (exercise.CaloriesPerHour * model.Minutes) / 60;
-                await _myActivityService.AddActivity(userId, exerciseId, model.Minutes, calories, dailySum.Id);
+                await _myActivityService.AddActivity(userId, exerciseId, model.Minutes, caloriesBurned, dailySum.Id);
 
                 return RedirectToAction(nameof(Index));
             }

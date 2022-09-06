@@ -57,9 +57,7 @@ namespace MyCalorieCounter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddFood(AddFoodVM model, int productId)
         {
-            //var claimsIdentity = (ClaimsIdentity)User.Identity;
-            //var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            //meal.UserId = claim.Value;
+            
             try
             {
                 if (!ModelState.IsValid)

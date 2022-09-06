@@ -31,7 +31,7 @@ namespace MyCalorieCounter.Application.Services
             else
             {
                 await BeginNewDay(dailySumDto);
-            }   
+            }
         }
 
         public async Task<DailySumDto> GetDailySum(string userId)
