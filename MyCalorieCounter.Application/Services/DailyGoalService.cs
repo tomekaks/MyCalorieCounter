@@ -1,4 +1,5 @@
 ﻿using MyCalorieCounter.Application.Dto;
+using MyCalorieCounter.Application.Exeptions;
 using MyCalorieCounter.Application.Interfaces.Factories;
 using MyCalorieCounter.Application.Interfaces.Repositories;
 using MyCalorieCounter.Application.Interfaces.Services;
@@ -43,7 +44,7 @@ namespace MyCalorieCounter.Application.Services
             var validationResult = _dailyGoalDtoValidator.Validate(dailyGoalDto);
             if (!validationResult.IsValid)
             {
-                throw new Exception();
+                throw new ValidationExeption(validationResult);
             }
 
             var dailyGoal = _dailyGoalFactory.CreateDailyGoal(dailyGoalDto);
@@ -57,7 +58,7 @@ namespace MyCalorieCounter.Application.Services
             var validationResult = _dailyGoalDtoValidator.Validate(dailyGoalDto);
             if (!validationResult.IsValid)
             {
-                throw new Exception();
+                throw new ValidationExeption(validationResult);
             }
 
             var dailyGoal = _dailyGoalFactory.CreateDailyGoal(dailyGoalDto);

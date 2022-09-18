@@ -1,4 +1,5 @@
 ﻿using MyCalorieCounter.Application.Dto;
+using MyCalorieCounter.Application.Exeptions;
 using MyCalorieCounter.Application.Interfaces.Factories;
 using MyCalorieCounter.Application.Interfaces.Repositories;
 using MyCalorieCounter.Application.Interfaces.Services;
@@ -31,7 +32,7 @@ namespace MyCalorieCounter.Application.Services
             var validationResult = _myActivityDtoValidator.Validate(myActivityDto);
             if (!validationResult.IsValid)
             {
-                throw new Exception();
+                throw new ValidationExeption(validationResult);
             }
 
             var activity = _myActivityFactory.CreateMyActivity(myActivityDto);
@@ -59,7 +60,7 @@ namespace MyCalorieCounter.Application.Services
             var validationResult = _myActivityDtoValidator.Validate(myActivityDto);
             if (!validationResult.IsValid)
             {
-                throw new Exception();
+                throw new ValidationExeption(validationResult);
             }
 
             var activity = _myActivityFactory.CreateMyActivity(myActivityDto, id);

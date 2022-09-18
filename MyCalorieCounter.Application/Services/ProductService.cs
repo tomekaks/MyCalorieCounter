@@ -1,4 +1,5 @@
 ﻿using MyCalorieCounter.Application.Dto;
+using MyCalorieCounter.Application.Exeptions;
 using MyCalorieCounter.Application.Interfaces.Factories;
 using MyCalorieCounter.Application.Interfaces.Repositories;
 using MyCalorieCounter.Application.Interfaces.Services;
@@ -32,7 +33,7 @@ namespace MyCalorieCounter.Application.Services
             var validationResult = _productDtoValidator.Validate(productDto);
             if (!validationResult.IsValid)
             {
-                throw new Exception();
+                throw new ValidationExeption(validationResult);
             }
 
             Product product = _productFactory.CreateProduct(productDto);
@@ -65,7 +66,7 @@ namespace MyCalorieCounter.Application.Services
             var validationResult = _productDtoValidator.Validate(productDto);
             if (!validationResult.IsValid)
             {
-                throw new Exception();
+                throw new ValidationExeption(validationResult);
             }
 
             var product = _productFactory.CreateProduct(productDto);
