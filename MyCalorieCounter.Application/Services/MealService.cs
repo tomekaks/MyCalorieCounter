@@ -2,6 +2,7 @@
 using MyCalorieCounter.Application.Interfaces.Factories;
 using MyCalorieCounter.Application.Interfaces.Repositories;
 using MyCalorieCounter.Application.Interfaces.Services;
+using MyCalorieCounter.Application.Interfaces.Validators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,15 +15,23 @@ namespace MyCalorieCounter.Application.Services
     {
         private readonly IMealFactory _mealFactory;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMealDtoValidator _mealDtoValidator;
 
-        public MealService(IMealFactory mealFactory, IUnitOfWork unitOfWork)
+        public MealService(IMealFactory mealFactory, IUnitOfWork unitOfWork, IMealDtoValidator mealDtoValidator)
         {
             _mealFactory = mealFactory;
             _unitOfWork = unitOfWork;
+            _mealDtoValidator = mealDtoValidator;
         }
 
         public async Task AddMeal(MealDto mealDto)
         {
+            var validationResult = _mealDtoValidator.Validate(mealDto);
+            if (!validationResult.IsValid)
+            {
+                throw new Exception();
+            }
+
             var meal = _mealFactory.CreateMeal(mealDto);
             await _unitOfWork.Meals.Add(meal);
             await _unitOfWork.Save();
@@ -53,6 +62,12 @@ namespace MyCalorieCounter.Application.Services
         }
         public async Task UpdateMeal(MealDto mealDto, int id)
         {
+            var validationResult = _mealDtoValidator.Validate(mealDto);
+            if (!validationResult.IsValid)
+            {
+                throw new Exception();
+            }
+
             var meal = _mealFactory.CreateMeal(mealDto, id);
             await _unitOfWork.Meals.Update(meal);
             await _unitOfWork.Save();

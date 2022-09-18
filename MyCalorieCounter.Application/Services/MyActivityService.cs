@@ -2,6 +2,7 @@
 using MyCalorieCounter.Application.Interfaces.Factories;
 using MyCalorieCounter.Application.Interfaces.Repositories;
 using MyCalorieCounter.Application.Interfaces.Services;
+using MyCalorieCounter.Application.Interfaces.Validators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,16 +15,25 @@ namespace MyCalorieCounter.Application.Services
     {
         private readonly IMyActivityFactory _myActivityFactory;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMyActivityDtoValidator _myActivityDtoValidator;
 
-        public MyActivityService(IMyActivityFactory myActivityFactory, IUnitOfWork unitOfWork)
+        public MyActivityService(IMyActivityFactory myActivityFactory, IUnitOfWork unitOfWork, IMyActivityDtoValidator myActivityDtoValidator)
         {
             _myActivityFactory = myActivityFactory;
             _unitOfWork = unitOfWork;
+            _myActivityDtoValidator = myActivityDtoValidator;
         }
 
         public async Task AddActivity(string userId, int exerciseId, int minutes, int calories, int dailySumId)
         {
             var myActivityDto = _myActivityFactory.CreateMyActivityDto(userId, exerciseId, minutes, calories, dailySumId);
+
+            var validationResult = _myActivityDtoValidator.Validate(myActivityDto);
+            if (!validationResult.IsValid)
+            {
+                throw new Exception();
+            }
+
             var activity = _myActivityFactory.CreateMyActivity(myActivityDto);
             await _unitOfWork.MyActivities.Add(activity);
             await _unitOfWork.Save();
@@ -46,6 +56,12 @@ namespace MyCalorieCounter.Application.Services
         }
         public async Task UpdateActivity(MyActivityDto myActivityDto, int id)
         {
+            var validationResult = _myActivityDtoValidator.Validate(myActivityDto);
+            if (!validationResult.IsValid)
+            {
+                throw new Exception();
+            }
+
             var activity = _myActivityFactory.CreateMyActivity(myActivityDto, id);
             await _unitOfWork.MyActivities.Update(activity);
             await _unitOfWork.Save();

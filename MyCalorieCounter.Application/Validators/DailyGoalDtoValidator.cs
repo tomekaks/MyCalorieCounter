@@ -9,30 +9,25 @@ using System.Threading.Tasks;
 
 namespace MyCalorieCounter.Application.Validators
 {
-    public class ProductDtoValidator : AbstractValidator<ProductDto>, IProductDtoValidator
+    public class DailyGoalDtoValidator : AbstractValidator<DailyGoalDto>, IDailyGoalDtoValidator
     {
-        public ProductDtoValidator()
+        public DailyGoalDtoValidator()
         {
-            RuleFor(p => p.Name)
-                .NotEmpty().WithMessage("{PropertyName} is required")
-                .MaximumLength(100).WithMessage("{PropertyName} can't be longer than 100 characters");
-
             RuleFor(p => p.Calories)
                 .GreaterThanOrEqualTo(0).WithMessage("The amount of {PropertyName} can't be less than 0")
-                .LessThan(1000).WithMessage("The amount of {ProperyName} can't be greater than 1000");
+                .LessThan(100000).WithMessage("The amount of {ProperyName} can't be greater than 100000");
 
             RuleFor(p => p.Proteins)
                 .GreaterThanOrEqualTo(0).WithMessage("The amount of {PropertyName} can't be less than 0")
-                .LessThan(100).WithMessage("The amount of {ProperyName} can't be greater than 100");
+                .LessThan(10000).WithMessage("The amount of {ProperyName} can't be greater than 10000");
 
             RuleFor(p => p.Carbs)
                 .GreaterThanOrEqualTo(0).WithMessage("The amount of {PropertyName} can't be less than 0")
-                .LessThan(100).WithMessage("The amount of {ProperyName} can't be greater than 100");
+                .LessThan(10000).WithMessage("The amount of {ProperyName} can't be greater than 10000");
 
             RuleFor(p => p.Fats)
                 .GreaterThanOrEqualTo(0).WithMessage("The amount of {PropertyName} can't be less than 0")
-                .LessThan(100).WithMessage("The amount of {ProperyName} can't be greater than 100");
-
+                .LessThan(10000).WithMessage("The amount of {ProperyName} can't be greater than 10000");
         }
     }
 }

@@ -11,8 +11,9 @@ namespace MyCalorieCounter.Application.Interfaces.Factories
     public interface IDailyGoalFactory
     {
         DailyGoal CreateDailyGoal(DailyGoalDto dailyGoalDto);
-        DailyGoal CreateDailyGoal(string userID, double cal, double pro, double carb, double fat);
+        DailyGoal CreateDailyGoal(string userId, double cal, double pro, double carb, double fat);
         DailyGoalDto CreateDailyGoalDto(DailyGoal dailyGoal);
+        DailyGoalDto CreateDailyGoalDto(string userId, double cal, double pro, double carb, double fat);
         DailyGoal CreateNewUsersDailyGoal(string userId);
         DailyGoalDto CreateNewUsersDailyGoalDto(string userId);
     }

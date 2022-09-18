@@ -2,6 +2,7 @@
 using MyCalorieCounter.Application.Interfaces.Factories;
 using MyCalorieCounter.Application.Interfaces.Repositories;
 using MyCalorieCounter.Application.Interfaces.Services;
+using MyCalorieCounter.Application.Interfaces.Validators;
 using MyCalorieCounter.Core.Data;
 using System;
 using System.Collections.Generic;
@@ -16,11 +17,13 @@ namespace MyCalorieCounter.Application.Services
     {
         private readonly IDailyGoalFactory _dailyGoalFactory;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IDailyGoalDtoValidator _dailyGoalDtoValidator;
 
-        public DailyGoalService(IDailyGoalFactory dailyGoalFactory, IUnitOfWork unitOfWork)
+        public DailyGoalService(IDailyGoalFactory dailyGoalFactory, IUnitOfWork unitOfWork, IDailyGoalDtoValidator dailyGoalDtoValidator)
         {
             _dailyGoalFactory = dailyGoalFactory;
             _unitOfWork = unitOfWork;
+            _dailyGoalDtoValidator = dailyGoalDtoValidator;
         }
 
         public async Task<DailyGoalDto> GetDailyGoal(string userId)
@@ -37,13 +40,27 @@ namespace MyCalorieCounter.Application.Services
         }
         public async Task UpdateDailyGoal(DailyGoalDto dailyGoalDto)
         {
+            var validationResult = _dailyGoalDtoValidator.Validate(dailyGoalDto);
+            if (!validationResult.IsValid)
+            {
+                throw new Exception();
+            }
+
             var dailyGoal = _dailyGoalFactory.CreateDailyGoal(dailyGoalDto);
             await _unitOfWork.DailyGoals.Update(dailyGoal);
             await _unitOfWork.Save();
         }
         public async Task UpdateDailyGoal(string userId, double cal, double pro, double carb, double fat)
         {
-            var dailyGoal = _dailyGoalFactory.CreateDailyGoal(userId, cal, pro, carb, fat);
+            var dailyGoalDto = _dailyGoalFactory.CreateDailyGoalDto(userId, cal, pro, carb, fat);
+            
+            var validationResult = _dailyGoalDtoValidator.Validate(dailyGoalDto);
+            if (!validationResult.IsValid)
+            {
+                throw new Exception();
+            }
+
+            var dailyGoal = _dailyGoalFactory.CreateDailyGoal(dailyGoalDto);
             await _unitOfWork.DailyGoals.Update(dailyGoal);
             await _unitOfWork.Save();
         }

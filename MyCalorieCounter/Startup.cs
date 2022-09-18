@@ -11,7 +11,9 @@ using MyCalorieCounter.Application.Factories;
 using MyCalorieCounter.Application.Interfaces.Factories;
 using MyCalorieCounter.Application.Interfaces.Repositories;
 using MyCalorieCounter.Application.Interfaces.Services;
+using MyCalorieCounter.Application.Interfaces.Validators;
 using MyCalorieCounter.Application.Services;
+using MyCalorieCounter.Application.Validators;
 using MyCalorieCounter.Core.Data;
 using MyCalorieCounter.Infrastructure.DataBase;
 using MyCalorieCounter.Infrastructure.Repositories;
@@ -57,6 +59,11 @@ namespace MyCalorieCounter
             services.AddScoped<IExerciseService, ExerciseService>();
             services.AddScoped<IMyActivityFactory, MyActivityFactory>();
             services.AddScoped<IMyActivityService, MyActivityService>();
+            services.AddScoped<IDailyGoalDtoValidator, DailyGoalDtoValidator>();
+            services.AddScoped<IExerciseDtoValidator, ExerciseDtoValidator>();
+            services.AddScoped<IMealDtoValidator, MealDtoValidator>();
+            services.AddScoped<IMyActivityValidator, MyActivityDtoValidator>();
+            services.AddScoped<IProductDtoValidator, ProductDtoValidator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

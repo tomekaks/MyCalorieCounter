@@ -22,11 +22,11 @@ namespace MyCalorieCounter.Application.Factories
                 Fats = dailyGoalDto.Fats
             };
         }
-        public DailyGoal CreateDailyGoal(string userID, double cal, double pro, double carb, double fat)
+        public DailyGoal CreateDailyGoal(string userId, double cal, double pro, double carb, double fat)
         {
             return new DailyGoal()
             {
-                UserId = userID,
+                UserId = userId,
                 Calories = cal,
                 Proteins = pro,
                 Carbs = carb,
@@ -55,6 +55,17 @@ namespace MyCalorieCounter.Application.Factories
                 Proteins = dailyGoal.Proteins,
                 Carbs = dailyGoal.Carbs,
                 Fats = dailyGoal.Fats
+            };
+        }
+        public DailyGoalDto CreateDailyGoalDto(string userId, double cal, double pro, double carb, double fat)
+        {
+            return new DailyGoalDto()
+            {
+                UserId = userId,
+                Calories = cal,
+                Proteins = pro,
+                Carbs = carb,
+                Fats = fat
             };
         }
         public DailyGoalDto CreateNewUsersDailyGoalDto(string userId)

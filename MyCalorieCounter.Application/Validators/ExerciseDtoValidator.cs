@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using MyCalorieCounter.Application.Dto;
+using MyCalorieCounter.Application.Interfaces.Validators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MyCalorieCounter.Application.Validators
 {
-    public class ExerciseDtoValidator : AbstractValidator<ExerciseDto>
+    public class ExerciseDtoValidator : AbstractValidator<ExerciseDto>, IExerciseDtoValidator
     {
         public ExerciseDtoValidator()
         {

@@ -2,6 +2,7 @@
 using MyCalorieCounter.Application.Interfaces.Factories;
 using MyCalorieCounter.Application.Interfaces.Repositories;
 using MyCalorieCounter.Application.Interfaces.Services;
+using MyCalorieCounter.Application.Interfaces.Validators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +15,13 @@ namespace MyCalorieCounter.Application.Services
     { 
         private readonly IExerciseFactory _exerciseFactory;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IExerciseDtoValidator _exerciseDtoValidator;
 
-        public ExerciseService(IExerciseFactory exerciseFactory, IUnitOfWork unitOfWork)
+        public ExerciseService(IExerciseFactory exerciseFactory, IUnitOfWork unitOfWork, IExerciseDtoValidator exerciseDtoValidator)
         {
             _exerciseFactory = exerciseFactory;
             _unitOfWork = unitOfWork;
+            _exerciseDtoValidator = exerciseDtoValidator;
         }
 
         public async Task AddNewExercise(ExerciseDto exerciseDto)
@@ -31,6 +34,13 @@ namespace MyCalorieCounter.Application.Services
         public async Task AddNewExercise(string name, int calories)
         {
             var exerciseDto = _exerciseFactory.CreateExerciseDto(name, calories);
+
+            var validationResult = _exerciseDtoValidator.Validate(exerciseDto);
+            if (!validationResult.IsValid)
+            {
+                throw new Exception();
+            }
+
             var exercise = _exerciseFactory.CreateExercise(exerciseDto);
             await _unitOfWork.Exercises.Add(exercise);
             await _unitOfWork.Save();
@@ -61,6 +71,12 @@ namespace MyCalorieCounter.Application.Services
 
         public async Task UpdateExercise(ExerciseDto exerciseDto, int id)
         {
+            var validationResult = _exerciseDtoValidator.Validate(exerciseDto);
+            if (!validationResult.IsValid)
+            {
+                throw new Exception();
+            }
+
             var exercise = _exerciseFactory.CreateExercise(exerciseDto, id);
             await _unitOfWork.Exercises.Update(exercise);
             await _unitOfWork.Save();
