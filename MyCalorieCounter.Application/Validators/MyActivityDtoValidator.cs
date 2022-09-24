@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MyCalorieCounter.Application.Validators
 {
-    public class MyActivityDtoValidator : AbstractValidator<MyActivityDto>, IMyActivityValidator
+    public class MyActivityDtoValidator : AbstractValidator<MyActivityDto>, IMyActivityDtoValidator
     {
         public MyActivityDtoValidator()
         {
