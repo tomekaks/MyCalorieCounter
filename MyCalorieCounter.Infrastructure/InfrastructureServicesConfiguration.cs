@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity;
 using MyCalorieCounter.Application.Interfaces.Repositories;
 using MyCalorieCounter.Core.Data;
 using MyCalorieCounter.Infrastructure.DataBase;
@@ -20,7 +21,6 @@ namespace MyCalorieCounter.Infrastructure
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     configuration.GetConnectionString("DefaultConnection")));
-           
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
