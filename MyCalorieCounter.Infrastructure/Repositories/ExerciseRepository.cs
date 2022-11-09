@@ -18,14 +18,9 @@ namespace MyCalorieCounter.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task Update(Exercise exercise)
+        public void Update(Exercise exercise)
         {
-            var obj = await _context.Exercises.FirstOrDefaultAsync(q => q.Id == exercise.Id);
-            if (obj != null)
-            {
-                obj.Name = exercise.Name;
-                obj.CaloriesPerHour = exercise.CaloriesPerHour;
-            }
+            _context.Update(exercise);
         }
     }
 }

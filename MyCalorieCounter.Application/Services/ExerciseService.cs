@@ -78,8 +78,10 @@ namespace MyCalorieCounter.Application.Services
                 throw new ValidationExeption(validationResult);
             }
 
-            var exercise = _exerciseFactory.CreateExercise(exerciseDto, id);
-            await _unitOfWork.Exercises.Update(exercise);
+            var exercise = await _unitOfWork.Exercises.Get(q => q.Id == id);
+            exercise = _exerciseFactory.MapToModel(exercise, exerciseDto);
+
+            _unitOfWork.Exercises.Update(exercise);
             await _unitOfWork.Save();
         }
     }

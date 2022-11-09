@@ -57,5 +57,12 @@ namespace MyCalorieCounter.Application.Factories
             }
             return exerciseList;
         }
+        public Exercise MapToModel(Exercise model, ExerciseDto dto)
+        {
+            model.Name = dto.Name;
+            model.CaloriesPerHour = dto.CaloriesPerHour;
+
+            return model;
+        }
     }
 }
