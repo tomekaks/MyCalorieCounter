@@ -23,8 +23,10 @@ namespace MyCalorieCounter.Application.CQRS.Product.Handlers.Commands
         }
         public async Task<Unit> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
-            var product = _productFactory.CreateProduct(request.ProductDto);
-            await _unitOfWork.Products.Update(product);
+            var product = await _unitOfWork.Products.Get(q => q.Id == request.ProductDto.Id);
+            product = _productFactory.MapToModel(product, request.ProductDto);
+
+            _unitOfWork.Products.Update(product);
             await _unitOfWork.Save();
             return Unit.Value;
         }

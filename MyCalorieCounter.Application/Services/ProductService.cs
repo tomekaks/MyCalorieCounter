@@ -28,7 +28,7 @@ namespace MyCalorieCounter.Application.Services
 
         public async Task AddAProduct(string name, double cal, double pro, double carb, double fat)
         {
-            ProductDto productDto = _productFactory.CreateProductDto(name, cal, pro, carb, fat);
+            var productDto = _productFactory.CreateProductDto(name, cal, pro, carb, fat);
 
             var validationResult = _productDtoValidator.Validate(productDto);
             if (!validationResult.IsValid)
@@ -36,7 +36,7 @@ namespace MyCalorieCounter.Application.Services
                 throw new ValidationExeption(validationResult);
             }
 
-            Product product = _productFactory.CreateProduct(productDto);
+            var product = _productFactory.CreateProduct(productDto);
 
             await _unitOfWork.Products.Add(product);
             await _unitOfWork.Save();
@@ -68,9 +68,9 @@ namespace MyCalorieCounter.Application.Services
             {
                 throw new ValidationExeption(validationResult);
             }
-
-            var product = _productFactory.CreateProduct(productDto);
-            await _unitOfWork.Products.Update(product);
+            var product = await _unitOfWork.Products.Get(q => q.Id == productDto.Id);
+            product = _productFactory.MapToModel(product, productDto);
+            _unitOfWork.Products.Update(product);
             await _unitOfWork.Save();
         }
     }

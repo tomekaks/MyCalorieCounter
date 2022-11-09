@@ -14,5 +14,7 @@ namespace MyCalorieCounter.Application.Interfaces.Factories
         ProductDto CreateProductDto(Product product);
         ProductDto CreateProductDto(string name, double cal, double pro, double carb, double fat);
         List<ProductDto> CreateProductDtoList(List<Product> productList);
+        Product MapToModel(Product model, ProductDto dto);
+        ProductDto MapToDto(ProductDto dto, Product model);
     }
 }

@@ -19,16 +19,9 @@ namespace MyCalorieCounter.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task Update(Product product)
+        public void Update(Product product)
         {
-            var obj = await _context.Products.FirstOrDefaultAsync(p => p.Name == product.Name);
-            if (obj != null)
-            {
-                obj.Calories = product.Calories;
-                obj.Proteins = product.Proteins;
-                obj.Carbs = product.Carbs;
-                obj.Fats = product.Fats;
-            }
+            _context.Update(product);
         }
     }
 }

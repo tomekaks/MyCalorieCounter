@@ -55,5 +55,27 @@ namespace MyCalorieCounter.Application.Factories
             return products;
             //return productList.Select(p => CreateProductDto(p)).ToList();
         }
+
+        public ProductDto MapToDto(ProductDto dto, Product model)
+        {
+            dto.Id = model.Id;
+            dto.Name = model.Name;
+            dto.Calories = model.Calories;
+            dto.Proteins = model.Proteins;
+            dto.Carbs = model.Carbs;
+            dto.Fats = model.Fats;
+
+            return dto;
+        }
+
+        public Product MapToModel(Product model, ProductDto dto)
+        {
+            model.Calories = dto.Calories;
+            model.Proteins = dto.Proteins;
+            model.Carbs = dto.Carbs;
+            model.Fats = dto.Fats;
+
+            return model;
+        }
     }
 }
