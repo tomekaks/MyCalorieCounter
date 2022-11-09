@@ -6,11 +6,13 @@ using MyCalorieCounter.Application.Interfaces.Services;
 using MyCalorieCounter.Application.Interfaces.Validators;
 using MyCalorieCounter.Application.Services;
 using MyCalorieCounter.Application.Validators;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace MyCalorieCounter.Application
 {
@@ -38,6 +40,8 @@ namespace MyCalorieCounter.Application
             services.AddScoped<IMyActivityDtoValidator, MyActivityDtoValidator>();
             services.AddScoped<IProductDtoValidator, ProductDtoValidator>();
             services.AddScoped<IExerciseDtoValidator, ExerciseDtoValidator>();
+
+            services.AddMediatR(Assembly.GetExecutingAssembly());
 
             return services;
         }
