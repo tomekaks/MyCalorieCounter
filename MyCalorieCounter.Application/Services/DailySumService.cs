@@ -47,8 +47,10 @@ namespace MyCalorieCounter.Application.Services
         }
         private async Task UpdateDailySum(DailySumDto dailySumDto)
         {
-            var dailySum = _dailySumFactory.CreateDailySum(dailySumDto);
-            await _unitOfWork.DailySums.Update(dailySum);
+            var dailySum = await _unitOfWork.DailySums.Get(q => q.Id == dailySumDto.Id);
+            dailySum = _dailySumFactory.MapToModel(dailySum, dailySumDto);
+
+            _unitOfWork.DailySums.Update(dailySum);
             await _unitOfWork.Save();
         }
         private async Task BeginNewDay(DailySumDto dailySumDto)

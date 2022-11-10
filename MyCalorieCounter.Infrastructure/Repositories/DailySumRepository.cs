@@ -19,17 +19,9 @@ namespace MyCalorieCounter.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task Update(DailySum dailySum)
+        public void Update(DailySum dailySum)
         {
-            var obj = await _context.DailySums.FirstOrDefaultAsync(d => d.Date == dailySum.Date && d.UserId == dailySum.UserId);
-            if (obj != null)
-            {
-                obj.Calories = dailySum.Calories;
-                obj.Proteins = dailySum.Proteins;
-                obj.Carbs = dailySum.Carbs;
-                obj.Fats = dailySum.Fats;
-                obj.CaloriesBurned = dailySum.CaloriesBurned;
-            }
+            _context.DailySums.Update(dailySum);
         }
     }
 }

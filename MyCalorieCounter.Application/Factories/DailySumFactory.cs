@@ -60,5 +60,16 @@ namespace MyCalorieCounter.Application.Factories
             }
             return listDto;
         }
+
+        public DailySum MapToModel(DailySum model, DailySumDto dto)
+        {
+            model.Calories = dto.Calories;
+            model.Proteins = dto.Proteins;
+            model.Carbs = dto.Carbs;
+            model.Fats = dto.Fats;
+            model.CaloriesBurned = dto.CaloriesBurned;
+
+            return model;
+        }
     }
 }

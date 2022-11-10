@@ -13,5 +13,7 @@ namespace MyCalorieCounter.Application.Interfaces.Factories
         DailySum CreateDailySum(DailySumDto dailySumDto);
         DailySumDto CreateDailySumDto(DailySum dailySum);
         DailySumDto CreateDailySumDto(string todaysDate, string userId);
+        List<DailySumDto> CreateDailySumDtoList(List<DailySum> dailySums);
+        DailySum MapToModel(DailySum model, DailySumDto dto);
     }
 }

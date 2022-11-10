@@ -9,6 +9,6 @@ namespace MyCalorieCounter.Application.Interfaces.Repositories
 {
     public interface IDailySumRepository : IGenericRepository<DailySum>
     {
-        Task Update(DailySum dailySum);
+        void Update(DailySum dailySum);
     }
 }
