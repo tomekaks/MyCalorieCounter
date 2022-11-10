@@ -68,16 +68,15 @@ namespace MyCalorieCounter.Application.Factories
                 Fats = fat
             };
         }
-        public DailyGoalDto CreateNewUsersDailyGoalDto(string userId)
+        
+        public DailyGoal MapToModel(DailyGoal model, DailyGoalDto dto)
         {
-            return new DailyGoalDto()
-            {
-                UserId = userId,
-                Calories = 0,
-                Proteins = 0,
-                Carbs = 0,
-                Fats = 0
-            };
+            model.Calories = dto.Calories;
+            model.Proteins = dto.Proteins;
+            model.Carbs = dto.Carbs;
+            model.Fats = dto.Fats;
+
+            return model;
         }
     }
 }

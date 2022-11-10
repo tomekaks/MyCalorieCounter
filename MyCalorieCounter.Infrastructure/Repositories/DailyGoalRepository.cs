@@ -25,16 +25,9 @@ namespace MyCalorieCounter.Infrastructure.Repositories
             var dailyGoal = await _context.DailyGoals.FirstOrDefaultAsync(d => d.UserId == userId);
             return dailyGoal;
         }
-        public async Task Update(DailyGoal dailyGoal)
+        public void Update(DailyGoal dailyGoal)
         {
-            var obj = await _context.DailyGoals.FirstOrDefaultAsync(q => q.UserId == dailyGoal.UserId);
-            if (obj != null)
-            {
-                obj.Calories = dailyGoal.Calories;
-                obj.Proteins = dailyGoal.Proteins;
-                obj.Carbs = dailyGoal.Carbs;
-                obj.Fats = dailyGoal.Fats;
-            }
+            _context.DailyGoals.Update(dailyGoal);
         }
         public async Task Add(DailyGoal dailyGoal)
         {

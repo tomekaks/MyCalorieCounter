@@ -47,8 +47,10 @@ namespace MyCalorieCounter.Application.Services
                 throw new ValidationExeption(validationResult);
             }
 
-            var dailyGoal = _dailyGoalFactory.CreateDailyGoal(dailyGoalDto);
-            await _unitOfWork.DailyGoals.Update(dailyGoal);
+            var dailyGoal = await _unitOfWork.DailyGoals.GetById(dailyGoalDto.UserId);
+            dailyGoal = _dailyGoalFactory.MapToModel(dailyGoal, dailyGoalDto);
+
+            _unitOfWork.DailyGoals.Update(dailyGoal);
             await _unitOfWork.Save();
         }
         public async Task UpdateDailyGoal(string userId, double cal, double pro, double carb, double fat)
@@ -61,8 +63,10 @@ namespace MyCalorieCounter.Application.Services
                 throw new ValidationExeption(validationResult);
             }
 
-            var dailyGoal = _dailyGoalFactory.CreateDailyGoal(dailyGoalDto);
-            await _unitOfWork.DailyGoals.Update(dailyGoal);
+            var dailyGoal = await _unitOfWork.DailyGoals.GetById(dailyGoalDto.UserId);
+            dailyGoal = _dailyGoalFactory.MapToModel(dailyGoal, dailyGoalDto);
+
+            _unitOfWork.DailyGoals.Update(dailyGoal);
             await _unitOfWork.Save();
         }
 
@@ -71,7 +75,10 @@ namespace MyCalorieCounter.Application.Services
             var dailyGoal = _dailyGoalFactory.CreateNewUsersDailyGoal(userId);
             await _unitOfWork.DailyGoals.Add(dailyGoal);
             await _unitOfWork.Save();
-            return _dailyGoalFactory.CreateNewUsersDailyGoalDto(userId);
+
+            dailyGoal = await _unitOfWork.DailyGoals.GetById(userId);
+
+            return _dailyGoalFactory.CreateDailyGoalDto(dailyGoal);
         }
     }
 }

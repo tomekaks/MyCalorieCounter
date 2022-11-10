@@ -10,7 +10,7 @@ namespace MyCalorieCounter.Application.Interfaces.Repositories
 {
     public interface IDailyGoalRepository
     {
-        Task Update(DailyGoal dailyGoal);
+        void Update(DailyGoal dailyGoal);
         Task<DailyGoal> GetById(string userId);
         Task Add(DailyGoal dailyGoal);
     }

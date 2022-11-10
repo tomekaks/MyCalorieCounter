@@ -15,6 +15,6 @@ namespace MyCalorieCounter.Application.Interfaces.Factories
         DailyGoalDto CreateDailyGoalDto(DailyGoal dailyGoal);
         DailyGoalDto CreateDailyGoalDto(string userId, double cal, double pro, double carb, double fat);
         DailyGoal CreateNewUsersDailyGoal(string userId);
-        DailyGoalDto CreateNewUsersDailyGoalDto(string userId);
+        DailyGoal MapToModel(DailyGoal model, DailyGoalDto dto);
     }
 }
