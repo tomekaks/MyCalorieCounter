@@ -65,5 +65,11 @@ namespace MyCalorieCounter.Application.Factories
             }
             return meals;
         }
+
+        public Meal MapToModel(Meal model, MealDto dto)
+        {
+            model.Weight = dto.Weight;
+            return model;
+        }
     }
 }

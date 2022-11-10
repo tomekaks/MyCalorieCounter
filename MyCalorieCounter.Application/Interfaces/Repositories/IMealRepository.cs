@@ -9,6 +9,6 @@ namespace MyCalorieCounter.Application.Interfaces.Repositories
 {
     public interface IMealRepository : IGenericRepository<Meal>
     {
-        Task Update(Meal meal);
+        void Update(Meal meal);
     }
 }

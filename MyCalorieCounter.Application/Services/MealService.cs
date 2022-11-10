@@ -61,7 +61,7 @@ namespace MyCalorieCounter.Application.Services
             var meal = await _unitOfWork.Meals.Get(m => m.Id == id, includeProperties:"Product");
             return _mealFactory.CreateMealDto(meal);
         }
-        public async Task UpdateMeal(MealDto mealDto, int id)
+        public async Task UpdateMeal(MealDto mealDto)
         {
             var validationResult = _mealDtoValidator.Validate(mealDto);
             if (!validationResult.IsValid)
@@ -69,8 +69,10 @@ namespace MyCalorieCounter.Application.Services
                 throw new ValidationExeption(validationResult);
             }
 
-            var meal = _mealFactory.CreateMeal(mealDto, id);
-            await _unitOfWork.Meals.Update(meal);
+            var meal = await _unitOfWork.Meals.Get(q => q.Id == mealDto.Id);
+            meal = _mealFactory.MapToModel(meal, mealDto);
+
+            _unitOfWork.Meals.Update(meal);
             await _unitOfWork.Save();
         }
     }

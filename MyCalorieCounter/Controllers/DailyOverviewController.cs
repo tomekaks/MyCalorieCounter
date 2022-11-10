@@ -164,7 +164,7 @@ namespace MyCalorieCounter.Controllers
                 dailySum.Carbs += meal.Carbs;
                 dailySum.Fats += meal.Fats;
 
-                await _mealService.UpdateMeal(meal, id);
+                await _mealService.UpdateMeal(meal);
                 await _dailySumService.BeginNewOrUpdateDailySum(dailySum);
 
                 return RedirectToAction(nameof(Index));

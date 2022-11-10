@@ -17,14 +17,10 @@ namespace MyCalorieCounter.Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task Update(Meal meal)
+        public void Update(Meal meal)
         {
-            var obj = await _context.Meals.FirstOrDefaultAsync(m => m.Id == meal.Id && m.UserId == meal.UserId);
-            if (obj != null)
-            {
-                obj.Weight = meal.Weight;
-            }
-            
-        }
+            _context.Meals.Update(meal);
+        }  
+        
     }
 }
