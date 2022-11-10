@@ -15,5 +15,6 @@ namespace MyCalorieCounter.Application.Interfaces.Factories
         MyActivityDto CreateMyActivityDto(MyActivity myActivity);
         MyActivityDto CreateMyActivityDto(string userId, int exerciseId, int minutes, int calories, int dailySumId);
         List<MyActivityDto> CreateMyActivityDtoList(List<MyActivity> myActivities);
+        MyActivity MapToModel(MyActivity model, MyActivityDto dto);
     }
 }

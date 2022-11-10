@@ -55,7 +55,7 @@ namespace MyCalorieCounter.Application.Services
             _unitOfWork.MyActivities.Delete(activity);
             await _unitOfWork.Save();
         }
-        public async Task UpdateActivity(MyActivityDto myActivityDto, int id)
+        public async Task UpdateActivity(MyActivityDto myActivityDto)
         {
             var validationResult = _myActivityDtoValidator.Validate(myActivityDto);
             if (!validationResult.IsValid)
@@ -63,8 +63,10 @@ namespace MyCalorieCounter.Application.Services
                 throw new ValidationExeption(validationResult);
             }
 
-            var activity = _myActivityFactory.CreateMyActivity(myActivityDto, id);
-            await _unitOfWork.MyActivities.Update(activity);
+            var myActivity = await _unitOfWork.MyActivities.Get(q => q.Id == myActivityDto.Id);
+            myActivity = _myActivityFactory.MapToModel(myActivity, myActivityDto);
+
+            _unitOfWork.MyActivities.Update(myActivity);
             await _unitOfWork.Save();
         }
     }

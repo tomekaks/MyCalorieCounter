@@ -76,5 +76,13 @@ namespace MyCalorieCounter.Application.Factories
             }
             return activityList;
         }
+
+        public MyActivity MapToModel(MyActivity model, MyActivityDto dto)
+        {
+            model.Minutes = dto.Minutes;
+            model.CaloriesBurned = dto.CaloriesBurned;
+
+            return model;
+        }
     }
 }

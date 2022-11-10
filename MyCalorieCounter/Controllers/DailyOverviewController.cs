@@ -249,7 +249,7 @@ namespace MyCalorieCounter.Controllers
                 dailySum.CaloriesBurned += activity.CaloriesBurned;
                 await _dailySumService.BeginNewOrUpdateDailySum(dailySum);
 
-                await _myActivityService.UpdateActivity(activity, id);
+                await _myActivityService.UpdateActivity(activity);
 
                 return RedirectToAction(nameof(Index));
             }
