@@ -70,7 +70,7 @@ namespace MyCalorieCounter.Application.Services
             return _exerciseFactory.CreateExerciseDto(exercise);
         }
 
-        public async Task UpdateExercise(ExerciseDto exerciseDto, int id)
+        public async Task UpdateExercise(ExerciseDto exerciseDto)
         {
             var validationResult = _exerciseDtoValidator.Validate(exerciseDto);
             if (!validationResult.IsValid)
@@ -78,7 +78,7 @@ namespace MyCalorieCounter.Application.Services
                 throw new ValidationExeption(validationResult);
             }
 
-            var exercise = await _unitOfWork.Exercises.Get(q => q.Id == id);
+            var exercise = await _unitOfWork.Exercises.Get(q => q.Id == exerciseDto.Id);
             exercise = _exerciseFactory.MapToModel(exercise, exerciseDto);
 
             _unitOfWork.Exercises.Update(exercise);

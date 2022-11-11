@@ -26,10 +26,8 @@ namespace MyCalorieCounter.Application.Services
             _productDtoValidator = productDtoValidator;
         }
 
-        public async Task AddAProduct(string name, double cal, double pro, double carb, double fat)
+        public async Task AddAProduct(ProductDto productDto)
         {
-            var productDto = _productFactory.CreateProductDto(name, cal, pro, carb, fat);
-
             var validationResult = _productDtoValidator.Validate(productDto);
             if (!validationResult.IsValid)
             {

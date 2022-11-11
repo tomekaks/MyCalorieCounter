@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using MyCalorieCounter.Application.Dto;
 using MyCalorieCounter.Application.Interfaces.Services;
 using MyCalorieCounter.Models;
 using System;
@@ -11,10 +13,12 @@ namespace MyCalorieCounter.Controllers
     public class ManageExercisesController : Controller
     {
         private readonly IExerciseService _exerciseService;
+        private readonly IMapper _mapper;
 
-        public ManageExercisesController(IExerciseService exerciseService)
+        public ManageExercisesController(IExerciseService exerciseService, IMapper mapper)
         {
             _exerciseService = exerciseService;
+            _mapper = mapper;
         }
 
         public async Task<IActionResult> Index()
@@ -43,7 +47,8 @@ namespace MyCalorieCounter.Controllers
                     return View(model);
                 }
 
-                await _exerciseService.AddNewExercise(model.Name, model.CaloriesPerHour);
+                var exercise = _mapper.Map<ExerciseDto>(model);
+                await _exerciseService.AddNewExercise(exercise);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -56,12 +61,7 @@ namespace MyCalorieCounter.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var exercise = await _exerciseService.GetExercise(id);
-            var model = new ExerciseVM()
-            {
-                Id = id,
-                Name = exercise.Name,
-                CaloriesPerHour = exercise.CaloriesPerHour
-            };
+            var model = _mapper.Map<ExerciseVM>(exercise);
             
             return View(model);
         }
@@ -85,17 +85,13 @@ namespace MyCalorieCounter.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var exercise = await _exerciseService.GetExercise(id);
-            var model = new ExerciseVM()
-            {
-                Id = exercise.Id,
-                Name = exercise.Name,
-                CaloriesPerHour = exercise.CaloriesPerHour
-            };
+            var model = _mapper.Map<ExerciseVM>(exercise);
+
             return View(model);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditExercise(ExerciseVM model, int id)
+        public async Task<IActionResult> EditExercise(ExerciseVM model)
         {
             try
             {
@@ -104,10 +100,9 @@ namespace MyCalorieCounter.Controllers
                     return View(model);
                 }
 
-                var exercise = await _exerciseService.GetExercise(id);
-                exercise.Name = model.Name;
-                exercise.CaloriesPerHour = model.CaloriesPerHour;
-                await _exerciseService.UpdateExercise(exercise, id);
+                var exercise = _mapper.Map<ExerciseDto>(model);
+                
+                await _exerciseService.UpdateExercise(exercise);
 
                 return RedirectToAction(nameof(Index));
             }

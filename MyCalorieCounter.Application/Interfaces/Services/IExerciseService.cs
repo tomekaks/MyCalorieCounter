@@ -14,6 +14,6 @@ namespace MyCalorieCounter.Application.Interfaces.Services
         Task AddNewExercise(string name, int calories);
         Task DeleteExercise(int id);
         Task<List<ExerciseDto>> GetAllExercises();
-        Task UpdateExercise(ExerciseDto exerciseDto, int id);
+        Task UpdateExercise(ExerciseDto exerciseDto);
     }
 }

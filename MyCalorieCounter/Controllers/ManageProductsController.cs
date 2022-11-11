@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyCalorieCounter.Application.Dto;
 using MyCalorieCounter.Application.Interfaces.Services;
@@ -14,10 +15,12 @@ namespace MyCalorieCounter.Controllers
     public class ManageProductsController : Controller
     {
         private readonly IProductService _productService;
+        private readonly IMapper _mapper;
 
-        public ManageProductsController(IProductService productService)
+        public ManageProductsController(IProductService productService, IMapper mapper)
         {
             _productService = productService;
+            _mapper = mapper;
         }
 
 
@@ -47,8 +50,10 @@ namespace MyCalorieCounter.Controllers
                 {
                     return View(model);
                 }
- 
-                await _productService.AddAProduct(model.Name, model.Calories, model.Proteins, model.Carbs, model.Fats);
+
+                var productDto = _mapper.Map<ProductDto>(model);
+                
+                await _productService.AddAProduct(productDto);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -61,15 +66,8 @@ namespace MyCalorieCounter.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var product = await _productService.GetProduct(id);
-            var model = new ProductVM()
-            {
-                Id = product.Id,
-                Name = product.Name,
-                Calories = product.Calories,
-                Proteins = product.Proteins,
-                Carbs = product.Carbs,
-                Fats = product.Fats
-            };
+            var model = _mapper.Map<ProductVM>(product);
+            
             return View(model);
         }
 
@@ -92,15 +90,8 @@ namespace MyCalorieCounter.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var product = await _productService.GetProduct(id);
-            var model = new ProductVM()
-            {
-                Id = id,
-                Name = product.Name,
-                Calories = product.Calories,
-                Proteins = product.Proteins,
-                Carbs = product.Carbs,
-                Fats = product.Fats
-            };
+            var model = _mapper.Map<ProductVM>(product);
+
             return View(model);
         }
         [HttpPost]
@@ -113,12 +104,8 @@ namespace MyCalorieCounter.Controllers
                 {
                     return View(model);
                 }
-                var product = await _productService.GetProduct(id);
-                product.Name = model.Name;
-                product.Calories = model.Calories;
-                product.Proteins = model.Proteins;
-                product.Carbs = model.Carbs;
-                product.Fats = model.Fats;
+
+                var product = _mapper.Map<ProductDto>(model);
                 await _productService.UpdateProduct(product);
 
                 return RedirectToAction(nameof(Index));
