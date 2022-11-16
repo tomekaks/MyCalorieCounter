@@ -25,10 +25,8 @@ namespace MyCalorieCounter.Application.Services
             _myActivityDtoValidator = myActivityDtoValidator;
         }
 
-        public async Task AddActivity(string userId, int exerciseId, int minutes, int calories, int dailySumId)
+        public async Task AddActivity(MyActivityDto myActivityDto)
         {
-            var myActivityDto = _myActivityFactory.CreateMyActivityDto(userId, exerciseId, minutes, calories, dailySumId);
-
             var validationResult = _myActivityDtoValidator.Validate(myActivityDto);
             if (!validationResult.IsValid)
             {

@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using MyCalorieCounter.Application.Dto;
 using MyCalorieCounter.Application.Interfaces.Services;
 using MyCalorieCounter.Core.Data;
 using MyCalorieCounter.Models;
@@ -18,13 +20,15 @@ namespace MyCalorieCounter.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IDailySumService _dailySumService;
         private readonly IMyActivityService _myActivityService;
+        private readonly IMapper _mapper;
 
-        public ActivitiesController(IExerciseService exerciseService, UserManager<ApplicationUser> userManager, IDailySumService dailySumService, IMyActivityService myActivityService)
+        public ActivitiesController(IExerciseService exerciseService, UserManager<ApplicationUser> userManager, IDailySumService dailySumService, IMyActivityService myActivityService, IMapper mapper)
         {
             _exerciseService = exerciseService;
             _userManager = userManager;
             _dailySumService = dailySumService;
             _myActivityService = myActivityService;
+            _mapper = mapper;
         }
 
         public async Task<IActionResult> Index()
@@ -68,7 +72,10 @@ namespace MyCalorieCounter.Controllers
                 await _dailySumService.BeginNewOrUpdateDailySum(dailySum);
                 dailySum = await _dailySumService.GetDailySum(userId);
 
-                await _myActivityService.AddActivity(userId, exerciseId, model.Minutes, caloriesBurned, dailySum.Id);
+                var myActivity = _mapper.Map<MyActivityDto>(model);
+                myActivity.UserId = userId;
+                myActivity.DailySumId = dailySum.Id;
+                await _myActivityService.AddActivity(myActivity);
 
                 return RedirectToAction(nameof(Index));
             }

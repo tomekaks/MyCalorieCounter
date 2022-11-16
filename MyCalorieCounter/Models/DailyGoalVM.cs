@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MyCalorieCounter.Models
 {
-    public class DailyGoalsVM
+    public class DailyGoalVM
     {
         public double DailyCaloriesGoal { get; set; }
         public double DailyProteinsGoal { get; set; }

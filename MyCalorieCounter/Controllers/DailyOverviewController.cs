@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyCalorieCounter.Application.Dto;
@@ -21,46 +22,43 @@ namespace MyCalorieCounter.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMealService _mealService;
         private readonly IMyActivityService _myActivityService;
+        private readonly IMapper _mapper;
 
 
         public DailyOverviewController(IDailySumService dailySumService, IDailyGoalService dailyGoalService,
-                                       UserManager<ApplicationUser> userManager, IMealService mealService, IMyActivityService myActivityService)
+                                       UserManager<ApplicationUser> userManager, IMealService mealService, IMyActivityService myActivityService, IMapper mapper)
         {
             _dailySumService = dailySumService;
             _dailyGoalService = dailyGoalService;
             _userManager = userManager;
             _mealService = mealService;
             _myActivityService = myActivityService;
+            _mapper = mapper;
         }
 
         public async Task<IActionResult> Index()
         {
             var currentUsersId = await GetUsersId();
             var dailySum = await _dailySumService.GetDailySum(currentUsersId);
-            var dailyGoals = await _dailyGoalService.GetDailyGoal(currentUsersId);
+            var dailyGoal = await _dailyGoalService.GetDailyGoal(currentUsersId);
             var todaysMeals = await _mealService.GetTodaysMeals(currentUsersId, dailySum.Date);
             var activities = await _myActivityService.GetTodaysActivities(dailySum.Id);
-            var model = new DailyOverviewVM(dailySum, dailyGoals, todaysMeals, activities);
+            var model = new DailyOverviewVM(dailySum, dailyGoal, todaysMeals, activities);
             return View(model);
         }
 
         public async Task<IActionResult> UpdateGoals()
         {
             var currentUsersId = await GetUsersId();
-            var dailyGoals = await _dailyGoalService.GetDailyGoal(currentUsersId);
-            var model = new DailyGoalsVM()
-            {
-                DailyCaloriesGoal = dailyGoals.Calories,
-                DailyProteinsGoal = dailyGoals.Proteins,
-                DailyCarbsGoal = dailyGoals.Carbs,
-                DailyFatsGoal = dailyGoals.Fats
-            };
+            var dailyGoal = await _dailyGoalService.GetDailyGoal(currentUsersId);
+            var model = _mapper.Map<DailyGoalVM>(dailyGoal);
+            
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateGoals(DailyGoalsVM model)
+        public async Task<IActionResult> UpdateGoals(DailyGoalVM model)
         {
             try
             {
@@ -69,10 +67,9 @@ namespace MyCalorieCounter.Controllers
                     return View(model);
                 }
                
-                var currentUsersId = await GetUsersId();
-                await _dailyGoalService.UpdateDailyGoal(currentUsersId, 
-                                                        model.DailyCaloriesGoal, model.DailyProteinsGoal, 
-                                                        model.DailyCarbsGoal, model.DailyFatsGoal);
+                var dailyGoalDto = _mapper.Map<DailyGoalDto>(model);
+                dailyGoalDto.UserId = await GetUsersId();
+                await _dailyGoalService.UpdateDailyGoal(dailyGoalDto);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -84,16 +81,8 @@ namespace MyCalorieCounter.Controllers
         public async Task<IActionResult> RemoveMeal(int id)
         {
             var meal = await _mealService.GetMeal(id);
-            var model = new RemoveMealVM()
-            {
-                Id = id,
-                Name = meal.Product.Name,
-                Calories = meal.Calories,
-                Proteins = meal.Proteins,
-                Carbs = meal.Carbs,
-                Fats = meal.Fats,
-                Weight = meal.Weight
-            };
+            var model = _mapper.Map<RemoveMealVM>(meal);
+
             return View(model);
         }
         [HttpPost]
@@ -128,16 +117,8 @@ namespace MyCalorieCounter.Controllers
         public async Task<IActionResult> EditMeal(int id)
         {
             var meal = await _mealService.GetMeal(id);
-            var model = new EditMealVM()
-            {
-                Id = id,
-                Name = meal.Product.Name,
-                Calories = meal.Calories,
-                Proteins = meal.Proteins,
-                Carbs = meal.Carbs,
-                Fats = meal.Fats,
-                Weight = meal.Weight
-            };
+            var model = _mapper.Map<EditMealVM>(meal);
+
             return View(model);
         }
         [HttpPost]
@@ -178,13 +159,8 @@ namespace MyCalorieCounter.Controllers
         public async Task<IActionResult> RemoveActivity(int id)
         {
             var activity = await _myActivityService.GetMyActivity(id);
-            var model = new RemoveActivityVM()
-            {
-                Id = id,
-                Name = activity.Exercise.Name,
-                CaloriesBurned = activity.CaloriesBurned,
-                Minutes = activity.Minutes
-            };
+            var model = _mapper.Map<RemoveActivityVM>(activity);
+
             return View(model);
         }
         [HttpPost]
@@ -217,13 +193,8 @@ namespace MyCalorieCounter.Controllers
         public async Task<IActionResult> EditActivity(int id)
         {
             var activity = await _myActivityService.GetMyActivity(id);
-            var model = new EditActivityVM()
-            {
-                Id = id,
-                Name = activity.Exercise.Name,
-                CaloriesBurned = activity.CaloriesBurned,
-                Minutes = activity.Minutes
-            };
+            var model = _mapper.Map<EditActivityVM>(activity);
+
             return View(model);
         }
         [HttpPost]

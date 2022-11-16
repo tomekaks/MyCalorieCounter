@@ -27,15 +27,6 @@ namespace MyCalorieCounter.Application.Services
 
         public async Task AddNewExercise(ExerciseDto exerciseDto)
         {
-            var exercise = _exerciseFactory.CreateExercise(exerciseDto);
-            await _unitOfWork.Exercises.Add(exercise);
-            await _unitOfWork.Save();
-        }
-
-        public async Task AddNewExercise(string name, int calories)
-        {
-            var exerciseDto = _exerciseFactory.CreateExerciseDto(name, calories);
-
             var validationResult = _exerciseDtoValidator.Validate(exerciseDto);
             if (!validationResult.IsValid)
             {

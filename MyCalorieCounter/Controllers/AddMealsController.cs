@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyCalorieCounter.Application.Dto;
@@ -20,14 +21,16 @@ namespace MyCalorieCounter.Controllers
         private readonly IDailySumService _dailySumService;
         private readonly IMealService _mealService;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IMapper _mapper;
 
 
-        public AddMealsController(IProductService productService, IDailySumService dailySumService, UserManager<ApplicationUser> userManager, IMealService mealService)
+        public AddMealsController(IProductService productService, IDailySumService dailySumService, UserManager<ApplicationUser> userManager, IMealService mealService, IMapper mapper)
         {
             _productService = productService;
             _dailySumService = dailySumService;
             _userManager = userManager;
             _mealService = mealService;
+            _mapper = mapper;
         }
 
         public async Task<IActionResult> Index()
@@ -41,15 +44,8 @@ namespace MyCalorieCounter.Controllers
         public async Task<IActionResult> AddFood(int id)
         {
             var product = await _productService.GetProduct(id);
-            var model = new AddFoodVM()
-            {
-                ProductId = id,
-                Name = product.Name,
-                Calories = product.Calories,
-                Proteins = product.Proteins,
-                Carbs = product.Carbs,
-                Fats = product.Fats
-            };
+            var model = _mapper.Map<AddFoodVM>(product);
+
             return View(model);
         }
 

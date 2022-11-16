@@ -13,8 +13,18 @@ namespace MyCalorieCounter.Mappings
         public MapperConfig()
         {
             CreateMap<ProductVM, ProductDto>().ReverseMap();
+            CreateMap<AddActivityVM, ProductDto>().ReverseMap();
 
             CreateMap<ExerciseVM, ExerciseDto>().ReverseMap();
+
+            CreateMap<DailyGoalVM, DailyGoalDto>().ReverseMap();
+
+            CreateMap<RemoveMealVM, MealDto>().ReverseMap();
+            CreateMap<EditMealVM, MealDto>().ReverseMap();
+
+            CreateMap<RemoveActivityVM, MyActivityDto>().ReverseMap();
+            CreateMap<EditActivityVM, MyActivityDto>().ReverseMap();
+            CreateMap<AddActivityVM, MyActivityDto>().ReverseMap();
         }
     }
 }

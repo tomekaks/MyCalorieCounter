@@ -9,7 +9,7 @@ namespace MyCalorieCounter.Application.Interfaces.Services
 {
     public interface IMyActivityService
     {
-        Task AddActivity(string userId, int exerciseId, int minutes, int calories, int dailySumId);
+        Task AddActivity(MyActivityDto myActivityDto);
         Task<List<MyActivityDto>> GetTodaysActivities(int dailySumId);
         Task<MyActivityDto> GetMyActivity(int id);
         Task DeleteActivity(int id);
