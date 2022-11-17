@@ -21,31 +21,19 @@ namespace MyCalorieCounter.Application.Services
             _dailySumFactory = dailySumFactory;
         }
 
-        public async Task BeginNewOrUpdateDailySum(DailySumDto dailySumDto)
-        {
-            var isExists = await _unitOfWork.DailySums.IsExists(d => d.Date == dailySumDto.Date && d.UserId == dailySumDto.UserId);
-            if (isExists)
-            {
-                await UpdateDailySum(dailySumDto);
-            }
-            else
-            {
-                await BeginNewDay(dailySumDto);
-            }
-        }
-
         public async Task<DailySumDto> GetDailySum(string userId)
         {
             var todaysDate = GetTodaysDate();
 
             var dailySum = await _unitOfWork.DailySums.Get(q => q.Date == todaysDate && q.UserId == userId);
             if (dailySum == null)
-            {  
-                return _dailySumFactory.CreateDailySumDto(todaysDate, userId);
+            {
+                return await BeginNewDailySum(todaysDate, userId);
             }
             return _dailySumFactory.CreateDailySumDto(dailySum);
         }
-        private async Task UpdateDailySum(DailySumDto dailySumDto)
+
+        public async Task UpdateDailySum(DailySumDto dailySumDto)
         {
             var dailySum = await _unitOfWork.DailySums.Get(q => q.Id == dailySumDto.Id);
             dailySum = _dailySumFactory.MapToModel(dailySum, dailySumDto);
@@ -53,12 +41,17 @@ namespace MyCalorieCounter.Application.Services
             _unitOfWork.DailySums.Update(dailySum);
             await _unitOfWork.Save();
         }
-        private async Task BeginNewDay(DailySumDto dailySumDto)
+
+        private async Task<DailySumDto> BeginNewDailySum(string todaysDate, string userId)
         {
-            var dailySum = _dailySumFactory.CreateDailySum(dailySumDto);
+            var dailySum = _dailySumFactory.CreateDailySum(todaysDate, userId);
             await _unitOfWork.DailySums.Add(dailySum);
             await _unitOfWork.Save();
+
+            dailySum = await _unitOfWork.DailySums.Get(q => q.Date == todaysDate && q.UserId == userId);
+            return _dailySumFactory.CreateDailySumDto(dailySum);
         }
+
         private string GetTodaysDate()
         {
             return DateTime.Today.ToString("d");

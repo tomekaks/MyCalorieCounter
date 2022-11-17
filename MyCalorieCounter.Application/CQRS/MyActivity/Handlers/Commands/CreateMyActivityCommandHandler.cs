@@ -34,12 +34,30 @@ namespace MyCalorieCounter.Application.CQRS.MyActivity.Handlers.Commands
                 throw new ValidationExeption(validationResult);
             }
 
+            var todaysDate = GetTodaysDate();
+
             var myActivity = _myActivityFactory.CreateMyActivity(request.MyActivityDto);
 
+            var exercise = await _unitOfWork.Exercises.Get(q => q.Id == request.MyActivityDto.ExerciseId);
+            var dailySum = await _unitOfWork.DailySums.Get(q => q.UserId == request.MyActivityDto.UserId
+                                                             && q.Date == todaysDate);
+
+            var caloriesBurned = (exercise.CaloriesPerHour * request.MyActivityDto.Minutes) / 60;
+            dailySum.CaloriesBurned += caloriesBurned;
+
+            myActivity.DailySumId = dailySum.Id;
+            myActivity.CaloriesBurned = caloriesBurned;
+
+            _unitOfWork.DailySums.Update(dailySum);
             await _unitOfWork.MyActivities.Add(myActivity);
             await _unitOfWork.Save();
 
             return Unit.Value;
+        }
+
+        private string GetTodaysDate()
+        {
+            return DateTime.Today.ToString("d");
         }
     }
 }

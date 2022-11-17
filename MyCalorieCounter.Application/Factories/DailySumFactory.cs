@@ -51,6 +51,19 @@ namespace MyCalorieCounter.Application.Factories
                 CaloriesBurned = 0
             };
         }
+        public DailySum CreateDailySum(string todaysDate, string userId)
+        {
+            return new DailySum()
+            {
+                UserId = userId,
+                Date = todaysDate,
+                Calories = 0,
+                Proteins = 0,
+                Carbs = 0,
+                Fats = 0,
+                CaloriesBurned = 0
+            };
+        }
         public List<DailySumDto> CreateDailySumDtoList(List<DailySum> dailySums)
         {
             var listDto = new List<DailySumDto>();

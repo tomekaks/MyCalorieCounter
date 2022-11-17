@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using MyCalorieCounter.Application.CQRS.MyActivity.Requests.Commands;
 using MyCalorieCounter.Application.Dto;
 using MyCalorieCounter.Application.Interfaces.Services;
 using MyCalorieCounter.Core.Data;
@@ -21,14 +23,16 @@ namespace MyCalorieCounter.Controllers
         private readonly IDailySumService _dailySumService;
         private readonly IMyActivityService _myActivityService;
         private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
 
-        public ActivitiesController(IExerciseService exerciseService, UserManager<ApplicationUser> userManager, IDailySumService dailySumService, IMyActivityService myActivityService, IMapper mapper)
+        public ActivitiesController(IExerciseService exerciseService, UserManager<ApplicationUser> userManager, IDailySumService dailySumService, IMyActivityService myActivityService, IMapper mapper, IMediator mediator)
         {
             _exerciseService = exerciseService;
             _userManager = userManager;
             _dailySumService = dailySumService;
             _myActivityService = myActivityService;
             _mapper = mapper;
+            _mediator = mediator;
         }
 
         public async Task<IActionResult> Index()
@@ -63,19 +67,13 @@ namespace MyCalorieCounter.Controllers
                     return View(model);
                 }
                 var userId = await GetUsersId();
-                var exercise = await _exerciseService.GetExercise(exerciseId);
-                var dailySum = await _dailySumService.GetDailySum(userId);
-
-                var caloriesBurned = (exercise.CaloriesPerHour * model.Minutes) / 60;
-                dailySum.CaloriesBurned += caloriesBurned;
-
-                await _dailySumService.BeginNewOrUpdateDailySum(dailySum);
-                dailySum = await _dailySumService.GetDailySum(userId);
-
+                
                 var myActivity = _mapper.Map<MyActivityDto>(model);
                 myActivity.UserId = userId;
-                myActivity.DailySumId = dailySum.Id;
+                
                 await _myActivityService.AddActivity(myActivity);
+
+                //await _mediator.Send(new CreateMyActivityCommand { MyActivityDto = myActivity });
 
                 return RedirectToAction(nameof(Index));
             }

@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using MyCalorieCounter.Application.CQRS.Meal.Requests.Commands;
 using MyCalorieCounter.Application.Dto;
 using MyCalorieCounter.Application.Interfaces.Services;
 using MyCalorieCounter.Core.Data;
@@ -22,15 +24,17 @@ namespace MyCalorieCounter.Controllers
         private readonly IMealService _mealService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
 
 
-        public AddMealsController(IProductService productService, IDailySumService dailySumService, UserManager<ApplicationUser> userManager, IMealService mealService, IMapper mapper)
+        public AddMealsController(IProductService productService, IDailySumService dailySumService, UserManager<ApplicationUser> userManager, IMealService mealService, IMapper mapper, IMediator mediator)
         {
             _productService = productService;
             _dailySumService = dailySumService;
             _userManager = userManager;
             _mealService = mealService;
             _mapper = mapper;
+            _mediator = mediator;
         }
 
         public async Task<IActionResult> Index()
@@ -45,6 +49,7 @@ namespace MyCalorieCounter.Controllers
         {
             var product = await _productService.GetProduct(id);
             var model = _mapper.Map<AddFoodVM>(product);
+            model.ProductId = id;
 
             return View(model);
         }
@@ -61,26 +66,23 @@ namespace MyCalorieCounter.Controllers
                     return View(model);
                 }
                 var userId = await GetUsersId();
-                var product = await _productService.GetProduct(productId);
-                var dailySum = await _dailySumService.GetDailySum(userId);
+                //var product = await _productService.GetProduct(productId);
+                //var dailySum = await _dailySumService.GetDailySum(userId);
 
-                dailySum.Calories += (product.Calories * model.Weight) / 100;
-                dailySum.Proteins += (product.Proteins * model.Weight) / 100;
-                dailySum.Carbs += (product.Carbs * model.Weight) / 100;
-                dailySum.Fats += (product.Fats * model.Weight) / 100;
+                //dailySum.Calories += (product.Calories * model.Weight) / 100;
+                //dailySum.Proteins += (product.Proteins * model.Weight) / 100;
+                //dailySum.Carbs += (product.Carbs * model.Weight) / 100;
+                //dailySum.Fats += (product.Fats * model.Weight) / 100;
 
-                await _dailySumService.BeginNewOrUpdateDailySum(dailySum);
-                dailySum = await _dailySumService.GetDailySum(userId);
-                
-                var meal = new MealDto()
-                {
-                    DailySumId = dailySum.Id,
-                    UserId = userId,
-                    Date = dailySum.Date,
-                    ProductId = productId,
-                    Weight = model.Weight
-                };
-                await _mealService.AddMeal(meal);
+                //await _dailySumService.UpdateDailySum(dailySum);
+                //dailySum = await _dailySumService.GetDailySum(userId);
+
+                var meal = _mapper.Map<MealDto>(model);
+                meal.UserId = userId;
+
+                //await _mealService.AddMeal(meal);
+
+                await _mediator.Send(new CreateMealCommand { MealDto = meal });
 
                 return RedirectToAction(nameof(Index));
             }

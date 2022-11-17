@@ -17,12 +17,16 @@ namespace MyCalorieCounter.Application.Services
         private readonly IMealFactory _mealFactory;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMealDtoValidator _mealDtoValidator;
+        private readonly IProductService _productService;
+        private readonly IDailySumService _dailySumService;
 
-        public MealService(IMealFactory mealFactory, IUnitOfWork unitOfWork, IMealDtoValidator mealDtoValidator)
+        public MealService(IMealFactory mealFactory, IUnitOfWork unitOfWork, IMealDtoValidator mealDtoValidator, IProductService productService, IDailySumService dailySumService)
         {
             _mealFactory = mealFactory;
             _unitOfWork = unitOfWork;
             _mealDtoValidator = mealDtoValidator;
+            _productService = productService;
+            _dailySumService = dailySumService;
         }
 
         public async Task AddMeal(MealDto mealDto)
@@ -33,7 +37,18 @@ namespace MyCalorieCounter.Application.Services
                 throw new ValidationExeption(validationResult);
             }
 
+            var productDto = await _productService.GetProduct(mealDto.ProductId);
+            var dailySumDto = await _dailySumService.GetDailySum(mealDto.UserId);
+
+            dailySumDto.Calories += (productDto.Calories * mealDto.Weight) / 100;
+            dailySumDto.Proteins += (productDto.Proteins * mealDto.Weight) / 100;
+            dailySumDto.Carbs += (productDto.Carbs * mealDto.Weight) / 100;
+            dailySumDto.Fats += (productDto.Fats * mealDto.Weight) / 100;
+            await _dailySumService.UpdateDailySum(dailySumDto);
+
+            mealDto.DailySumId = dailySumDto.Id;
             var meal = _mealFactory.CreateMeal(mealDto);
+            
             await _unitOfWork.Meals.Add(meal);
             await _unitOfWork.Save();
         }

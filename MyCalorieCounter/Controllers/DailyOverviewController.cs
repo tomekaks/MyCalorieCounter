@@ -103,7 +103,7 @@ namespace MyCalorieCounter.Controllers
                 dailySum.Proteins -= meal.Proteins;
                 dailySum.Carbs -= meal.Carbs;
                 dailySum.Fats -= meal.Fats;
-                await _dailySumService.BeginNewOrUpdateDailySum(dailySum);
+                await _dailySumService.UpdateDailySum(dailySum);
                 await _mealService.DeleteMeal(id);
 
                 return RedirectToAction(nameof(Index));
@@ -146,7 +146,7 @@ namespace MyCalorieCounter.Controllers
                 dailySum.Fats += meal.Fats;
 
                 await _mealService.UpdateMeal(meal);
-                await _dailySumService.BeginNewOrUpdateDailySum(dailySum);
+                await _dailySumService.UpdateDailySum(dailySum);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -178,7 +178,7 @@ namespace MyCalorieCounter.Controllers
                 var activity = await _myActivityService.GetMyActivity(id);
 
                 dailySum.CaloriesBurned -= activity.CaloriesBurned;
-                await _dailySumService.BeginNewOrUpdateDailySum(dailySum);
+                await _dailySumService.UpdateDailySum(dailySum);
 
                 await _myActivityService.DeleteActivity(id);
 
@@ -218,7 +218,7 @@ namespace MyCalorieCounter.Controllers
                 activity.CaloriesBurned = activity.Exercise.CaloriesPerHour * activity.Minutes / 60;
 
                 dailySum.CaloriesBurned += activity.CaloriesBurned;
-                await _dailySumService.BeginNewOrUpdateDailySum(dailySum);
+                await _dailySumService.UpdateDailySum(dailySum);
 
                 await _myActivityService.UpdateActivity(activity);
 

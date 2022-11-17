@@ -10,7 +10,7 @@ namespace MyCalorieCounter.Application.Interfaces.Services
     public interface IDailySumService
     {
         Task<DailySumDto> GetDailySum(string userId);
-        Task BeginNewOrUpdateDailySum(DailySumDto todaysMacros);
-        
+        Task UpdateDailySum(DailySumDto dailySumDto);
+
     }
 }

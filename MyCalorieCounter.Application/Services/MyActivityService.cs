@@ -17,12 +17,16 @@ namespace MyCalorieCounter.Application.Services
         private readonly IMyActivityFactory _myActivityFactory;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMyActivityDtoValidator _myActivityDtoValidator;
+        private readonly IExerciseService _exerciseService;
+        private readonly IDailySumService _dailySumService;
 
-        public MyActivityService(IMyActivityFactory myActivityFactory, IUnitOfWork unitOfWork, IMyActivityDtoValidator myActivityDtoValidator)
+        public MyActivityService(IMyActivityFactory myActivityFactory, IUnitOfWork unitOfWork, IMyActivityDtoValidator myActivityDtoValidator, IExerciseService exerciseService, IDailySumService dailySumService)
         {
             _myActivityFactory = myActivityFactory;
             _unitOfWork = unitOfWork;
             _myActivityDtoValidator = myActivityDtoValidator;
+            _exerciseService = exerciseService;
+            _dailySumService = dailySumService;
         }
 
         public async Task AddActivity(MyActivityDto myActivityDto)
@@ -32,6 +36,16 @@ namespace MyCalorieCounter.Application.Services
             {
                 throw new ValidationExeption(validationResult);
             }
+
+            var exercise = await _exerciseService.GetExercise(myActivityDto.ExerciseId);
+            var dailySum = await _dailySumService.GetDailySum(myActivityDto.UserId);
+
+            var caloriesBurned = (exercise.CaloriesPerHour * myActivityDto.Minutes) / 60;
+            dailySum.CaloriesBurned += caloriesBurned;
+            await _dailySumService.UpdateDailySum(dailySum);
+
+            myActivityDto.DailySumId = dailySum.Id;
+            myActivityDto.CaloriesBurned = caloriesBurned;
 
             var activity = _myActivityFactory.CreateMyActivity(myActivityDto);
             await _unitOfWork.MyActivities.Add(activity);
@@ -61,7 +75,13 @@ namespace MyCalorieCounter.Application.Services
                 throw new ValidationExeption(validationResult);
             }
 
+            //var dailySum = await _dailySumService.GetDailySum(myActivityDto.UserId);
+
             var myActivity = await _unitOfWork.MyActivities.Get(q => q.Id == myActivityDto.Id);
+
+            //dailySum.CaloriesBurned -= myActivity.CaloriesBurned;
+            //dailySum.CaloriesBurned += myActivityDto.CaloriesBurned;
+
             myActivity = _myActivityFactory.MapToModel(myActivity, myActivityDto);
 
             _unitOfWork.MyActivities.Update(myActivity);

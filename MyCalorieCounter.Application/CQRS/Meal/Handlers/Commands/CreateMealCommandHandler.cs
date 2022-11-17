@@ -34,12 +34,31 @@ namespace MyCalorieCounter.Application.CQRS.Meal.Handlers.Commands
                 throw new ValidationExeption(validationRestult);
             }
 
+            var todaysDate = GetTodaysDate();
+
             var meal = _mealFactory.CreateMeal(request.MealDto);
 
+            var product = await _unitOfWork.Products.Get(q => q.Id == request.MealDto.ProductId);
+            var dailySum = await _unitOfWork.DailySums.Get(q => q.UserId == request.MealDto.UserId
+                                                             && q.Date == todaysDate);
+
+            dailySum.Calories += (product.Calories * request.MealDto.Weight) / 100;
+            dailySum.Proteins += (product.Proteins * request.MealDto.Weight) / 100;
+            dailySum.Carbs += (product.Carbs * request.MealDto.Weight) / 100;
+            dailySum.Fats += (product.Fats * request.MealDto.Weight) / 100;
+
+            meal.DailySumId = dailySum.Id;
+
+
+            _unitOfWork.DailySums.Update(dailySum);
             await _unitOfWork.Meals.Add(meal);
             await _unitOfWork.Save();
 
             return Unit.Value;
+        }
+        private string GetTodaysDate()
+        {
+            return DateTime.Today.ToString("d");
         }
     }
 }
