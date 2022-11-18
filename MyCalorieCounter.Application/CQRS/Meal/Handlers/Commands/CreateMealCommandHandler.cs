@@ -42,13 +42,17 @@ namespace MyCalorieCounter.Application.CQRS.Meal.Handlers.Commands
             var dailySum = await _unitOfWork.DailySums.Get(q => q.UserId == request.MealDto.UserId
                                                              && q.Date == todaysDate);
 
-            dailySum.Calories += (product.Calories * request.MealDto.Weight) / 100;
-            dailySum.Proteins += (product.Proteins * request.MealDto.Weight) / 100;
-            dailySum.Carbs += (product.Carbs * request.MealDto.Weight) / 100;
-            dailySum.Fats += (product.Fats * request.MealDto.Weight) / 100;
-
+            meal.Calories = (product.Calories * meal.Weight) / 100;
+            meal.Proteins = (product.Proteins * meal.Weight) / 100;
+            meal.Carbs = (product.Carbs * meal.Weight) / 100;
+            meal.Fats = (product.Fats * meal.Weight) / 100;
             meal.DailySumId = dailySum.Id;
+            meal.Date = dailySum.Date;
 
+            dailySum.Calories += meal.Calories;
+            dailySum.Proteins += meal.Proteins;
+            dailySum.Carbs += meal.Carbs;
+            dailySum.Fats += meal.Fats;
 
             _unitOfWork.DailySums.Update(dailySum);
             await _unitOfWork.Meals.Add(meal);

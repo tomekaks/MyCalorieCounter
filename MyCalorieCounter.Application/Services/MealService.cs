@@ -40,13 +40,19 @@ namespace MyCalorieCounter.Application.Services
             var productDto = await _productService.GetProduct(mealDto.ProductId);
             var dailySumDto = await _dailySumService.GetDailySum(mealDto.UserId);
 
-            dailySumDto.Calories += (productDto.Calories * mealDto.Weight) / 100;
-            dailySumDto.Proteins += (productDto.Proteins * mealDto.Weight) / 100;
-            dailySumDto.Carbs += (productDto.Carbs * mealDto.Weight) / 100;
-            dailySumDto.Fats += (productDto.Fats * mealDto.Weight) / 100;
+            mealDto.Calories = (productDto.Calories * mealDto.Weight) / 100;
+            mealDto.Proteins = (productDto.Proteins * mealDto.Weight) / 100;
+            mealDto.Carbs = (productDto.Carbs * mealDto.Weight) / 100;
+            mealDto.Fats = (productDto.Fats * mealDto.Weight) / 100;
+            mealDto.DailySumId = dailySumDto.Id;
+            mealDto.Date = dailySumDto.Date;
+
+            dailySumDto.Calories += mealDto.Calories;
+            dailySumDto.Proteins += mealDto.Proteins;
+            dailySumDto.Carbs += mealDto.Carbs;
+            dailySumDto.Fats += mealDto.Carbs;
             await _dailySumService.UpdateDailySum(dailySumDto);
 
-            mealDto.DailySumId = dailySumDto.Id;
             var meal = _mealFactory.CreateMeal(mealDto);
             
             await _unitOfWork.Meals.Add(meal);

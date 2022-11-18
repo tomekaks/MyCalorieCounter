@@ -26,7 +26,11 @@ namespace MyCalorieCounter.Application.Factories
                 ProductId = mealDto.ProductId,
                 DailySumId = mealDto.DailySumId,
                 Date = mealDto.Date,
-                Weight = mealDto.Weight
+                Weight = mealDto.Weight,
+                Calories = mealDto.Calories,
+                Proteins = mealDto.Proteins,
+                Carbs = mealDto.Carbs,
+                Fats = mealDto.Fats
             };
         }
         public Meal CreateMeal(MealDto mealDto, int id)
@@ -38,7 +42,11 @@ namespace MyCalorieCounter.Application.Factories
                 ProductId = mealDto.ProductId,
                 DailySumId = mealDto.DailySumId,
                 Date = mealDto.Date,
-                Weight = mealDto.Weight
+                Weight = mealDto.Weight,
+                Calories = mealDto.Calories,
+                Proteins = mealDto.Proteins,
+                Carbs = mealDto.Carbs,
+                Fats = mealDto.Fats
             };
         }
 
@@ -52,7 +60,11 @@ namespace MyCalorieCounter.Application.Factories
                 Product = _productFactory.CreateProductDto(meal.Product),
                 DailySumId = meal.DailySumId,
                 Date = meal.Date,
-                Weight = meal.Weight
+                Weight = meal.Weight,
+                Calories = meal.Calories,
+                Proteins = meal.Proteins,
+                Carbs = meal.Carbs,
+                Fats = meal.Fats
             };
         }
 
@@ -69,6 +81,10 @@ namespace MyCalorieCounter.Application.Factories
         public Meal MapToModel(Meal model, MealDto dto)
         {
             model.Weight = dto.Weight;
+            model.Calories = dto.Calories;
+            model.Proteins = dto.Proteins;
+            model.Carbs = dto.Carbs;
+            model.Fats = dto.Fats;
             return model;
         }
     }
