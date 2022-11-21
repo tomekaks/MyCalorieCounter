@@ -12,7 +12,7 @@ namespace MyCalorieCounter.Application.Interfaces.Services
         Task AddActivity(MyActivityDto myActivityDto);
         Task<List<MyActivityDto>> GetTodaysActivities(int dailySumId);
         Task<MyActivityDto> GetMyActivity(int id);
-        Task DeleteActivity(int id);
+        Task DeleteActivity(int id, string userId);
         Task UpdateActivity(MyActivityDto myActivityDto);
     }
 }

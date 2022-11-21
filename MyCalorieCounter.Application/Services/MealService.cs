@@ -64,15 +64,24 @@ namespace MyCalorieCounter.Application.Services
             _unitOfWork.Meals.Delete(meal);
             await _unitOfWork.Save();
         }
-        public async Task DeleteMeal(int id)
+        public async Task DeleteMeal(int id, string userId)
         {
-            var meal = await _unitOfWork.Meals.Get(m => m.Id == id);
+            var mealDto = await GetMeal(id);
+            var dailySumDto = await _dailySumService.GetDailySum(userId);
+
+            dailySumDto.Calories -= mealDto.Calories;
+            dailySumDto.Proteins -= mealDto.Proteins;
+            dailySumDto.Carbs -= mealDto.Carbs;
+            dailySumDto.Fats -= mealDto.Fats;
+            await _dailySumService.UpdateDailySum(dailySumDto);
+
+            var meal = _mealFactory.CreateMeal(mealDto);
             _unitOfWork.Meals.Delete(meal);
             await _unitOfWork.Save();
         }
-        public async Task<List<MealDto>> GetTodaysMeals(string userId, string date)
+        public async Task<List<MealDto>> GetTodaysMeals(int dailySumId)
         {
-            var list = await _unitOfWork.Meals.GetAll(m => m.UserId == userId && m.Date == date,
+            var list = await _unitOfWork.Meals.GetAll(m => m.DailySumId == dailySumId,
                                                       includeProperties:"Product");
             var mealList = _mealFactory.CreateMealDtoList(list.ToList());
             return mealList;
@@ -90,7 +99,21 @@ namespace MyCalorieCounter.Application.Services
                 throw new ValidationExeption(validationResult);
             }
 
+            var dailySumDto = await _dailySumService.GetDailySum(mealDto.UserId);
             var meal = await _unitOfWork.Meals.Get(q => q.Id == mealDto.Id);
+
+            dailySumDto.Calories -= meal.Calories;
+            dailySumDto.Proteins -= meal.Proteins;
+            dailySumDto.Carbs -= meal.Carbs;
+            dailySumDto.Fats -= meal.Fats;
+
+            dailySumDto.Calories += mealDto.Calories;
+            dailySumDto.Proteins += mealDto.Proteins;
+            dailySumDto.Carbs += mealDto.Carbs;
+            dailySumDto.Fats += mealDto.Fats;
+
+            await _dailySumService.UpdateDailySum(dailySumDto);
+
             meal = _mealFactory.MapToModel(meal, mealDto);
 
             _unitOfWork.Meals.Update(meal);

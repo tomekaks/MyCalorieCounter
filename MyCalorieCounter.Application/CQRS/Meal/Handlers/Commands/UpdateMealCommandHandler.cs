@@ -35,7 +35,24 @@ namespace MyCalorieCounter.Application.CQRS.Meal.Handlers.Commands
             }
 
             var meal = await _unitOfWork.Meals.Get(q => q.Id == request.MealDto.Id);
+            var dailySum = await _unitOfWork.DailySums.Get(d => d.Id == meal.DailySumId);
+
+            dailySum.Calories -= meal.Calories;
+            dailySum.Proteins -= meal.Proteins;
+            dailySum.Carbs -= meal.Carbs;
+            dailySum.Fats -= meal.Fats;
+
             meal = _mealFactory.MapToModel(meal, request.MealDto);
+
+            meal.Calories = (meal.Product.Calories * meal.Weight) / 100;
+            meal.Proteins = (meal.Product.Proteins * meal.Weight) / 100;
+            meal.Carbs = (meal.Product.Carbs * meal.Weight) / 100;
+            meal.Fats = (meal.Product.Fats * meal.Weight) / 100;
+
+            dailySum.Calories += meal.Calories;
+            dailySum.Proteins += meal.Proteins;
+            dailySum.Carbs += meal.Carbs;
+            dailySum.Fats += meal.Fats;
 
             _unitOfWork.Meals.Update(meal);
             await _unitOfWork.Save();

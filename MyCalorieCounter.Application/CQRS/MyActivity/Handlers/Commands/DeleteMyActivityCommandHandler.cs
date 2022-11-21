@@ -22,6 +22,11 @@ namespace MyCalorieCounter.Application.CQRS.MyActivity.Handlers.Commands
         public async Task<Unit> Handle(DeleteMyActivityCommand request, CancellationToken cancellationToken)
         {
             var myActivity = await _unitOfWork.MyActivities.Get(q => q.Id == request.Id);
+            var dailySum = await _unitOfWork.DailySums.Get(d => d.Id == myActivity.DailySumId);
+
+            dailySum.CaloriesBurned -= myActivity.CaloriesBurned;
+
+            _unitOfWork.DailySums.Update(dailySum);
             _unitOfWork.MyActivities.Delete(myActivity);
             await _unitOfWork.Save();
 

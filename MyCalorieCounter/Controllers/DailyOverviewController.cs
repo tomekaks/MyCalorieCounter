@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -23,10 +24,11 @@ namespace MyCalorieCounter.Controllers
         private readonly IMealService _mealService;
         private readonly IMyActivityService _myActivityService;
         private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
 
 
         public DailyOverviewController(IDailySumService dailySumService, IDailyGoalService dailyGoalService,
-                                       UserManager<ApplicationUser> userManager, IMealService mealService, IMyActivityService myActivityService, IMapper mapper)
+                                       UserManager<ApplicationUser> userManager, IMealService mealService, IMyActivityService myActivityService, IMapper mapper, IMediator mediator)
         {
             _dailySumService = dailySumService;
             _dailyGoalService = dailyGoalService;
@@ -34,6 +36,7 @@ namespace MyCalorieCounter.Controllers
             _mealService = mealService;
             _myActivityService = myActivityService;
             _mapper = mapper;
+            _mediator = mediator;
         }
 
         public async Task<IActionResult> Index()
@@ -41,7 +44,7 @@ namespace MyCalorieCounter.Controllers
             var currentUsersId = await GetUsersId();
             var dailySum = await _dailySumService.GetDailySum(currentUsersId);
             var dailyGoal = await _dailyGoalService.GetDailyGoal(currentUsersId);
-            var todaysMeals = await _mealService.GetTodaysMeals(currentUsersId, dailySum.Date);
+            var todaysMeals = await _mealService.GetTodaysMeals(dailySum.Id);
             var activities = await _myActivityService.GetTodaysActivities(dailySum.Id);
             var model = new DailyOverviewVM(dailySum, dailyGoal, todaysMeals, activities);
             return View(model);
@@ -80,6 +83,7 @@ namespace MyCalorieCounter.Controllers
         }
         public async Task<IActionResult> RemoveMeal(int id)
         {
+            var userId = await GetUsersId();
             var meal = await _mealService.GetMeal(id);
             var model = _mapper.Map<RemoveMealVM>(meal);
 
@@ -95,16 +99,9 @@ namespace MyCalorieCounter.Controllers
                 {
                     return View(model);
                 }
+
                 var userId = await GetUsersId();
-                var dailySum = await _dailySumService.GetDailySum(userId);
-                var meal = await _mealService.GetMeal(id);
-                dailySum.UserId = userId;
-                dailySum.Calories -= meal.Calories;
-                dailySum.Proteins -= meal.Proteins;
-                dailySum.Carbs -= meal.Carbs;
-                dailySum.Fats -= meal.Fats;
-                await _dailySumService.UpdateDailySum(dailySum);
-                await _mealService.DeleteMeal(id);
+                await _mealService.DeleteMeal(id, userId);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -131,22 +128,10 @@ namespace MyCalorieCounter.Controllers
                 {
                     return View(model);
                 }
-                var userId = await GetUsersId();
-                var dailySum = await _dailySumService.GetDailySum(userId);
-                var meal = await _mealService.GetMeal(id);
-                dailySum.Calories -= meal.Calories;
-                dailySum.Proteins -= meal.Proteins;
-                dailySum.Carbs -= meal.Carbs;
-                dailySum.Fats -= meal.Fats;
-
-                meal.Weight = model.Weight;
-                dailySum.Calories += meal.Calories;
-                dailySum.Proteins += meal.Proteins;
-                dailySum.Carbs += meal.Carbs;
-                dailySum.Fats += meal.Fats;
-
+                
+                var meal = _mapper.Map<MealDto>(model);
+                meal.UserId = await GetUsersId();
                 await _mealService.UpdateMeal(meal);
-                await _dailySumService.UpdateDailySum(dailySum);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -173,14 +158,9 @@ namespace MyCalorieCounter.Controllers
                 {
                     return View(model);
                 }
-                var userId = await GetUsersId();
-                var dailySum = await _dailySumService.GetDailySum(userId);
-                var activity = await _myActivityService.GetMyActivity(id);
+                var userId = await GetUsersId(); 
 
-                dailySum.CaloriesBurned -= activity.CaloriesBurned;
-                await _dailySumService.UpdateDailySum(dailySum);
-
-                await _myActivityService.DeleteActivity(id);
+                await _myActivityService.DeleteActivity(id, userId);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -208,17 +188,9 @@ namespace MyCalorieCounter.Controllers
                 {
                     return View(model);
                 }
-                var userId = await GetUsersId();
-                var dailySum = await _dailySumService.GetDailySum(userId);
-                var activity = await _myActivityService.GetMyActivity(id);
 
-                dailySum.CaloriesBurned -= activity.CaloriesBurned;
-
-                activity.Minutes = model.Minutes;
-                activity.CaloriesBurned = activity.Exercise.CaloriesPerHour * activity.Minutes / 60;
-
-                dailySum.CaloriesBurned += activity.CaloriesBurned;
-                await _dailySumService.UpdateDailySum(dailySum);
+                var activity = _mapper.Map<MyActivityDto>(model);
+                activity.UserId = await GetUsersId(); 
 
                 await _myActivityService.UpdateActivity(activity);
 
