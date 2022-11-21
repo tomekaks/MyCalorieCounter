@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using MyCalorieCounter.Application.CQRS.Exercise.Requests.Queries;
 using MyCalorieCounter.Application.CQRS.MyActivity.Requests.Commands;
 using MyCalorieCounter.Application.Dto;
 using MyCalorieCounter.Application.Interfaces.Services;
@@ -37,7 +38,10 @@ namespace MyCalorieCounter.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var exercises = await _exerciseService.GetAllExercises();
+            //var exercises = await _exerciseService.GetAllExercises();
+
+            var exercises = await _mediator.Send(new GetExerciseListRequest());
+
             var model = new ActivitiesVM
             {
                 Exercises = exercises
@@ -47,12 +51,15 @@ namespace MyCalorieCounter.Controllers
 
         public async Task<IActionResult> Add(int id)
         {
-            var exercise = await _exerciseService.GetExercise(id);
+            //var exercise = await _exerciseService.GetExercise(id);
+
+            var exerciseDto = await _mediator.Send(new GetExerciseRequest { Id = id });
+
             var model = new AddActivityVM()
             {
                 ExerciseId = id,
-                Name = exercise.Name,
-                CaloriesPerHour = exercise.CaloriesPerHour
+                Name = exerciseDto.Name,
+                CaloriesPerHour = exerciseDto.CaloriesPerHour
             };
             return View(model);
         }
@@ -71,9 +78,9 @@ namespace MyCalorieCounter.Controllers
                 var myActivity = _mapper.Map<MyActivityDto>(model);
                 myActivity.UserId = userId;
                 
-                await _myActivityService.AddActivity(myActivity);
+                //await _myActivityService.AddActivity(myActivity);
 
-                //await _mediator.Send(new CreateMyActivityCommand { MyActivityDto = myActivity });
+                await _mediator.Send(new CreateMyActivityCommand { MyActivityDto = myActivity });
 
                 return RedirectToAction(nameof(Index));
             }

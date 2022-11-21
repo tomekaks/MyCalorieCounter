@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MyCalorieCounter.Application.CQRS.DailyGoal.Requests.Commands;
 using MyCalorieCounter.Application.CQRS.DailyGoal.Requests.Queries;
 using MyCalorieCounter.Application.Dto;
 using MyCalorieCounter.Application.Interfaces.Factories;
@@ -16,6 +17,8 @@ namespace MyCalorieCounter.Application.CQRS.DailyGoal.Handlers.Queries
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IDailyGoalFactory _dailyGoalFactory;
+        private readonly IMediator _mediator;
+
         public GetDailyGoalRequestHandler(IUnitOfWork unitOfWork, IDailyGoalFactory dailyGoalFactory)
         {
             _unitOfWork = unitOfWork;
@@ -25,6 +28,12 @@ namespace MyCalorieCounter.Application.CQRS.DailyGoal.Handlers.Queries
         public async Task<DailyGoalDto> Handle(GetDailyGoalRequest request, CancellationToken cancellationToken)
         {
             var dailyGoal = await _unitOfWork.DailyGoals.GetById(request.UserId);
+
+            if (dailyGoal == null)
+            {
+                return await _mediator.Send(new CreateDailyGoalCommand { UserId = request.UserId });
+            }
+
             return _dailyGoalFactory.CreateDailyGoalDto(dailyGoal);
         }
     }

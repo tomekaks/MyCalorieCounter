@@ -12,7 +12,6 @@ namespace MyCalorieCounter.Application.Interfaces.Services
     public interface IDailyGoalService
     {
         Task UpdateDailyGoal(DailyGoalDto dailyGoalDto);
-        Task UpdateDailyGoal(string userId, double cal, double pro, double carb, double fat);
         Task<DailyGoalDto> GetDailyGoal(string userId);
     }
 }

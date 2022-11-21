@@ -53,22 +53,6 @@ namespace MyCalorieCounter.Application.Services
             _unitOfWork.DailyGoals.Update(dailyGoal);
             await _unitOfWork.Save();
         }
-        public async Task UpdateDailyGoal(string userId, double cal, double pro, double carb, double fat)
-        {
-            var dailyGoalDto = _dailyGoalFactory.CreateDailyGoalDto(userId, cal, pro, carb, fat);
-            
-            var validationResult = _dailyGoalDtoValidator.Validate(dailyGoalDto);
-            if (!validationResult.IsValid)
-            {
-                throw new ValidationExeption(validationResult);
-            }
-
-            var dailyGoal = await _unitOfWork.DailyGoals.GetById(dailyGoalDto.UserId);
-            dailyGoal = _dailyGoalFactory.MapToModel(dailyGoal, dailyGoalDto);
-
-            _unitOfWork.DailyGoals.Update(dailyGoal);
-            await _unitOfWork.Save();
-        }
 
         private async Task<DailyGoalDto> SetNewUsersDailyGoal(string userId)
         {

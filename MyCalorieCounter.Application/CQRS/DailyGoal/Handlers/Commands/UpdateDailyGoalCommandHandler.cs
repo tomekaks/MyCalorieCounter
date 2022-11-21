@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using MyCalorieCounter.Application.CQRS.DailyGoal.Handlers.Queries;
+using MyCalorieCounter.Application.CQRS.DailyGoal.Requests.Commands;
 using MyCalorieCounter.Application.Exeptions;
 using MyCalorieCounter.Application.Interfaces.Factories;
 using MyCalorieCounter.Application.Interfaces.Repositories;
@@ -43,6 +43,6 @@ namespace MyCalorieCounter.Application.CQRS.DailyGoal.Handlers.Commands
             return Unit.Value;
         }
 
-        //TODO dailygoalservice i factory
+        
     }
 }

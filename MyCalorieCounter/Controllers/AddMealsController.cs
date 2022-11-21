@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyCalorieCounter.Application.CQRS.Meal.Requests.Commands;
+using MyCalorieCounter.Application.CQRS.Product.Requsts.Queries;
 using MyCalorieCounter.Application.Dto;
 using MyCalorieCounter.Application.Interfaces.Services;
 using MyCalorieCounter.Core.Data;
@@ -39,16 +40,24 @@ namespace MyCalorieCounter.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var productList = await _productService.GetProductList();
-            var model = new AddMealsVM();
-            model.Products = productList;
+            //var productList = await _productService.GetProductList();
+
+            var productList = await _mediator.Send(new GetProductListRequest());
+
+            var model = new AddMealsVM
+            {
+                Products = productList
+            };
             return View(model);
         }
 
         public async Task<IActionResult> AddFood(int id)
         {
-            var product = await _productService.GetProduct(id);
-            var model = _mapper.Map<AddFoodVM>(product);
+            //var product = await _productService.GetProduct(id);
+
+            var productDto = await _mediator.Send(new GetProductRequest { Id = id });
+
+            var model = _mapper.Map<AddFoodVM>(productDto);
             model.ProductId = id;
 
             return View(model);

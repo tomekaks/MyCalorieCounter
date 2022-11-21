@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace MyCalorieCounter.Application.CQRS.DailyGoal.Requests.Commands
 {
-    public class CreateDailyGoalCommand : IRequest
+    public class CreateDailyGoalCommand : IRequest<DailyGoalDto>
     {
-        public DailyGoalDto DailyGoalDto{ get; set; }
+        public string UserId { get; set; }
     }
 }

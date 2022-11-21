@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyCalorieCounter.Application.CQRS.DailyGoal.Handlers.Queries
+namespace MyCalorieCounter.Application.CQRS.DailyGoal.Requests.Commands
 {
     public class UpdateDailyGoalCommand : IRequest
     {

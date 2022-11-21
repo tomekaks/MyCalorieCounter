@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using MyCalorieCounter.Application.CQRS.DailyGoal.Requests.Commands;
+using MyCalorieCounter.Application.Dto;
 using MyCalorieCounter.Application.Interfaces.Factories;
 using MyCalorieCounter.Application.Interfaces.Repositories;
 using System;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace MyCalorieCounter.Application.CQRS.DailyGoal.Handlers.Commands
 {
-    public class CreateDailyGoalCommandHandler : IRequestHandler<CreateDailyGoalCommand, Unit>
+    public class CreateDailyGoalCommandHandler : IRequestHandler<CreateDailyGoalCommand, DailyGoalDto>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IDailyGoalFactory _dailyGoalFactory;
@@ -22,14 +23,16 @@ namespace MyCalorieCounter.Application.CQRS.DailyGoal.Handlers.Commands
             _dailyGoalFactory = dailyGoalFactory;
         }
 
-        public async Task<Unit> Handle(CreateDailyGoalCommand request, CancellationToken cancellationToken)
+        public async Task<DailyGoalDto> Handle(CreateDailyGoalCommand request, CancellationToken cancellationToken)
         {
-            var dailyGoal = _dailyGoalFactory.CreateDailyGoal(request.DailyGoalDto);
+            var dailyGoal = _dailyGoalFactory.CreateNewUsersDailyGoal(request.UserId);
 
             await _unitOfWork.DailyGoals.Add(dailyGoal);
             await _unitOfWork.Save();
 
-            return Unit.Value;
+            dailyGoal = await _unitOfWork.DailyGoals.GetById(request.UserId);
+
+            return _dailyGoalFactory.CreateDailyGoalDto(dailyGoal);
         }
     }
 }
