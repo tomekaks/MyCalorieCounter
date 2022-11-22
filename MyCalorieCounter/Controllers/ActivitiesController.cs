@@ -1,13 +1,8 @@
-﻿using AutoMapper;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using MyCalorieCounter.Application.CQRS.Exercise.Requests.Queries;
-using MyCalorieCounter.Application.CQRS.MyActivity.Requests.Commands;
-using MyCalorieCounter.Application.Dto;
-using MyCalorieCounter.Application.Interfaces.Services;
 using MyCalorieCounter.Core.Data;
+using MyCalorieCounter.Interefaces.Services;
 using MyCalorieCounter.Models;
 using System;
 using System.Collections.Generic;
@@ -19,48 +14,24 @@ namespace MyCalorieCounter.Controllers
     [Authorize]
     public class ActivitiesController : Controller
     {
-        private readonly IExerciseService _exerciseService;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IDailySumService _dailySumService;
-        private readonly IMyActivityService _myActivityService;
-        private readonly IMapper _mapper;
-        private readonly IMediator _mediator;
+        private readonly IActivitiesService _activitiesService;
 
-        public ActivitiesController(IExerciseService exerciseService, UserManager<ApplicationUser> userManager, IDailySumService dailySumService, IMyActivityService myActivityService, IMapper mapper, IMediator mediator)
+        public ActivitiesController(UserManager<ApplicationUser> userManager, IActivitiesService activitiesService)
         {
-            _exerciseService = exerciseService;
             _userManager = userManager;
-            _dailySumService = dailySumService;
-            _myActivityService = myActivityService;
-            _mapper = mapper;
-            _mediator = mediator;
+            _activitiesService = activitiesService;
         }
 
         public async Task<IActionResult> Index()
         {
-            //var exercises = await _exerciseService.GetAllExercises();
-
-            var exercises = await _mediator.Send(new GetExerciseListRequest());
-
-            var model = new ActivitiesVM
-            {
-                Exercises = exercises
-            };
+            var model = await _activitiesService.GetActivityList();
             return View(model);
         }
 
         public async Task<IActionResult> Add(int id)
         {
-            //var exercise = await _exerciseService.GetExercise(id);
-
-            var exerciseDto = await _mediator.Send(new GetExerciseRequest { Id = id });
-
-            var model = new AddActivityVM()
-            {
-                ExerciseId = id,
-                Name = exerciseDto.Name,
-                CaloriesPerHour = exerciseDto.CaloriesPerHour
-            };
+            var model = await _activitiesService.GetActivity(id);
             return View(model);
         }
         [HttpPost]
@@ -74,13 +45,8 @@ namespace MyCalorieCounter.Controllers
                     return View(model);
                 }
                 var userId = await GetUsersId();
-                
-                var myActivity = _mapper.Map<MyActivityDto>(model);
-                myActivity.UserId = userId;
-                
-                //await _myActivityService.AddActivity(myActivity);
 
-                await _mediator.Send(new CreateMyActivityCommand { MyActivityDto = myActivity });
+                await _activitiesService.AddActivity(model, userId);
 
                 return RedirectToAction(nameof(Index));
             }
