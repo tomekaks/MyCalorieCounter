@@ -19,6 +19,8 @@ using MyCalorieCounter.Core.Data;
 using MyCalorieCounter.Infrastructure;
 using MyCalorieCounter.Infrastructure.DataBase;
 using MyCalorieCounter.Infrastructure.Repositories;
+using MyCalorieCounter.Interefaces.Services;
+using MyCalorieCounter.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,6 +54,8 @@ namespace MyCalorieCounter
             services.AddRazorPages();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
+            services.AddScoped<IManageProductsService, ManageProductsService>();
+            services.AddScoped<IManageExercisesService, ManageExercisesService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

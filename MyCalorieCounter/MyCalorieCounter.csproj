@@ -26,8 +26,4 @@
     <ProjectReference Include="..\MyCalorieCounter.Infrastructure\MyCalorieCounter.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Interefaces\Services\" />
-  </ItemGroup>
-
 </Project>

@@ -1,15 +1,7 @@
-﻿using AutoMapper;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MyCalorieCounter.Application.CQRS.Product.Requsts.Commands;
-using MyCalorieCounter.Application.CQRS.Product.Requsts.Queries;
-using MyCalorieCounter.Application.Dto;
-using MyCalorieCounter.Application.Interfaces.Services;
+using MyCalorieCounter.Interefaces.Services;
 using MyCalorieCounter.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MyCalorieCounter.Controllers
@@ -17,28 +9,17 @@ namespace MyCalorieCounter.Controllers
     [Authorize]
     public class ManageProductsController : Controller
     {
-        private readonly IProductService _productService;
-        private readonly IMapper _mapper;
-        private readonly IMediator _mediator;
+        private readonly IManageProductsService _manageProductsService;
 
-        public ManageProductsController(IProductService productService, IMapper mapper, IMediator mediator)
+        public ManageProductsController(IManageProductsService manageProductsService)
         {
-            _productService = productService;
-            _mapper = mapper;
-            _mediator = mediator;
+            _manageProductsService = manageProductsService;
         }
 
 
         public async Task<IActionResult> Index()
         {
-            //var productList = await _productService.GetProductList();
-
-            var productList = await _mediator.Send(new GetProductListRequest());
-
-            var model = new AddMealsVM
-            {
-                Products = productList
-            };
+            var model = await _manageProductsService.GetProductList();
             return View(model);
         }
 
@@ -59,11 +40,7 @@ namespace MyCalorieCounter.Controllers
                     return View(model);
                 }
 
-                var productDto = _mapper.Map<ProductDto>(model);
-
-                //await _productService.AddAProduct(productDto);
-
-                await _mediator.Send(new CreateProductCommand { ProductDto = productDto });
+                await _manageProductsService.AddProduct(model);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -75,11 +52,7 @@ namespace MyCalorieCounter.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            //var product = await _productService.GetProduct(id);
-
-            var productDto = await _mediator.Send(new GetProductRequest { Id = id });
-
-            var model = _mapper.Map<ProductVM>(productDto);
+            var model = await _manageProductsService.GetProduct(id);
             
             return View(model);
         }
@@ -90,9 +63,7 @@ namespace MyCalorieCounter.Controllers
         {
             try
             {
-                //await _productService.DeleteAProduct(id);
-
-                await _mediator.Send(new DeleteProductCommand { Id = id });
+                await _manageProductsService.DeleteProduct(id);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -104,11 +75,7 @@ namespace MyCalorieCounter.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            //var productDto = await _productService.GetProduct(id);
-
-            var productDto = await _mediator.Send(new GetProductRequest { Id = id });
-
-            var model = _mapper.Map<ProductVM>(productDto);
+            var model = await _manageProductsService.GetProduct(id);
 
             return View(model);
         }
@@ -123,10 +90,7 @@ namespace MyCalorieCounter.Controllers
                     return View(model);
                 }
 
-                var productDto = _mapper.Map<ProductDto>(model);
-                //await _productService.UpdateProduct(productDto);
-
-                await _mediator.Send(new UpdateProductCommand { ProductDto = productDto });
+                await _manageProductsService.EditProduct(model);
 
                 return RedirectToAction(nameof(Index));
             }

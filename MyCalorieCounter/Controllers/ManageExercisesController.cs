@@ -5,6 +5,7 @@ using MyCalorieCounter.Application.CQRS.Exercise.Requests.Commands;
 using MyCalorieCounter.Application.CQRS.Exercise.Requests.Queries;
 using MyCalorieCounter.Application.Dto;
 using MyCalorieCounter.Application.Interfaces.Services;
+using MyCalorieCounter.Interefaces.Services;
 using MyCalorieCounter.Models;
 using System;
 using System.Collections.Generic;
@@ -15,27 +16,16 @@ namespace MyCalorieCounter.Controllers
 {
     public class ManageExercisesController : Controller
     {
-        private readonly IExerciseService _exerciseService;
-        private readonly IMapper _mapper;
-        private readonly IMediator _mediator;
+        private readonly IManageExercisesService _manageExercisesService;
 
-        public ManageExercisesController(IExerciseService exerciseService, IMapper mapper, IMediator mediator)
+        public ManageExercisesController(IManageExercisesService manageExercisesService)
         {
-            _exerciseService = exerciseService;
-            _mapper = mapper;
-            _mediator = mediator;
+            _manageExercisesService = manageExercisesService;
         }
 
         public async Task<IActionResult> Index()
         {
-            //var exercises = await _exerciseService.GetAllExercises();
-
-            var exercises = await _mediator.Send(new GetExerciseListRequest());
-
-            var model = new ActivitiesVM()
-            {
-                Exercises = exercises
-            };
+            var model = await _manageExercisesService.GetExerciseList();
             return View(model);
         }
         public IActionResult AddExercise()
@@ -55,10 +45,7 @@ namespace MyCalorieCounter.Controllers
                     return View(model);
                 }
 
-                var exercise = _mapper.Map<ExerciseDto>(model);
-                //await _exerciseService.AddNewExercise(exercise);
-
-                await _mediator.Send(new CreateExerciseCommand { ExerciseDto = exercise });
+                await _manageExercisesService.AddExercise(model);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -70,11 +57,7 @@ namespace MyCalorieCounter.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            //var exercise = await _exerciseService.GetExercise(id);
-
-            var exerciseDto = await _mediator.Send(new GetExerciseRequest { Id = id });
-
-            var model = _mapper.Map<ExerciseVM>(exerciseDto);
+            var model = await _manageExercisesService.GetExercise(id);
             
             return View(model);
         }
@@ -85,9 +68,7 @@ namespace MyCalorieCounter.Controllers
         {
             try
             {
-                //await _exerciseService.DeleteExercise(id);
-
-                await _mediator.Send(new DeleteExerciseCommand { Id = id });
+                await _manageExercisesService.DeleteExercise(id);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -99,12 +80,7 @@ namespace MyCalorieCounter.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            //var exercise = await _exerciseService.GetExercise(id);
-
-            var exerciseDto = await _mediator.Send(new GetExerciseRequest { Id = id });
-
-            var model = _mapper.Map<ExerciseVM>(exerciseDto);
-
+            var model = await _manageExercisesService.GetExercise(id);
             return View(model);
         }
         [HttpPost]
@@ -118,11 +94,7 @@ namespace MyCalorieCounter.Controllers
                     return View(model);
                 }
 
-                var exercise = _mapper.Map<ExerciseDto>(model);
-
-                //await _exerciseService.UpdateExercise(exercise);
-
-                await _mediator.Send(new UpdateExerciseCommand { ExerciaseDto = exercise });
+                await _manageExercisesService.EditExercise(model);
 
                 return RedirectToAction(nameof(Index));
             }
