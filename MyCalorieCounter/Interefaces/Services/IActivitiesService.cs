@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MyCalorieCounter.Interefaces.Services
 {
-    public interface IMealService
+    public interface IActivitiesService
     {
     }
 }

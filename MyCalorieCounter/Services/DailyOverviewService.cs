@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MyCalorieCounter.Interefaces.Services
+namespace MyCalorieCounter.Services
 {
-    public interface IDailyGoalService
+    public class DailyOverviewService
     {
     }
 }

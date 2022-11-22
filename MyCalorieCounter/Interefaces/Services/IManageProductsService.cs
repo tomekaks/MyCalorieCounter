@@ -8,7 +8,7 @@ namespace MyCalorieCounter.Interefaces.Services
 {
     public interface IManageProductsService
     {
-        Task<AddMealsVM> GetProductList();
+        Task<AddMealListVM> GetProductList();
         Task AddProduct(ProductVM model);
         Task DeleteProduct(int id);
         Task EditProduct(ProductVM model);

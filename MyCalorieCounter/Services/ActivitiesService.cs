@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MyCalorieCounter.Services
 {
-    public class MealService
+    public class ActivitiesService
     {
     }
 }

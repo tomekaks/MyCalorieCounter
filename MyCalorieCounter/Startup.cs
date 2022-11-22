@@ -8,17 +8,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MyCalorieCounter.Application;
-using MyCalorieCounter.Application.Factories;
-using MyCalorieCounter.Application.Interfaces.Factories;
-using MyCalorieCounter.Application.Interfaces.Repositories;
-using MyCalorieCounter.Application.Interfaces.Services;
-using MyCalorieCounter.Application.Interfaces.Validators;
-using MyCalorieCounter.Application.Services;
-using MyCalorieCounter.Application.Validators;
 using MyCalorieCounter.Core.Data;
 using MyCalorieCounter.Infrastructure;
 using MyCalorieCounter.Infrastructure.DataBase;
-using MyCalorieCounter.Infrastructure.Repositories;
 using MyCalorieCounter.Interefaces.Services;
 using MyCalorieCounter.Services;
 using System;
@@ -56,6 +48,7 @@ namespace MyCalorieCounter
 
             services.AddScoped<IManageProductsService, ManageProductsService>();
             services.AddScoped<IManageExercisesService, ManageExercisesService>();
+            services.AddScoped<IAddMealsService, AddMealsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

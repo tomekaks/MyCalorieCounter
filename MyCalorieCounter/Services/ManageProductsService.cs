@@ -49,11 +49,11 @@ namespace MyCalorieCounter.Services
             return _mapper.Map<ProductVM>(productDto);
         }
 
-        public async Task<AddMealsVM> GetProductList()
+        public async Task<AddMealListVM> GetProductList()
         {
             var productList = await _mediator.Send(new GetProductListRequest());
 
-            return new AddMealsVM()
+            return new AddMealListVM()
             {
                 Products = productList
             };
