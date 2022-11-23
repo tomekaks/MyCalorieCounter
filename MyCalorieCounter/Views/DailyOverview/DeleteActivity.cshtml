@@ -1,7 +1,7 @@
-﻿@model MyCalorieCounter.Models.RemoveActivityVM
+﻿@model MyCalorieCounter.Models.DeleteActivityVM
 
 @{
-    ViewData["Title"] = "RemoveActivity";
+    ViewData["Title"] = "DeleteActivity";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -30,7 +30,7 @@
         </dd>
     </dl>
     
-    <form asp-action="RemoveActivity">
+    <form asp-action="DeleteActivity">
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index" class="btn btn-primary">Back to List</a>
     </form>

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MyCalorieCounter.Models
 {
-    public class RemoveMealVM
+    public class DeleteMealVM
     {
         public int Id { get; set; }
         public string Name { get; set; }

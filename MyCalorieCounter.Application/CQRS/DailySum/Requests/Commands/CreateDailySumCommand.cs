@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace MyCalorieCounter.Application.CQRS.DailySum.Requests.Commands
 {
-    public class CreateDailySumCommand : IRequest
+    public class CreateDailySumCommand : IRequest<DailySumDto>
     {
-        public DailySumDto DailySumDto { get; set; }
+        public string Date { get; set; }
+        public string UserId { get; set; }
     }
 }

@@ -34,7 +34,7 @@ namespace MyCalorieCounter.Application.CQRS.Meal.Handlers.Commands
                 throw new ValidationExeption(validationResult);
             }
 
-            var meal = await _unitOfWork.Meals.Get(q => q.Id == request.MealDto.Id);
+            var meal = await _unitOfWork.Meals.Get(q => q.Id == request.MealDto.Id, includeProperties: "Product");
             var dailySum = await _unitOfWork.DailySums.Get(d => d.Id == meal.DailySumId);
 
             dailySum.Calories -= meal.Calories;

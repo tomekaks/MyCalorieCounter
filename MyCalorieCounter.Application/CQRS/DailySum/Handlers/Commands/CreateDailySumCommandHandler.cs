@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using MyCalorieCounter.Application.CQRS.DailySum.Requests.Commands;
+using MyCalorieCounter.Application.Dto;
 using MyCalorieCounter.Application.Interfaces.Factories;
 using MyCalorieCounter.Application.Interfaces.Repositories;
 using System;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace MyCalorieCounter.Application.CQRS.DailySum.Handlers.Commands
 {
-    public class CreateDailySumCommandHandler : IRequestHandler<CreateDailySumCommand, Unit>
+    public class CreateDailySumCommandHandler : IRequestHandler<CreateDailySumCommand, DailySumDto>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IDailySumFactory _dailySumFactory;
@@ -23,14 +24,14 @@ namespace MyCalorieCounter.Application.CQRS.DailySum.Handlers.Commands
             _dailySumFactory = dailySumFactory;
         }
 
-        public async Task<Unit> Handle(CreateDailySumCommand request, CancellationToken cancellationToken)
+        public async Task<DailySumDto> Handle(CreateDailySumCommand request, CancellationToken cancellationToken)
         {
-            var dailySum = _dailySumFactory.CreateDailySum(request.DailySumDto);
+            var dailySum = _dailySumFactory.CreateDailySum(request.Date, request.UserId);
 
             await _unitOfWork.DailySums.Add(dailySum);
             await _unitOfWork.Save();
 
-            return Unit.Value;
+            return _dailySumFactory.CreateDailySumDto(dailySum);
         }
     }
 }

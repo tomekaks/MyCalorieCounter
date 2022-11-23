@@ -15,17 +15,19 @@ namespace MyCalorieCounter.Mappings
             CreateMap<ProductVM, ProductDto>().ReverseMap();
             CreateMap<AddActivityVM, ProductDto>().ReverseMap();
             CreateMap<AddMealVM, ProductDto>().ReverseMap();
-            
 
-            CreateMap<ExerciseVM, ExerciseDto>().ReverseMap();
+
+            CreateMap<ExerciseDto, ExerciseVM>().ReverseMap();
+            CreateMap<ExerciseDto, AddActivityVM>()
+                .ForMember(dest => dest.ExerciseId, opt => opt.MapFrom(src => src.Id)).ReverseMap();
 
             CreateMap<DailyGoalVM, DailyGoalDto>().ReverseMap();
 
-            CreateMap<RemoveMealVM, MealDto>().ReverseMap();
+            CreateMap<DeleteMealVM, MealDto>().ReverseMap();
             CreateMap<EditMealVM, MealDto>().ReverseMap();
             CreateMap<AddMealVM, MealDto>().ReverseMap();
 
-            CreateMap<RemoveActivityVM, MyActivityDto>().ReverseMap();
+            CreateMap<DeleteActivityVM, MyActivityDto>().ReverseMap();
             CreateMap<EditActivityVM, MyActivityDto>().ReverseMap();
             CreateMap<AddActivityVM, MyActivityDto>().ReverseMap();
         }

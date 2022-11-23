@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using MyCalorieCounter.Application.Dto;
 using MyCalorieCounter.Application.Interfaces.Services;
 using MyCalorieCounter.Core.Data;
+using MyCalorieCounter.Interefaces.Services;
 using MyCalorieCounter.Models;
 using System;
 using System.Collections.Generic;
@@ -18,43 +19,27 @@ namespace MyCalorieCounter.Controllers
     [Authorize]
     public class DailyOverviewController : Controller
     {
-        private readonly IDailySumService _dailySumService;
-        private readonly IDailyGoalService _dailyGoalService;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IMealService _mealService;
-        private readonly IMyActivityService _myActivityService;
-        private readonly IMapper _mapper;
-        private readonly IMediator _mediator;
+        private readonly IDailyOverviewService _dailyOverviewService;
 
 
-        public DailyOverviewController(IDailySumService dailySumService, IDailyGoalService dailyGoalService,
-                                       UserManager<ApplicationUser> userManager, IMealService mealService, IMyActivityService myActivityService, IMapper mapper, IMediator mediator)
+        public DailyOverviewController(UserManager<ApplicationUser> userManager, IDailyOverviewService dailyOverviewService)
         {
-            _dailySumService = dailySumService;
-            _dailyGoalService = dailyGoalService;
             _userManager = userManager;
-            _mealService = mealService;
-            _myActivityService = myActivityService;
-            _mapper = mapper;
-            _mediator = mediator;
+            _dailyOverviewService = dailyOverviewService;
         }
 
         public async Task<IActionResult> Index()
         {
             var currentUsersId = await GetUsersId();
-            var dailySum = await _dailySumService.GetDailySum(currentUsersId);
-            var dailyGoal = await _dailyGoalService.GetDailyGoal(currentUsersId);
-            var todaysMeals = await _mealService.GetTodaysMeals(dailySum.Id);
-            var activities = await _myActivityService.GetTodaysActivities(dailySum.Id);
-            var model = new DailyOverviewVM(dailySum, dailyGoal, todaysMeals, activities);
+            var model = await _dailyOverviewService.GetDailyOverview(currentUsersId);
             return View(model);
         }
 
         public async Task<IActionResult> UpdateGoals()
         {
             var currentUsersId = await GetUsersId();
-            var dailyGoal = await _dailyGoalService.GetDailyGoal(currentUsersId);
-            var model = _mapper.Map<DailyGoalVM>(dailyGoal);
+            var model = await _dailyOverviewService.GenerateDailyGoalVM(currentUsersId);
             
             return View(model);
         }
@@ -69,10 +54,8 @@ namespace MyCalorieCounter.Controllers
                 {
                     return View(model);
                 }
-               
-                var dailyGoalDto = _mapper.Map<DailyGoalDto>(model);
-                dailyGoalDto.UserId = await GetUsersId();
-                await _dailyGoalService.UpdateDailyGoal(dailyGoalDto);
+
+                await _dailyOverviewService.UpdateDailyGoal(model);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -81,17 +64,15 @@ namespace MyCalorieCounter.Controllers
                 return View(model);
             }
         }
-        public async Task<IActionResult> RemoveMeal(int id)
+        public async Task<IActionResult> DeleteMeal(int id)
         {
-            var userId = await GetUsersId();
-            var meal = await _mealService.GetMeal(id);
-            var model = _mapper.Map<RemoveMealVM>(meal);
+            var model = await _dailyOverviewService.GenerateDeleteMealVM(id);
 
             return View(model);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RemoveMeal(RemoveMealVM model, int id)
+        public async Task<IActionResult> DeleteMeal(DeleteMealVM model, int id)
         {
             try
             {
@@ -100,8 +81,7 @@ namespace MyCalorieCounter.Controllers
                     return View(model);
                 }
 
-                var userId = await GetUsersId();
-                await _mealService.DeleteMeal(id, userId);
+                await _dailyOverviewService.DeleteMeal(id);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -113,8 +93,7 @@ namespace MyCalorieCounter.Controllers
 
         public async Task<IActionResult> EditMeal(int id)
         {
-            var meal = await _mealService.GetMeal(id);
-            var model = _mapper.Map<EditMealVM>(meal);
+            var model = await _dailyOverviewService.GetMeal(id);
 
             return View(model);
         }
@@ -128,10 +107,8 @@ namespace MyCalorieCounter.Controllers
                 {
                     return View(model);
                 }
-                
-                var meal = _mapper.Map<MealDto>(model);
-                meal.UserId = await GetUsersId();
-                await _mealService.UpdateMeal(meal);
+
+                await _dailyOverviewService.EditMeal(model);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -141,16 +118,15 @@ namespace MyCalorieCounter.Controllers
             }
         }
 
-        public async Task<IActionResult> RemoveActivity(int id)
+        public async Task<IActionResult> DeleteActivity(int id)
         {
-            var activity = await _myActivityService.GetMyActivity(id);
-            var model = _mapper.Map<RemoveActivityVM>(activity);
+            var model = await _dailyOverviewService.GenerateDeleteActivityVM(id);
 
             return View(model);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RemoveActivity(RemoveActivityVM model, int id)
+        public async Task<IActionResult> DeleteActivity(DeleteActivityVM model, int id)
         {
             try
             {
@@ -158,9 +134,8 @@ namespace MyCalorieCounter.Controllers
                 {
                     return View(model);
                 }
-                var userId = await GetUsersId(); 
 
-                await _myActivityService.DeleteActivity(id, userId);
+                await _dailyOverviewService.DeleteActivity(id);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -172,8 +147,7 @@ namespace MyCalorieCounter.Controllers
 
         public async Task<IActionResult> EditActivity(int id)
         {
-            var activity = await _myActivityService.GetMyActivity(id);
-            var model = _mapper.Map<EditActivityVM>(activity);
+            var model = await _dailyOverviewService.GetActivity(id);
 
             return View(model);
         }
@@ -189,10 +163,7 @@ namespace MyCalorieCounter.Controllers
                     return View(model);
                 }
 
-                var activity = _mapper.Map<MyActivityDto>(model);
-                activity.UserId = await GetUsersId(); 
-
-                await _myActivityService.UpdateActivity(activity);
+                await _dailyOverviewService.EditActivity(model);
 
                 return RedirectToAction(nameof(Index));
             }

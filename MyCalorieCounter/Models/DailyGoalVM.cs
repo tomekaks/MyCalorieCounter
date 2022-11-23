@@ -7,9 +7,10 @@ namespace MyCalorieCounter.Models
 {
     public class DailyGoalVM
     {
-        public double DailyCaloriesGoal { get; set; }
-        public double DailyProteinsGoal { get; set; }
-        public double DailyCarbsGoal { get; set; }
-        public double DailyFatsGoal { get; set; }
+        public string UserId { get; set; }
+        public double Calories { get; set; }
+        public double Proteins { get; set; }
+        public double Carbs { get; set; }
+        public double Fats { get; set; }
     }
 }

@@ -34,7 +34,7 @@ namespace MyCalorieCounter.Application.CQRS.MyActivity.Handlers.Commands
                 throw new ValidationExeption(validationResult);
             }
 
-            var myActivity = await _unitOfWork.MyActivities.Get(q => q.Id == request.MyActivityDto.Id);
+            var myActivity = await _unitOfWork.MyActivities.Get(q => q.Id == request.MyActivityDto.Id, includeProperties:"Exercise");
             var dailySum = await _unitOfWork.DailySums.Get(d => d.Id == myActivity.DailySumId);
 
             dailySum.CaloriesBurned -= myActivity.CaloriesBurned;

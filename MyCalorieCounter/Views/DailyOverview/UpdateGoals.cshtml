@@ -11,25 +11,26 @@
 <div class="col-md-4">
     <form asp-action="UpdateGoals">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input hidden asp-for="UserId" />
         <div class="form-group">
-            <label asp-for="DailyCaloriesGoal" class="control-label">Calories</label>
-            <input asp-for="DailyCaloriesGoal" class="form-control" />
-            <span asp-validation-for="DailyCaloriesGoal" class="text-danger"></span>
+            <label asp-for="Calories" class="control-label">Calories</label>
+            <input asp-for="Calories" class="form-control" />
+            <span asp-validation-for="Calories" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="DailyProteinsGoal" class="control-label">Proteins</label>
-            <input asp-for="DailyProteinsGoal" class="form-control" />
-            <span asp-validation-for="DailyProteinsGoal" class="text-danger"></span>
+            <label asp-for="Proteins" class="control-label">Proteins</label>
+            <input asp-for="Proteins" class="form-control" />
+            <span asp-validation-for="Proteins" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="DailyCarbsGoal" class="control-label">Carbs</label>
-            <input asp-for="DailyCarbsGoal" class="form-control" />
-            <span asp-validation-for="DailyCarbsGoal" class="text-danger"></span>
+            <label asp-for="Carbs" class="control-label">Carbs</label>
+            <input asp-for="Carbs" class="form-control" />
+            <span asp-validation-for="Carbs" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="DailyFatsGoal" class="control-label">Fats</label>
-            <input asp-for="DailyFatsGoal" class="form-control" />
-            <span asp-validation-for="DailyFatsGoal" class="text-danger"></span>
+            <label asp-for="Fats" class="control-label">Fats</label>
+            <input asp-for="Fats" class="form-control" />
+            <span asp-validation-for="Fats" class="text-danger"></span>
         </div>
         <div class="form-group">
             <input type="submit" value="Update Goals" class="btn btn-success" />
