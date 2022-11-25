@@ -30,8 +30,6 @@ namespace MyCalorieCounter.Application.CQRS.DailyGoal.Handlers.Commands
             await _unitOfWork.DailyGoals.Add(dailyGoal);
             await _unitOfWork.Save();
 
-            dailyGoal = await _unitOfWork.DailyGoals.GetById(request.UserId);
-
             return _dailyGoalFactory.CreateDailyGoalDto(dailyGoal);
         }
     }

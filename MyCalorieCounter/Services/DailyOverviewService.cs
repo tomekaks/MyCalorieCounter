@@ -50,18 +50,6 @@ namespace MyCalorieCounter.Services
             await _mediator.Send(new UpdateMealCommand { MealDto = mealDto });
         }
 
-        public async Task<DeleteActivityVM> GenerateDeleteActivityVM(int id)
-        {
-            var activity = await _mediator.Send(new GetMyActivityRequest { Id = id });
-            return _mapper.Map<DeleteActivityVM>(activity);
-        }
-
-        public async Task<DeleteMealVM> GenerateDeleteMealVM(int id)
-        {
-            var meal = await _mediator.Send(new GetMealRequest { Id = id });
-            return _mapper.Map<DeleteMealVM>(meal);
-        }
-
         public async Task<EditActivityVM> GetActivity(int id)
         {
             var activity = await _mediator.Send(new GetMyActivityRequest { Id = id });

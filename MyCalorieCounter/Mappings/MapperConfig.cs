@@ -23,11 +23,9 @@ namespace MyCalorieCounter.Mappings
 
             CreateMap<DailyGoalVM, DailyGoalDto>().ReverseMap();
 
-            CreateMap<DeleteMealVM, MealDto>().ReverseMap();
             CreateMap<EditMealVM, MealDto>().ReverseMap();
             CreateMap<AddMealVM, MealDto>().ReverseMap();
 
-            CreateMap<DeleteActivityVM, MyActivityDto>().ReverseMap();
             CreateMap<EditActivityVM, MyActivityDto>().ReverseMap();
             CreateMap<AddActivityVM, MyActivityDto>().ReverseMap();
         }

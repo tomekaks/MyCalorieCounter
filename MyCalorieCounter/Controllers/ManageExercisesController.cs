@@ -55,13 +55,6 @@ namespace MyCalorieCounter.Controllers
             }
         }
 
-        public async Task<IActionResult> Delete(int id)
-        {
-            var model = await _manageExercisesService.GetExercise(id);
-            
-            return View(model);
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteExercise(int id)

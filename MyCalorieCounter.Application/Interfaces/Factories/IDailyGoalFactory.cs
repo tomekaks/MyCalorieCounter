@@ -10,7 +10,6 @@ namespace MyCalorieCounter.Application.Interfaces.Factories
 {
     public interface IDailyGoalFactory
     {
-        DailyGoal CreateDailyGoal(DailyGoalDto dailyGoalDto);
         DailyGoalDto CreateDailyGoalDto(DailyGoal dailyGoal);
         DailyGoal CreateNewUsersDailyGoal(string userId);
         DailyGoal MapToModel(DailyGoal model, DailyGoalDto dto);

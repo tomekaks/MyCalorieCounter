@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MyCalorieCounter.Application;
+using MyCalorieCounter.Application.Dto;
 using MyCalorieCounter.Core.Data;
 using MyCalorieCounter.Infrastructure;
 using MyCalorieCounter.Infrastructure.DataBase;

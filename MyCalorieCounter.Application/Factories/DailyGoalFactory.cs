@@ -11,17 +11,6 @@ namespace MyCalorieCounter.Application.Factories
 {
     public class DailyGoalFactory : IDailyGoalFactory
     {
-        public DailyGoal CreateDailyGoal(DailyGoalDto dailyGoalDto)
-        {
-            return new DailyGoal()
-            {
-                UserId = dailyGoalDto.UserId,
-                Calories = dailyGoalDto.Calories,
-                Proteins = dailyGoalDto.Proteins,
-                Carbs = dailyGoalDto.Carbs,
-                Fats = dailyGoalDto.Fats
-            };
-        }
         public DailyGoal CreateNewUsersDailyGoal(string userId)
         {
             return new DailyGoal()

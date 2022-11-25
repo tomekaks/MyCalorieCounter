@@ -64,30 +64,20 @@ namespace MyCalorieCounter.Controllers
                 return View(model);
             }
         }
-        public async Task<IActionResult> DeleteMeal(int id)
-        {
-            var model = await _dailyOverviewService.GenerateDeleteMealVM(id);
 
-            return View(model);
-        }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteMeal(DeleteMealVM model, int id)
+        public async Task<IActionResult> DeleteMeal(int id)
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return View(model);
-                }
-
                 await _dailyOverviewService.DeleteMeal(id);
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View(model);
+                return View();
             }
         }
 
@@ -118,30 +108,20 @@ namespace MyCalorieCounter.Controllers
             }
         }
 
-        public async Task<IActionResult> DeleteActivity(int id)
-        {
-            var model = await _dailyOverviewService.GenerateDeleteActivityVM(id);
 
-            return View(model);
-        }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteActivity(DeleteActivityVM model, int id)
+        public async Task<IActionResult> DeleteActivity(int id)
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return View(model);
-                }
-
                 await _dailyOverviewService.DeleteActivity(id);
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View(model);
+                return View();
             }
         }
 

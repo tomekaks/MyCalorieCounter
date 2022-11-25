@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using MyCalorieCounter.Application.Dto;
 using MyCalorieCounter.Core.Data;
 using MyCalorieCounter.Interefaces.Services;
 using MyCalorieCounter.Models;
