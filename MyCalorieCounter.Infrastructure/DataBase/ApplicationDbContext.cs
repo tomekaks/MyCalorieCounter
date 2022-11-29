@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MyCalorieCounter.Infrastructure.DataBase
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<Core.Data.ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

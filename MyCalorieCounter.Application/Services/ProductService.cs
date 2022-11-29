@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace MyCalorieCounter.Application.Services
 {
+    [Obsolete]
     public class ProductService : IProductService
     {
         private readonly IProductFactory _productFactory;

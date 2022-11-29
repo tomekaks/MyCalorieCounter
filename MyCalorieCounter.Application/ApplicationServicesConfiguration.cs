@@ -20,14 +20,6 @@ namespace MyCalorieCounter.Application
     {
         public static IServiceCollection ConfigureApplicationServices(this IServiceCollection services)
         {
-            services.AddScoped<IDailySumService, DailySumService>();
-            services.AddScoped<IDailyGoalService, DailyGoalService>();
-            services.AddScoped<IMealService, MealService>();
-            services.AddScoped<IMyActivityService, MyActivityService>();
-            services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<IExerciseService, ExerciseService>();
-            services.AddScoped<ISettingService, SettingService>();
-
             services.AddScoped<IDailySumFactory, DailySumFactory>();
             services.AddScoped<IDailyGoalFactory, DailyGoalFactory>();
             services.AddScoped<IMealFactory, MealFactory>();

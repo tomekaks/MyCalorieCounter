@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace MyCalorieCounter.Application.Services
 {
+    [Obsolete]
     public class DailyGoalService : IDailyGoalService
     {
         private readonly IDailyGoalFactory _dailyGoalFactory;

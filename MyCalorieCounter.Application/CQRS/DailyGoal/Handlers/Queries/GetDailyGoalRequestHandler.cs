@@ -19,10 +19,11 @@ namespace MyCalorieCounter.Application.CQRS.DailyGoal.Handlers.Queries
         private readonly IDailyGoalFactory _dailyGoalFactory;
         private readonly IMediator _mediator;
 
-        public GetDailyGoalRequestHandler(IUnitOfWork unitOfWork, IDailyGoalFactory dailyGoalFactory)
+        public GetDailyGoalRequestHandler(IUnitOfWork unitOfWork, IDailyGoalFactory dailyGoalFactory, IMediator mediator)
         {
             _unitOfWork = unitOfWork;
             _dailyGoalFactory = dailyGoalFactory;
+            _mediator = mediator;
         }
 
         public async Task<DailyGoalDto> Handle(GetDailyGoalRequest request, CancellationToken cancellationToken)

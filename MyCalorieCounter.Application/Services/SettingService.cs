@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace MyCalorieCounter.Application.Services
 {
+    [Obsolete]
     public class SettingService : ISettingService
     {
         private readonly IUnitOfWork _unitOfWork;

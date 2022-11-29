@@ -1,10 +1,6 @@
-﻿using AutoMapper;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using MyCalorieCounter.Application.Dto;
-using MyCalorieCounter.Application.Interfaces.Services;
 using MyCalorieCounter.Core.Data;
 using MyCalorieCounter.Interefaces.Services;
 using MyCalorieCounter.Models;
@@ -89,7 +85,7 @@ namespace MyCalorieCounter.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditMeal(EditMealVM model, int id)
+        public async Task<IActionResult> EditMeal(EditMealVM model)
         {
             try
             {
@@ -133,7 +129,7 @@ namespace MyCalorieCounter.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditActivity(EditActivityVM model, int id)
+        public async Task<IActionResult> EditActivity(EditActivityVM model)
         {
 
             try
