@@ -2,9 +2,7 @@
 using MyCalorieCounter.Application.Factories;
 using MyCalorieCounter.Application.Interfaces.Factories;
 using MyCalorieCounter.Application.Interfaces.Repositories;
-using MyCalorieCounter.Application.Interfaces.Services;
 using MyCalorieCounter.Application.Interfaces.Validators;
-using MyCalorieCounter.Application.Services;
 using MyCalorieCounter.Application.Validators;
 using MediatR;
 using System;

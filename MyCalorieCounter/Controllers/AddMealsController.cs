@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using MyCalorieCounter.Application.CQRS.Meal.Requests.Commands;
 using MyCalorieCounter.Application.CQRS.Product.Requsts.Queries;
 using MyCalorieCounter.Application.Dto;
-using MyCalorieCounter.Application.Interfaces.Services;
 using MyCalorieCounter.Core.Data;
 using MyCalorieCounter.Interefaces.Services;
 using MyCalorieCounter.Models;

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using MyCalorieCounter.Application.CQRS.Exercise.Requests.Commands;
 using MyCalorieCounter.Application.CQRS.Exercise.Requests.Queries;
 using MyCalorieCounter.Application.Dto;
-using MyCalorieCounter.Application.Interfaces.Services;
 using MyCalorieCounter.Interefaces.Services;
 using MyCalorieCounter.Models;
 using System;

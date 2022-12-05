@@ -9,6 +9,5 @@ namespace MyCalorieCounter.Application.Interfaces.Repositories
 {
     public interface IProductRepository : IGenericRepository<Product>
     {
-        void Update(Product product);
     }
 }
