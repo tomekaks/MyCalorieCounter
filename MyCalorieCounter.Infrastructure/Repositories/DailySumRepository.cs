@@ -19,9 +19,5 @@ namespace MyCalorieCounter.Infrastructure.Repositories
             _context = context;
         }
 
-        public void Update(DailySum dailySum)
-        {
-            _context.DailySums.Update(dailySum);
-        }
     }
 }

@@ -17,10 +17,6 @@ namespace MyCalorieCounter.Infrastructure.Repositories
         {
             _context = context;
         }
-        public void Update(Meal meal)
-        {
-            _context.Meals.Update(meal);
-        }  
-        
+
     }
 }

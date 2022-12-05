@@ -14,6 +14,6 @@ namespace MyCalorieCounter.Application.Interfaces.Repositories
         Task<bool> IsExists(Expression<Func<T, bool>> expression);
         Task Add(T entity);
         void Delete(T entity);
-
+        void Update(T entity);
     }
 }

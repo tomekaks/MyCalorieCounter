@@ -17,7 +17,6 @@ namespace MyCalorieCounter.Infrastructure.Repositories
             _context = context;
             Products = new ProductRepository(context);
             DailySums = new DailySumRepository(context);
-            Settings = new SettingRepository(context);
             Meals = new MealRepository(context);
             DailyGoals = new DailyGoalRepository(context);
             Exercises = new ExerciseRepository(context);
@@ -26,7 +25,6 @@ namespace MyCalorieCounter.Infrastructure.Repositories
 
         public IProductRepository Products { get; private set; }
         public IDailySumRepository DailySums { get; private set; }
-        public ISettingRepository Settings { get; private set; }
         public IMealRepository Meals { get; private set; }
         public IDailyGoalRepository DailyGoals { get; private set; }
         public IExerciseRepository Exercises { get; private set; }

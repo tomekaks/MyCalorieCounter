@@ -64,5 +64,10 @@ namespace MyCalorieCounter.Infrastructure.Repositories
             IQueryable<T> query = _db;
             return await query.AnyAsync(expression);
         }
+
+        public void Update(T entity)
+        {
+            _db.Update(entity);
+        }
     }
 }
